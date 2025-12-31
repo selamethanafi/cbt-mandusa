@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+include '../inc/config.php';
 include 'fungsi_nilai.php';
 
 $id_siswa = $_SESSION['id_siswa'];

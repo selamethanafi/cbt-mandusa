@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+include '../inc/config.php';
 if(isset($_SESSION['id_siswa'])){
     header("Location: daftar_ujian.php");
     exit;

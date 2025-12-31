@@ -4,7 +4,7 @@ session_start();
 // Cek login
 if(!isset($_SESSION['id_siswa'])){
     // Belum login → redirect ke halaman login
-    header("Location: siswa/login.php");
+    header("Location: login.php");
     exit;
 }
 

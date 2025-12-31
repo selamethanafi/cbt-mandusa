@@ -1,6 +1,6 @@
 <?php
 
-include 'config.php';
+include '../inc/config.php';
 if(!isset($_SESSION['id_siswa'])) exit('Akses ditolak');
 if(!isset($_SESSION['ujian_id'])){
     exit('Akses ujian ditolak');
@@ -84,7 +84,11 @@ while($r = $qj->fetch_assoc()){
 <head>
 <meta charset="utf-8">
 <title>CBT Ujian</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="../css/style.css">
+<script>
+history.pushState(null,null,location.href);
+window.onpopstate = () => history.go(1);
+</script>
 </head>
 
 
