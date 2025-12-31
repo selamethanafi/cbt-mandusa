@@ -1,0 +1,226 @@
+/* =============================
+   TEMA CBT RINGAN OFFLINE
+============================= */
+
+/* BODY & CONTAINER */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    color: #212529;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 15px;
+}
+
+/* =============================
+   CARD & SHADOW
+============================= */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: 0.2s;
+}
+
+/* shadow-sm (mirip Bootstrap) */
+.card.shadow-sm {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.075);
+}
+
+/* shadow-md */
+.card.shadow-md {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* shadow-lg */
+.card.shadow-lg {
+    box-shadow: 0 10px 15px rgba(0,0,0,0.15);
+}
+
+/* =============================
+   TOMBOL
+============================= */
+.btn {
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    transition: 0.2s;
+    text-decoration: none;
+}
+
+/* PRIMARY */
+.btn-primary {
+    background-color: #0d6efd;
+    color: #fff;
+    border: 1px solid #0d6efd;
+}
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+/* OUTLINE PRIMARY */
+.btn-outline-primary {
+    background-color: #fff;
+    color: #0d6efd;
+    border: 1px solid #0d6efd;
+}
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+/* SUCCESS */
+.btn-success {
+    background-color: #198754;
+    color: #fff;
+    border: 1px solid #198754;
+}
+.btn-success:hover {
+    background-color: #157347;
+}
+
+/* DANGER */
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+    border: 1px solid #dc3545;
+}
+.btn-danger:hover {
+    background-color: #bb2d3b;
+}
+
+/* SECONDARY */
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: 1px solid #6c757d;
+}
+.btn-secondary:hover {
+    background-color: #5c636a;
+}
+/* OUTLINE SECONDARY */
+.btn-outline-secondary {
+    background-color: #fff;
+    color: #6c757d;
+    border: 1px solid #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* =============================
+   FORM INPUT
+============================= */
+input[type="text"], input[type="password"], textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.form-check {
+    margin-bottom: 8px;
+}
+
+/* =============================
+   INDIKATOR SOAL
+============================= */
+.indikator a {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    margin: 2px;
+    text-align: center;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    transition: 0.2s;
+}
+
+.ind-belum { background-color: #e9ecef; color: #495057; }
+.ind-jawab { background-color: #198754; color: #fff; }
+.ind-aktif { background-color: #0d6efd; color: #fff; }
+
+/* =============================
+   TIMER
+============================= */
+.timer {
+    font-weight: bold;
+    color: #dc3545;
+    font-size: 1.1rem;
+}
+
+/* =============================
+   SOAL
+============================= */
+.soal {
+    background-color: #eef2f5;
+    border-left: 5px solid #0d6efd;
+    padding: 15px;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+/* =============================
+   LINK
+============================= */
+a {
+    color: #0d6efd;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+/* Margin top (mirip mt-4) */
+.mt-4 {
+    margin-top: 1.5rem; /* 24px */
+}
+
+.mt-3 {
+    margin-top: 1rem; /* 16px */
+}
+
+.mb-3 {
+    margin-bottom: 1rem; /* 16px */
+}
+
+/* Flex container */
+.d-flex {
+    display: flex;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.align-items-center {
+    align-items: center;
+}
+.text-center { text-align: center; }
+.mb-3 { margin-bottom: 1rem; } /* 16px */
+
