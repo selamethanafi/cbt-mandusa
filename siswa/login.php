@@ -1,8 +1,25 @@
 <?php
-include '../inc/config.php';
+require_once '../inc/config.php';
+require_once '../inc/fungsi.php';
 if(isset($_SESSION['id_siswa'])){
     header("Location: daftar_ujian.php");
     exit;
+}
+if(isset($_GET['nopes']))
+{
+	$get_nopes = $_GET['nopes'];
+}
+else
+{
+$get_kode = '';
+}
+if(isset($_GET['kode']))
+{
+	$get_kode = $_GET['kode'];
+}
+else
+{
+$get_nopes = '';
 }
 
 $error = '';
@@ -12,7 +29,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
   $nis = $_POST['nis'];
   $pass = $_POST['password'];
 
-  $q = $db->prepare("SELECT * FROM siswa WHERE nis=?");
+  $q = $db->prepare("SELECT * FROM siswa WHERE username=?");
   $q->bind_param("s",$nis);
   $q->execute();
   $r = $q->get_result()->fetch_assoc();
@@ -21,27 +38,28 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 // cek apakah sudah login di tempat lain
 $cek = $db->query("
-SELECT session_id 
+SELECT session_token 
 FROM siswa 
-WHERE id={$r['id']}
+WHERE id_siswa={$r['id_siswa']}
 ")->fetch_assoc();
-
-if(!empty($cek['session_id']) && $cek['session_id'] != $login_token){
-    exit('Akun ini sedang digunakan di komputer lain');
+if(!empty($cek['session_token']) && $cek['session_token'] != $login_token){
+    exit('Akun ini sedang digunakan di komputer lain <a href="kirim_permintaan_reset.php?nopes='.$nis.'&kode='.$pass.'&reset=perangkat">Kirim permintaan Reset</a>');
 }
 
 // simpan session login
 $db->query("
 UPDATE siswa 
-SET session_id='$login_token'
-WHERE id={$r['id']}
+SET session_token='$login_token'
+WHERE id_siswa={$r['id_siswa']}
 ");
-  if($r && password_verify($pass,$r['password'])){
-    $_SESSION['id_siswa'] = $r['id'];
+
+$store_password = $r['password'];
+if ($r && verify_siswa_password($pass, $store_password)) {
+$_SESSION['id_siswa'] = $r['id_siswa'];
     $_SESSION['kelas'] = $r['kelas'];
     header("Location: daftar_ujian.php");
-    exit;
-  }
+        exit;
+        }
   $error="Login gagal";
 }
 ?>
@@ -49,8 +67,9 @@ WHERE id={$r['id']}
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Login CBT</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="../css/style.css">
 </head>
 <body class="bg-light">
 <div class="container mt-5">
@@ -58,18 +77,18 @@ WHERE id={$r['id']}
 <div class="col-md-4">
 <div class="card shadow-sm">
 <div class="card-body">
-<h5 class="card-title text-center mb-3">Login CBT</h5>
+<h3 class="card-title text-center mb-3">Login CBT <?= $sek_nama;?></h5>
 
 <?php if($error): ?>
-<div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+<div class="alert-danger"><?= htmlspecialchars($error) ?></div>
 <?php endif; ?>
 
 <form method="post">
 <div class="mb-3">
-<input type="text" name="nis" class="form-control" placeholder="Username" required>
+<input type="text" name="nis" class="form-control" placeholder="Username" value="<?= $get_nopes;?>" required>
 </div>
 <div class="mb-3">
-<input type="password" name="password" class="form-control" placeholder="Password" required>
+<input type="password" name="password" class="form-control" placeholder="Password" value="<?= $get_kode;?>" required>
 </div>
 <button class="btn btn-primary w-100">Login</button>
 </form>

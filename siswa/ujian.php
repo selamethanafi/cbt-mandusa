@@ -1,244 +1,321 @@
 <?php
+/* ===============================
+   UJIAN.PHP – FINAL PRODUKSI
+================================ */
 
 include '../inc/config.php';
-if(!isset($_SESSION['id_siswa'])) exit('Akses ditolak');
-if(!isset($_SESSION['ujian_id'])){
-    exit('Akses ujian ditolak');
-}
-echo '<script>history.pushState(null,null,location.href); window.onpopstate=function(){history.go(1);}</script>';
-$ujian_id = $_SESSION['ujian_id'];
-$u = $db->query("SELECT * FROM ujian_aktif WHERE id=$ujian_id")->fetch_assoc();
 
-if(!$u || time() > strtotime($u['selesai'])){
-    exit('Ujian sudah berakhir');
+if (!isset($_SESSION['id_siswa'])) {
+    header("Location: login.php");
+    exit;
 }
+
 $id_siswa = $_SESSION['id_siswa'];
+$ujian_id = $_SESSION['ujian_id'];
+
 
 /* ===============================
-   SETTING UJIAN
+   DISABLE BACK BROWSER
 ================================ */
-$durasi = 90; // menit
+echo "<script>
+history.pushState(null,null,location.href);
+window.onpopstate=function(){history.go(1);}
+</script>";
+$u = $db->query("SELECT * FROM ujian_aktif WHERE id_ujian=$ujian_id")->fetch_assoc();
 
-// catat waktu mulai & selesai (sekali saja)
-$db->query("
-INSERT IGNORE INTO ujian (id_siswa,mulai,selesai)
-VALUES ($id_siswa, NOW(), DATE_ADD(NOW(), INTERVAL $durasi MINUTE))
-");
+if(!$u || time() > strtotime($u['tanggal_selesai'])){
+    exit('Ujian sudah berakhir');
+}
+$durasi = $u['waktu_ujian']; // menit
+/* ===============================
+   CATAT WAKTU UJIAN (1x)
+================================ */
+$db->query("INSERT IGNORE INTO ujian (id_siswa,id_ujian,mulai,selesai) VALUES ($id_siswa, $ujian_id, NOW(), DATE_ADD(NOW(), INTERVAL $durasi MINUTE))");
 
-// ambil waktu ujian
-$uj = $db->query("SELECT * FROM ujian WHERE id_siswa=$id_siswa")->fetch_assoc();
+$uj = $db->query("SELECT * FROM ujian WHERE id_siswa=$id_siswa and id_ujian = $ujian_id")->fetch_assoc();
 $sisa = strtotime($uj['selesai']) - time();
-if($sisa <= 0){
+if ($sisa <= 0) {
     header("Location: selesai.php");
     exit;
 }
 
 /* ===============================
+   URUTAN SOAL ACAK (SEKALI SAJA)
+================================ */
+if (!isset($_SESSION['urutan_soal'])) {
+    $ids = [];
+    
+    $q = $db->query("SELECT id FROM soal where `id_ujian` = '$ujian_id'");
+    while ($r = $q->fetch_assoc()) {
+        $ids[] = $r['id'];
+    }
+    shuffle($ids);
+    $_SESSION['urutan_soal'] = $ids;
+}
+
+$urutan = $_SESSION['urutan_soal'];
+$total  = count($urutan);
+
+/* ===============================
    NAVIGASI SOAL
 ================================ */
 $no = isset($_GET['no']) ? (int)$_GET['no'] : 1;
-$total = $db->query("SELECT COUNT(*) jml FROM soal")->fetch_assoc()['jml'];
-if($no < 1) $no = 1;
-if($no > $total) $no = $total;
+if ($no < 1) $no = 1;
+if ($no > $total) $no = $total;
 
-// ambil soal
-$s = $db->query("
-SELECT * FROM soal
-LIMIT ".($no-1).",1
-")->fetch_assoc();
+$id_soal = $urutan[$no - 1];
 
-// ambil jawaban sebelumnya
+/* ===============================
+   AMBIL SOAL
+================================ */
+$s = $db->query("SELECT * FROM soal WHERE id='$id_soal'")->fetch_assoc();
+
+/* ===============================
+   JAWABAN SISWA
+================================ */
 $jwb = $db->query("
 SELECT jawaban FROM jawaban
-WHERE id_siswa=$id_siswa AND id_soal=".$s['id']
-)->fetch_assoc();
+WHERE id_siswa=$id_siswa AND id_soal='$id_soal'
+")->fetch_assoc();
 
-$jawaban = $jwb['jawaban'] ?? '';
-$jawaban_arr = json_decode($jawaban,true);
-$ids = [];
-$qid = $db->query("SELECT id FROM soal ORDER BY id ASC");
-while($r = $qid->fetch_assoc()){
-    $ids[] = $r['id'];
-}
+$jawaban      = $jwb['jawaban'] ?? '';
+$jawaban_arr  = json_decode($jawaban, true);
+
 /* ===============================
-   STATUS JAWABAN (INDIKATOR)
+   STATUS TERJAWAB (INDIKATOR)
 ================================ */
 $jawab = [];
-
 $qj = $db->query("
-SELECT id_soal
-FROM jawaban
-WHERE id_siswa = $id_siswa
-AND jawaban IS NOT NULL
-AND TRIM(jawaban) != ''
+SELECT id_soal FROM jawaban
+WHERE id_siswa=$id_siswa
+AND jawaban IS NOT NULL AND TRIM(jawaban)!=''
 ");
-
-while($r = $qj->fetch_assoc()){
+while ($r = $qj->fetch_assoc()) {
     $jawab[$r['id_soal']] = true;
 }
-
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<title>CBT Ujian</title>
-<link rel="stylesheet" href="../css/style.css">
-<script>
-history.pushState(null,null,location.href);
-window.onpopstate = () => history.go(1);
-</script>
+<title>Ujian</title>
+<link rel="stylesheet" href="../css/ujian.css?v=<?= time() ?>">
 </head>
-
-
 <body>
-<div class="container-fluid mt-4">
+
+<div class="container-fluid">
+
 <div class="text-center mb-3">
-    <h4 class="fw-bold">UJIAN SEKOLAH</h4>
-    <div class="text-muted small">
-        SMA / SMK / MA • Tahun Pelajaran <?= date('Y') ?>
-    </div>
-    <hr>
+    <h4>UJIAN SEKOLAH</h4>
+    <small><?= date('Y') ?></small>
 </div>
 
 <div class="card shadow-sm">
-<div class="card-body">
-
 
 <div class="d-flex justify-content-between mb-3">
-    <h5>Soal <?= $no ?> dari <?= $total ?></h5>
-    <div class="timer">
-        ⏱ <?= gmdate("H:i:s",$sisa) ?>
-    </div>
+    <div>Soal <?= $no ?> / <?= $total ?></div>
+    <div class="timer">⏱ <?= gmdate("H:i:s", $sisa) ?></div>
 </div>
-<div class="indikator">
-<?php foreach($ids as $i => $id_soal): 
 
+<!-- INDIKATOR -->
+<div class="indikator mb-3">
+<?php foreach ($urutan as $i => $sid): 
     $kelas = 'ind-belum';
-
-    if(isset($jawab[$id_soal])){
-        $kelas = 'ind-jawab';
-    }
-
-    if($id_soal == $s['id']){
-        $kelas = 'ind-aktif';
-    }
+    if (isset($jawab[$sid])) $kelas = 'ind-jawab';
+    if ($sid == $id_soal)     $kelas = 'ind-aktif';
 ?>
-<a href="?no=<?= $i+1 ?>" class="<?= $kelas ?>">
-<?= $i+1 ?>
-</a>
-<?php endforeach ?>
+<a href="?no=<?= $i+1 ?>" class="<?= $kelas ?>"><?= $i+1 ?></a>
+<?php endforeach; ?>
 </div>
 
-<div class="alert alert-secondary soal">
-<?= nl2br(htmlspecialchars($s['soal'])) ?>
+<!-- SOAL -->
+<div class="soal"><?= $s['soal'] ?>
 </div>
+
 <form method="post" action="simpan.php">
-
-<input type="hidden" name="id_soal" value="<?= $s['id'] ?>">
+<input type="hidden" name="id_soal" value="<?= $id_soal ?>">
 <input type="hidden" name="no" value="<?= $no ?>">
 
 <?php
 /* ===============================
-   TAMPILKAN SOAL SESUAI TIPE
+   TAMPIL SOAL SESUAI TIPE
 ================================ */
-switch($s['tipe']){
+switch (strtolower($s['tipe'])) {
 
 // ================= PG & BENAR-SALAH =================
 case 'pg':
 
+    foreach (['a','b','c','d','e'] as $p) {
+
+        if (empty($s[$p])) continue;
+
+        $opt = strtoupper($p); // A B C D E
+
+        $cek = ($jawaban === $opt) ? 'checked' : '';
+
+        echo "
+        <label class='opsi-box'>
+            <input type='radio'
+                   name='jawaban'
+                   value='$opt'
+                   $cek>
+            <span class='opsi-huruf'>$opt.</span>
+            <span class='opsi-teks'>{$s[$p]}</span>
+        </label>
+        ";
+    }
+
+break;
+
+
 case 'bs':
-    foreach(['a','b','c','d','e'] as $p){
-    
-        if(empty($s[$p])) continue;
-        $val = strtoupper($p);
-        $cek = ($jawaban == $val) ? 'checked' : '';
-        ?>
-    <div class="form-check opsi">
-  <input class="form-check-input" type="radio"
-         name="jawaban" value="<?= $val ?>" <?= $cek ?>>
-  <label class="form-check-label">
-    <?= $s[$p] ?>
-  </label>
-</div>
-<?php
+
+    echo "<div class='soal-bs'>";
+
+    foreach (['a','b','c','d','e'] as $p) {
+
+        if (empty($s[$p])) continue;
+
+        $kode = strtoupper($p); // A, B, C...
+
+        // jawaban siswa (jika ada)
+        $pilih = $jawaban_arr[$kode] ?? '';
+
+        echo "
+        <div class='bs-item'>
+            <div class='bs-teks'>
+                {$s[$p]}
+            </div>
+
+            <label class='bs-opsi'>
+                <input type='radio'
+                       name='jawaban[$kode]'
+                       value='B'
+                       ".($pilih=='B'?'checked':'').">
+                Benar
+            </label>
+
+            <label class='bs-opsi'>
+                <input type='radio'
+                       name='jawaban[$kode]'
+                       value='S'
+                       ".($pilih=='S'?'checked':'').">
+                Salah
+            </label>
+        </div>
+        ";
     }
+
+    echo "</div>";
+
 break;
 
-// ================= PG KOMPLEKS =================
 case 'pg_kompleks':
-    foreach(['a','b','c','d','e'] as $p){
-        if(empty($s[$p])) continue;
-        $val = strtoupper($p);
-        $cek = (is_array($jawaban_arr) && in_array($val,$jawaban_arr)) ? 'checked' : '';
-        ?>
-       <div class="form-check opsi">
-  <input class="form-check-input" type="checkbox"
-         name="jawaban[]" value="<?= $val ?>" <?= $cek ?>>
-  <label class="form-check-label">
-    <?= $s[$p] ?>
-  </label>
-</div>
-<?php
+
+    foreach (['a','b','c','d','e'] as $p) {
+
+        if (empty($s[$p])) continue;
+
+        $opt = strtoupper($p); // A B C D E
+
+        $cek = (
+            is_array($jawaban_arr) &&
+            in_array($opt, $jawaban_arr)
+        ) ? 'checked' : '';
+
+        echo "
+        <label class='opsi-box'>
+            <input type='checkbox'
+                   name='jawaban[]'
+                   value='$opt'
+                   $cek>
+            <span class='opsi-huruf'>$opt.</span>
+            <span class='opsi-teks'>{$s[$p]}</span>
+        </label>
+        ";
     }
+
 break;
 
-// ================= MENJODOHKAN =================
-case 'jodohkan':
-    $pair = json_decode($s['pasangan'],true);
-    foreach($pair as $k=>$v){
-        $isi = $jawaban_arr[$k] ?? '';
-        ?>
-        <div class="row mb-2">
-  <div class="col-md-5 fw-bold"><?= $k ?></div>
-  <div class="col-md-7">
-    <input class="form-control" type="text"
-           name="jawaban[<?= htmlspecialchars($k) ?>]"
-           value="<?= htmlspecialchars($isi) ?>">
-  </div>
-</div>
-<?php
+case 'menjodohkan':
+    // ===============================
+    // PARSE JAWABAN BENAR
+    // ===============================
+    $pairs = explode('|', $s['kunci']);
+
+    $kiri = [];
+    $opsi = [];
+
+    foreach ($pairs as $p) {
+        [$k, $v] = explode(':', $p, 2);
+        $kiri[] = trim($k);
+        $opsi[] = trim($v);
     }
+
+    // opsi unik & acak
+    $opsi = array_unique($opsi);
+    shuffle($opsi);
+
+    // jawaban siswa (jika ada)
+    $jawab = is_array($jawaban_arr) ? $jawaban_arr : [];
+
+    echo "<table class='table-jodoh'>";
+
+    foreach ($kiri as $k) {
+
+        echo "<tr>";
+        echo "<td class='jodoh-kiri'><strong>$k</strong></td>";
+        echo "<td class='jodoh-kanan'>";
+
+        foreach ($opsi as $o) {
+
+            $cek = (isset($jawab[$k]) && $jawab[$k] == $o) ? 'checked' : '';
+
+            echo "
+            <label class='jodoh-opsi'>
+                <input type='radio'
+                       name='jawaban[".htmlspecialchars($k)."]'
+                       value='".htmlspecialchars($o)."'
+                       $cek>
+                $o
+            </label>
+            ";
+        }
+
+        echo "</td>";
+        echo "</tr>";
+    }
+
+    echo "</table>";
+
 break;
 
-// ================= URAIAN =================
+
 case 'uraian':
-    ?>
-    <textarea class="form-control" name="jawaban" rows="6">
-<?= htmlspecialchars($jawaban) ?>
-</textarea>
-<?php
+    echo "<textarea name='jawaban' rows='6'>".htmlspecialchars($jawaban)."</textarea>";
 break;
 }
 ?>
 
-<br>
-<div class="mt-3">
-<button class="btn btn-success">💾 Simpan Jawaban</button>
+<button class="btn btn-success mt-3">💾 Simpan Jawaban</button>
+<div class="mt-4 d-flex justify-content-between">
+<?php if ($no > 1): ?>
+<a href="?no=<?= $no-1 ?>" class="btn btn-outline-secondary">⬅ Sebelumnya</a>
+<?php endif; ?>
+
+<?php if ($no < $total): ?>
+<a href="?no=<?= $no+1 ?>" class="btn btn-primary">Berikutnya ➡</a>
+<?php else: ?>
+<a href="selesai.php" class="btn btn-danger"
+onclick="return confirm('Akhiri ujian?')">Selesai</a>
+<?php endif; ?>
 </div>
 
 
 </form>
-<div class="mt-3 d-flex justify-content-between">
-<?php if($no > 1): ?>
-<a class="btn btn-outline-secondary" href="?no=<?= $no-1 ?>">⬅ Sebelumnya</a>
-<?php endif ?>
-
-<?php if($no < $total): ?>
-<a class="btn btn-outline-primary" href="?no=<?= $no+1 ?>">Berikutnya ➡</a>
-<?php else: ?>
-<a class="btn btn-danger"
-   href="selesai.php"
-   onclick="return confirm('Yakin mengakhiri ujian?')">
-   Selesai
-</a>
-<?php endif ?>
 </div>
-</div> <!-- card-body -->
-</div> <!-- card -->
-</div> <!-- container -->
+</div>
+
 </body>
 </html>
-
 

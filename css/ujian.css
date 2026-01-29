@@ -342,4 +342,95 @@ a:hover {
     white-space: nowrap;
     transition: width .4s ease;
 }
+.opsi p {
+  margin: 0;          /* hilangkan margin bawaan <p> */
+}
+/* =============================
+   OPSI PILIHAN (PG & KOMPLEKS)
+============================= */
+.opsi-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.opsi-box:hover {
+    background-color: #f0f6ff;
+}
+
+.opsi-box input[type="checkbox"],
+.opsi-box input[type="radio"] {
+    margin-top: 3px;
+    cursor: pointer;
+}
+
+.opsi-huruf {
+    font-weight: bold;
+    min-width: 24px;
+}
+
+.opsi-teks {
+    line-height: 1.5;
+}
+/* =============================
+   BENAR / SALAH
+============================= */
+.soal-bs {
+    margin-top: 10px;
+}
+
+.bs-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+.bs-teks {
+    flex: 1;
+    line-height: 1.5;
+}
+
+.bs-opsi {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+/* =============================
+   MENJODOHKAN (OPS BERSAMA)
+============================= */
+.table-jodoh {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.jodoh-kiri {
+    width: 30%;
+    padding: 10px;
+    vertical-align: top;
+}
+
+.jodoh-kanan {
+    padding: 10px;
+}
+
+.jodoh-opsi {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 16px;
+    cursor: pointer;
+}
 

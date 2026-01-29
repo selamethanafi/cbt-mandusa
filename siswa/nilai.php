@@ -1,36 +1,80 @@
 <?php
 include '../inc/config.php';
 include 'fungsi_nilai.php';
-
-$id_siswa = $_SESSION['id_siswa'];
-
-// ambil semua jawaban siswa
-$q = $db->query("
-SELECT s.tipe, j.jawaban, s.kunci
-FROM jawaban j
-JOIN soal s ON j.id_soal=s.id
-WHERE j.id_siswa=$id_siswa
-");
-
-$nilai = 0;
-$jumlah = 0;
-
-while($r = $q->fetch_assoc()){
-    if($r['tipe'] != 'uraian'){
-        $nilai += nilai_otomatis(
-            $r['tipe'],
-            $r['jawaban'],
-            $r['kunci']
-        );
-        $jumlah++;
-    }
+if(!isset($_SESSION['id_siswa'], $_SESSION['kelas'])){
+    header("Location: login.php");
+    exit;
 }
-$skor = $jumlah ? round(($nilai/$jumlah)*100) : 0;
+$id_siswa = $_SESSION['id_siswa'];
+$id_ujian = $_SESSION['ujian_id'];
 
-// simpan nilai
+/* ===============================
+   Ambil jawaban siswa ini saja
+================================ */
+$q = $db->query("
+SELECT j.id,
+       j.jawaban,
+       s.id AS id_soal,
+       s.tipe,
+       s.kunci
+FROM jawaban j
+JOIN soal s ON s.id = j.id_soal
+WHERE j.id_ujian = '$id_ujian'
+AND j.id_siswa = '$id_siswa'
+");
+$skor = 0;
+$nosoal = 0;
+while ($row = $q->fetch_assoc()) {
+    $nilai = hitung_nilai($row, $row['jawaban']);
+
+    if ($nilai !== null) {
+        $db->query("
+            UPDATE jawaban
+            SET nilai = '$nilai'
+            WHERE id = {$row['id']}
+            AND id_siswa = '$id_siswa'
+        ");
+    }
+    $skor = $skor + $nilai;
+    $nosoal++;
+}
+
+$nilai_akhir = 100* $skor / $nosoal;
+/* ===============================
+   Tandai ujian selesai
+================================ */
 $db->query("
-REPLACE INTO nilai (id_siswa, nilai)
-VALUES ($id_siswa, $skor)
+UPDATE ujian
+SET status = 'Selesai'
+WHERE id_ujian = '$id_ujian'
+AND id_siswa = '$id_siswa'
 ");
 
-echo "Nilai sementara: $skor";
+?>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hasil CBT</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="container-fluid mt-4">
+<div class="card shadow-sm">
+<div class="card-body">
+<h4 class="mb-2">Hasil Tes</h4>
+<?php
+// simpan nilai
+$db->query("REPLACE INTO nilai (id_siswa, id_ujian, nilai) VALUES ($id_siswa, $id_ujian, $nilai_akhir)");
+echo 'Cacah soal '.$nosoal;
+echo '<div class="alert-danger">Nilai sementara: '.round($nilai_akhir,2).'</div>';
+echo '<br />';
+echo '<a href="../logout.php" class="btn btn-primary mb-2">Keluar</a>';
+?>
+</div>
+</div>
+</div>
+</body>
+</html>
+

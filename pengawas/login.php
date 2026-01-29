@@ -1,5 +1,11 @@
 <?php
-include '../config.php';
+require_once '../inc/config.php';
+require_once '../inc/fungsi.php';
+if(isset($_SESSION['username'])){
+    header("Location: menu.php");
+    exit;
+}
+
 
 if($_POST){
   $nis = $_POST['nis'];
@@ -13,7 +19,7 @@ if($_POST){
   if($r && password_verify($pass,$r['password'])){
     $_SESSION['username'] = $r['id'];
     $_SESSION['role'] = 'pengawas';
-    header("Location: monitor.php");
+    header("Location: menu.php");
     exit;
   }
   $error="Login gagal";

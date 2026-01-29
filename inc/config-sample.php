@@ -1,7 +1,21 @@
 <?php
 session_start();
-
-$db = new mysqli("localhost","super","95EfR6wfFf^!","cbt_ringan");
+$key = '';
+$rahasia = ""; 
+$method = "AES-256-CBC";
+$db = new mysqli("localhost","","","cbt_ringan");
 if ($db->connect_error) die("DB Error");
-
 date_default_timezone_set("Asia/Jakarta");
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='cbt_ruang'");
+$da = mysqli_fetch_assoc($ta);
+$ruang = $da['konfigurasi_isi'] ?? '1';
+$ta = $db->query( "SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'app_key_server_cbt_lokal'");
+$da = mysqli_fetch_assoc($ta);
+$key = $da['konfigurasi_isi'] ?? '';
+$ta = $db->query( "SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'cbt_sianis'");
+$da = mysqli_fetch_assoc($ta);
+$sianis = $da['konfigurasi_isi'] ?? '';
+$ta = $db->query( "SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'sek_nama'");
+$da = mysqli_fetch_assoc($ta);
+$sek_nama = $da['konfigurasi_isi'] ?? '';
+
