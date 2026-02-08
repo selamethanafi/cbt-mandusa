@@ -34,12 +34,15 @@ Ruang: <strong><?= htmlspecialchars($ruang) ?></strong>
 <tr>
     <td><p><a class="btn btn-primary" href="sinkron_peserta.php" onclick="return confirm('Yakin mengunduh peserta semua?')">
 Unduh Peserta</a></p><p><a class="btn btn-primary" href="sinkron_peserta_per_ruang.php" onclick="return confirm('Yakin mengunduh peserta di ruang ini?')">
-Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php"  onclick="return confirm('Yakin mengunduh tes dari server pusat?')">Unduh Tes</a></p><p><a class="btn btn-primary" href="unduh_soal_per_kode_soal.php"  onclick="return confirm('Yakin mengunduh soal dari server pusat?')">Unduh Soal</a></p></td>
+Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php"  onclick="return confirm('Yakin mengunduh tes dari server pusat?')">Unduh Tes</a></p><p><a class="btn btn-primary" href="unduh_soal_per_kode_soal.php"  onclick="return confirm('Yakin mengunduh soal dari server pusat?')">Unduh Soal</a></p>
+<p><a class="btn btn-primary" href="siswa.php">Daftar Peserta</a>
+</td>
     <td>
        	<p><a class="btn btn-primary" href="soal_hari_ini.php">Daftar Tes Hari Ini</a></p>
     	<p><a class="btn btn-primary" href="daftar_tes.php">Daftar Tes</a></p>    	
     </td>
-    <td><p><a class="btn btn-primary" href="monitor.php">Pengawasan</a></p></td>
+    <td><p><a class="btn btn-primary" href="monitor.php">Pengawasan</a></p>
+    <p><a class="btn btn-primary" href="kirim_nilai.php">Kirim Hasil</a></p></td>
     <td><p><a class="btn btn-primary" href="daftar_hadir_tes_bersama.php">Daftar Hadir dan Berita Acara</a></p>
     </td>
 </tr>

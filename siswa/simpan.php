@@ -8,6 +8,7 @@ $id_siswa = $_SESSION['id_siswa'];
 $id_ujian = $_SESSION['ujian_id'];
 $id_soal = $_POST['id_soal'];
 $no = $_POST['no'];
+$nomer_soal = $_POST['nomer_soal'];
 $jawaban = $_POST['jawaban'] ?? '';
 
 if(is_array($jawaban)){
@@ -16,11 +17,11 @@ if(is_array($jawaban)){
 
 }
 echo $jawaban;
-$q = $db->prepare("REPLACE INTO jawaban VALUES(NULL,?,?,?,?,'0')");
+$q = $db->prepare("REPLACE INTO jawaban VALUES(NULL,?,?,?,?,?,'0')");
 if (!$q) {
     die("Prepare error: " . $db->error);
 }
-$q->bind_param("iiis",$id_siswa,$id_ujian,$id_soal,$jawaban);
+$q->bind_param("iiisi",$id_siswa,$id_ujian,$id_soal,$jawaban,$nomer_soal);
 $q->execute();
 
 $no++;

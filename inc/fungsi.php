@@ -175,4 +175,20 @@ function via_curl($url){
     curl_close($ch);
     return json_decode($out, true);
 }
-
+function isValidDateTime($datetime) {
+    $format = 'Y-m-d H:i:s';
+    $d = DateTime::createFromFormat($format, $datetime);
+    return $d && $d->format($format) === $datetime;
+}
+function postcurl($urlsms,$params) 
+	{
+		$ch = curl_init($urlsms);
+		curl_setopt($ch, CURLOPT_HEADER, false);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, ($params));
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		$result = curl_exec($ch);
+		curl_close($ch);
+		return $result;
+	}

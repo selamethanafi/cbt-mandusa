@@ -2,6 +2,23 @@
 require_once '../inc/config.php';
 require_once '../inc/fungsi.php';
 require_once '../inc/admin.php';
+$tanggal = $_GET['tanggal'] ?? '';
+$pukul = $_GET['jam'] ?? '';
+$waktu = $tanggal.' '.$pukul;
+if (isValidDateTime($waktu)) {
+
+} else {
+    echo "Format waktu salah";
+    ?>
+					<script>
+					// Auto redirect setelah 2 detik
+					setTimeout(function(){
+					window.location.href = 'soal_hari_ini.php';
+					}, 2000);
+					</script>
+					<?php	
+					exit;
+}
 $q = $db->query("
 SELECT 
     s.id_siswa,
@@ -13,16 +30,27 @@ SELECT
     u.status,
     COUNT(j.id_soal) AS dijawab
 FROM siswa s
+
 LEFT JOIN ujian u 
     ON u.id_siswa = s.id_siswa
+    AND u.id_ujian IN (
+        SELECT id_ujian 
+        FROM ujian_aktif 
+        WHERE tanggal = '$waktu'
+    )
+
 LEFT JOIN jawaban j 
     ON j.id_siswa = s.id_siswa
+    AND j.id_ujian = u.id_ujian
     AND j.jawaban IS NOT NULL
     AND TRIM(j.jawaban) != ''
+
 WHERE s.rombel = '$ruang'
+
 GROUP BY s.id_siswa
 ORDER BY s.kelas ASC, s.nama_siswa ASC
 ");
+
 
 ?>
 <!DOCTYPE html>
@@ -57,7 +85,7 @@ $ta = mysqli_query($db, "SELECT * FROM `reset`");
                                             while($da=mysqli_fetch_assoc($ta))
                                             {
                                             	echo '<tr><td width="60%">'.$da['nama'].'</td><td>';
-                                       		echo '<a href="reset_siswa.php?id_siswa='.$da['id_siswa'].'" class="btn btn-danger">Reset</a>';
+                                       		echo '<a href="reset_siswa.php?id_siswa='.$da['id_siswa'].'&tanggal='.$tanggal.'&jam='.$pukul.'" class="btn btn-danger">Reset</a>';
                                             	echo '</td></tr>';
                                             }
                                            ?>

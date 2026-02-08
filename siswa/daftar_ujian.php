@@ -7,6 +7,10 @@ if(!isset($_SESSION['id_siswa'], $_SESSION['kelas'])){
 }
 $id_siswa = $_SESSION['id_siswa'];
 $kelas_siswa = $_SESSION['kelas'];
+$ta = $db->query("SELECT * FROM `siswa` WHERE `id_siswa` = '$id_siswa'");
+$da = mysqli_fetch_assoc($ta);
+$nama_siswa =  $da['nama_siswa'] ?? '?';
+$nomor_tes = $da['username'] ?? '';
 $q = $db->query("
 SELECT * FROM ujian_aktif
 WHERE kelas='$kelas_siswa'
@@ -26,7 +30,7 @@ AND NOW() BETWEEN tanggal AND tanggal_selesai
 <div class="container-fluid">
 <div class="card shadow-sm">
 <div class="card-body">
-<?php echo $id_siswa.' '.$kelas_siswa;?>
+<?php echo 'Nama '.$nama_siswa.'<br />Nomor Peserta : '.$nomor_tes.'<br />Kelas:  '.$kelas_siswa;?>
 <h4 class="mb-2">Daftar Tes</h4>
 <table class="table table-bordered table-striped table-sm align-middle">
 <thead class="table-light text-center">

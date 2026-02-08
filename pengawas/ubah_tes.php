@@ -36,24 +36,24 @@ echo 'Soal ini sudah aktif dan tidak bisa diedit!';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
 	// Update data soal
-	$tanggal = $_POST['tanggal']
+	$tanggal = $_POST['tanggal'];
 	$date = new DateTime($tanggal);
 	$date->modify('+1 month');
 	$tanggal_selesai = $date->format('Y-m-d H:i:s');
-	$stmt = $db->prepare("UPDATE ujian_aktif SET tahun = ?, semester = ?, nama_soal = ?, mapel = ?, kelas = ?, tampilan_soal = ?, waktu_ujian = ?, tanggal = ?, user_id = ?, exambrowser = ? WHERE id_ujian = ?");
+	$stmt = $db->prepare("UPDATE ujian_aktif SET tahun = ?, semester = ?, nama_soal = ?, mapel = ?, kelas = ?, tampilan_soal = ?, waktu_ujian = ?, tanggal = ?, tanggal_selesai = ?, user_id = ?, exambrowser = ? WHERE id_ujian = ?");
 	$stmt->bind_param("ssssssississ", $_POST['tahun'], $_POST['semester'], $_POST['nama_soal'], $_POST['mapel'], $_POST['kelas'], $_POST['tampilan_soal'], $_POST['waktu_ujian'], $_POST['tanggal'], $tanggal_selesai, $_POST['id_user'], $_POST['exambrowser'], $_POST['id_ujian']
 );
 
 	if ($stmt->execute()) 
 	{
 		echo 'Data soal berhasil diupdate!';
-		echo 'sukses memperbarui data siswa';
+		echo '<br />sukses memperbarui data tes';
 					?>
 					<script>
 					// Auto redirect setelah 2 detik
 					setTimeout(function(){
 					window.location.href = 'daftar_tes.php';
-					}, 2000);
+					}, 1000);
 					</script>
 					<?php	
 					exit;

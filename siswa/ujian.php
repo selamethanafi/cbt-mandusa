@@ -135,6 +135,7 @@ while ($r = $qj->fetch_assoc()) {
 <form method="post" action="simpan.php">
 <input type="hidden" name="id_soal" value="<?= $id_soal ?>">
 <input type="hidden" name="no" value="<?= $no ?>">
+<input type="hidden" name="nomer_soal" value="<?= $s['nomer_soal'] ?>">
 
 <?php
 /* ===============================
@@ -306,11 +307,15 @@ break;
 <?php if ($no < $total): ?>
 <a href="?no=<?= $no+1 ?>" class="btn btn-primary">Berikutnya ➡</a>
 <?php else: ?>
-<a href="selesai.php" class="btn btn-danger"
-onclick="return confirm('Akhiri ujian?')">Selesai</a>
+<a href="selesai.php" class="btn btn-danger">Selesai</a>
 <?php endif; ?>
 </div>
-
+<?php
+/*
+<a href="selesai.php" class="btn btn-danger"
+onclick="return confirm('Akhiri ujian?')">Selesai</a>
+*/
+?>
 
 </form>
 </div>

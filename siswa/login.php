@@ -25,42 +25,36 @@ $get_nopes = '';
 $error = '';
 
 // Proses login
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+if($_SERVER['REQUEST_METHOD'] == 'POST')
+{
   $nis = $_POST['nis'];
   $pass = $_POST['password'];
-
-  $q = $db->prepare("SELECT * FROM siswa WHERE username=?");
-  $q->bind_param("s",$nis);
+  $q = $db->prepare("SELECT * FROM siswa WHERE username=? AND password=?");
+  $q->bind_param("ss", $nis, $pass);
   $q->execute();
-  $r = $q->get_result()->fetch_assoc();
-	// buat ID login unik
-	$login_token = session_id();
 
+  $result = $q->get_result();
+
+if($result->num_rows > 0){
+    $r = $result->fetch_assoc();
+    $login_token = session_id();
 // cek apakah sudah login di tempat lain
-$cek = $db->query("
-SELECT session_token 
-FROM siswa 
-WHERE id_siswa={$r['id_siswa']}
-")->fetch_assoc();
-if(!empty($cek['session_token']) && $cek['session_token'] != $login_token){
-    exit('Akun ini sedang digunakan di komputer lain <a href="kirim_permintaan_reset.php?nopes='.$nis.'&kode='.$pass.'&reset=perangkat">Kirim permintaan Reset</a>');
-}
-
-// simpan session login
-$db->query("
-UPDATE siswa 
-SET session_token='$login_token'
-WHERE id_siswa={$r['id_siswa']}
-");
-
-$store_password = $r['password'];
-if ($r && verify_siswa_password($pass, $store_password)) {
-$_SESSION['id_siswa'] = $r['id_siswa'];
-    $_SESSION['kelas'] = $r['kelas'];
-    header("Location: daftar_ujian.php");
+	$cek = $db->query("SELECT session_token  FROM siswa WHERE id_siswa={$r['id_siswa']} ")->fetch_assoc();
+	if(!empty($cek['session_token']) && $cek['session_token'] != $login_token){
+	    exit('Akun ini sedang digunakan di perangkat lain <a href="kirim_permintaan_reset.php?nopes='.$nis.'&kode='.$pass.'&reset=perangkat">Kirim permintaan Reset</a>');
+	}
+	// simpan session login
+	$db->query("UPDATE siswa SET session_token='$login_token' WHERE id_siswa={$r['id_siswa']}");
+	$_SESSION['id_siswa'] = $r['id_siswa'];
+	$_SESSION['kelas'] = $r['kelas'];
+	header("Location: daftar_ujian.php");
         exit;
-        }
+    
+}
+else
+{
   $error="Login gagal";
+}
 }
 ?>
 <!DOCTYPE html>

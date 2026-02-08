@@ -56,10 +56,6 @@ $pesan = $dm['pesan']; // <-- bisa diganti $dm['nama'] jika tersedia
 		$agen = clean($dm['agen']);
 		$versi= clean($dm['versi']);
 		$password = clean($dm['password']);
-	// Enkripsi password
-	$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($method));
-	$encrypted = openssl_encrypt($password, $method, $rahasia, 0, $iv);
-	$final = base64_encode($iv . $encrypted);
 	if(empty($password))
 	{
 		die($nama.' password masih kosong, buat dulu');
@@ -79,7 +75,7 @@ $pesan = $dm['pesan']; // <-- bisa diganti $dm['nama'] jika tersedia
 		} else 
 		{
 			$stmt = $db->prepare("INSERT INTO siswa (id_siswa, nama_siswa, username, password, kelas, rombel) VALUES (?,?,?,?,?,?)");
-			$stmt->bind_param("ssssss", $nis, $nama, $username, $final, $kelas, $rombel);
+			$stmt->bind_param("ssssss", $nis, $nama, $username, $password, $kelas, $rombel);
 			$stmt->execute();
 		}
 	}

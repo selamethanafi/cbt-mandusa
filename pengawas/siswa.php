@@ -24,8 +24,10 @@ $q = $db->query($query);
 <thead class="table-light text-center">
 <tr>
     <th style="width:40px;">No</th>
-        <th>Nomor Peserta</th>
+
     <th>Nama Siswa</th>
+    <th>Nomor Peserta</th>
+    <th>Password</th>
     <th style="width:90px;">Kelas</th>
         <th>Sinkron</th>
 </tr>
@@ -37,8 +39,9 @@ while($r = $q->fetch_assoc()){
 ?>
 <tr>
     <td><?= $no++ ?></td>
+    <td class="text-start"><?= htmlspecialchars($r['nama_siswa']) ?></td>    
     <td class="text-start"><?= htmlspecialchars($r['username']) ?></td>    
-    <td class="text-start"><?= htmlspecialchars($r['nama_siswa']) ?></td>
+    <td class="text-start"><?= htmlspecialchars($r['password']) ?></td>    
     <td><?= $r['kelas'] ?></td>
     <td><a href="sinkron_siswa.php?id=<?= $r['id_siswa'];?>">Sinkron</a></td>
 </tr>

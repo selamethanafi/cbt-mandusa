@@ -81,7 +81,7 @@ if (!$result) {
                                                 <td><?php echo $row['tampilan_soal']; ?></td>
                                                 <td>
                                                     <?php if ($row['status'] == 'Aktif') { ?>
-                                                    <span class="badge bg-success">Aktif</span>
+                                                    <span class="badge bg-success">Aktif</span>  <a href="nonaktif.php?id_ujian=<?= $row['id_ujian'];?>" onclick="return confirm('Yakin menonaktifkan tes ini?')">Nonaktifkan</a>
                                                     <?php } else { ?>
                                                     <span class="badge bg-danger">Nonaktif</span>
                                                     <?php } ?>

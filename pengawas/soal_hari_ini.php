@@ -89,7 +89,7 @@ if (!$result) {
                                 }
                                 else
                                 {?>
-                                 <a class="btn btn-primary" href="aktifkan_semua_tes.php?jam=<?php echo $jam;?>" onclick="return confirm('Yakin mengaktifkan tes?')">Aktifkan Semua Tes</a><br /><br />
+                                 <a class="btn btn-primary" href="aktifkan_semua_tes.php?jam=<?php echo $jam;?>" onclick="return confirm('Yakin mengaktifkan tes?')">Aktifkan Semua Tes</a> <a class="btn btn-success" href="monitor.php?tanggal=<?= $tgl;?>&jam=<?php echo $jam;?>">MONITORING</a><br /><br />
 
                                     <table id="soalTable" class="table table-striped">
                                         <thead>
