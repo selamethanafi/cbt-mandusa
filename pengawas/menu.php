@@ -48,6 +48,7 @@ Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php
 </tr>
 </tbody>
 </table>
+<a href="update.php">Update</a>
 </div>
 </div>
 </body>

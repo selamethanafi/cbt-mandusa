@@ -18,4 +18,6 @@ $sianis = $da['konfigurasi_isi'] ?? '';
 $ta = $db->query( "SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'sek_nama'");
 $da = mysqli_fetch_assoc($ta);
 $sek_nama = $da['konfigurasi_isi'] ?? '';
-
+$ta = $db->query( "SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'versi'");
+$da = mysqli_fetch_assoc($ta);
+$versi_aplikasi = $da['konfigurasi_isi'] ?? '0.0.0';
