@@ -8,18 +8,6 @@ require_once '../inc/admin.php';
 // www.sianis.web.id
 ?>
 <?php
-function via_curl($url_ard_unduh)
-{
-	$file = $url_ard_unduh;
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $file);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$xmldata = curl_exec($ch);
-	curl_close($ch);
-	$json = json_decode($xmldata, true);
-	return $json;	
-}
-
 if(isset($_GET['id']))
 {
 	$id = $_GET['id'];
@@ -60,7 +48,7 @@ if(empty($id))
 }
 if(empty($jenis))
 {
-	echo 'Silakan memilih <h1><a href="unduh_tes.php?jenis=sim&id=0">Simulasi</a> <a href="unduh_tes.php?jenis=sum1&id=0">SUM 1</a> <a href="unduh_tes.php?jenis=pht&id=0">PHT</a>  <a href="unduh_tes.php?jenis=pas&id=0">PAS</a>  <a href="unduh_tes.php?jenis=uma&id=0">Asesmen Madrasah</a></h1>';
+	echo 'Silakan memilih <h1><a href="unduh_tes.php?jenis=sim&id=0">Simulasi</a> <a href="unduh_tes.php?jenis=sum1&id=0">SUM 1</a> <a href="unduh_tes.php?jenis=pht&id=0">PHT</a>  <a href="unduh_tes.php?jenis=pas&id=0">PAS</a>  <a href="unduh_tes.php?jenis=uma&id=0">Ujian Madrasah</a></h1>';
 	die();
 }
 //echo $key.' '.$url_bank_soal;
@@ -95,10 +83,12 @@ if((!empty($key)) and (!empty($url_bank_soal)))
 			{
 				if($id == 0)
 				{
+				/*
 					$db->query("truncate `ujian_aktif`");
 					$db->query("truncate `jawaban`");
 					$db->query("truncate `nilai`");
 					$db->query("truncate `ujian`");					
+				*/
 
 				}
 				//echo 'oke';
@@ -107,7 +97,8 @@ if((!empty($key)) and (!empty($url_bank_soal)))
 					$pesan = clean($dm['pesan']);
 					if($pesan == 'ada')
 					{
-						$id_soal= clean($dm['id_soal']);
+						$id_soal= clean($dm['id_soal']);					
+						mysqli_query($db,"delete from `ujian_aktif` where `id_ujian` = '$id_soal'");
 						$kode_soal= clean($dm['kode_soal']);
 						$nama_soal= clean($dm['nama_soal']);
 						$mapel= clean($dm['mapel']);

@@ -73,7 +73,7 @@ if (!$result) {
                                                 <td><?php echo $row['kode_soal']; ?></td>
                                                 <td><?php echo $row['mapel']; ?></td>
                                                 <td><?php echo $row['kelas']; ?></td>
-                                                <td><?php echo $row['cacah_soal']; ?></td>
+                                                <td><?php echo '<a href="view_soal.php?id_ujian='.$row['id_ujian'].'" target="_blank">'.$row['cacah_soal']; ?></a></td>
                                                 <td><i class="fa fa-clock" aria-hidden="true"></i>
                                                     <?php echo $row['waktu_ujian']; ?></td>
                                                 <td><i class="fa fa-calendar-alt" aria-hidden="true"></i>

@@ -71,7 +71,7 @@ else
 <div class="col-md-4">
 <div class="card shadow-sm">
 <div class="card-body">
-<h3 class="card-title text-center mb-3">Login CBT <?= $sek_nama;?></h5>
+<h3 class="card-title text-center mb-3">Login CBT <?= $sek_nama;?><br />Ruang <?= $ruang;?></h5>
 
 <?php if($error): ?>
 <div class="alert-danger"><?= htmlspecialchars($error) ?></div>

@@ -11,18 +11,6 @@ require_once '../inc/admin.php';
 $tahun = cari_thnajaran();
 $semester = cari_semester();
 
-function via_curl($url_ard_unduh)
-{
-	$file = $url_ard_unduh;
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $file);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$xmldata = curl_exec($ch);
-	curl_close($ch);
-	$json = json_decode($xmldata, true);
-	return $json;	
-}
-
 if(isset($_GET['id']))
 {
 	$id = $_GET['id'];
@@ -39,13 +27,11 @@ else
 {
 	$jenis = '';
 }
-$ta = $db->query("SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'app_key_server_cbt_lokal'");
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='url_bank_soal'");
 $da = mysqli_fetch_assoc($ta);
-$key = $da['konfigurasi_isi'];
-$ta = $db->query("SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'url_bank_soal'");
-$da = mysqli_fetch_assoc($ta);
-$url_bank_soal = $da['konfigurasi_isi'];
-//echo $key.' '.$sianis;
+$url_bank_soal = $da['konfigurasi_isi'] ?? '';
+$url_cbt = '..';
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -125,12 +111,19 @@ if((!empty($key)) and (!empty($url_bank_soal)))
 					$nomer_soal     = clean($dms['nomer_soal']);
 					$kode_soal      = clean($dms['kode_soal']);
 					$pertanyaan     = clean($dms['pertanyaan']);
+					$pertanyaan = str_replace($url_bank_soal,$url_cbt,$pertanyaan);
+					$pertanyaan = str_replace($url_bank_soal,$url_cbt,$pertanyaan);
 					$tipe_soal      = clean($dms['tipe_soal']);
 					$pilihan_1      = clean($dms['pilihan_1']);
+					$pilihan_1 = str_replace($url_bank_soal,$url_cbt,$pilihan_1);
 					$pilihan_2      = clean($dms['pilihan_2']);
+					$pilihan_2 = str_replace($url_bank_soal,$url_cbt,$pilihan_2);
 					$pilihan_3      = clean($dms['pilihan_3']);
+					$pilihan_3 = str_replace($url_bank_soal,$url_cbt,$pilihan_3);
 					$pilihan_4      = clean($dms['pilihan_4']);
+					$pilihan_4 = str_replace($url_bank_soal,$url_cbt,$pilihan_4);
 					$pilihan_5      = clean($dms['pilihan_5']);
+					$pilihan_5 = str_replace($url_bank_soal,$url_cbt,$pilihan_5);
 					$jawaban_benar  = clean($dms['jawaban_benar']);
 					$status_soal    = clean($dms['status_soal']);
 					$created_at     = clean($dms['created_at']); // bisa s&j default juga
@@ -216,7 +209,19 @@ if((!empty($key)) and (!empty($url_bank_soal)))
 					}
 					else
 					{
+						echo '<h1>ada tipe soal yang tidak sesuai ketentuan</h1>';
 						die($tipe_soal.' '.$url2);
+					}
+					if(empty($jawaban_benar))
+					{
+						if($tipe_soal == 'uraian')
+						{
+						}
+						else
+						{
+							echo '<h1>kunci kosong</h1>';
+							die('nomor '.$nomer_soal.' '.$url2);
+						}
 					}
 					$sql = "INSERT INTO soal 
 (id, id_ujian,nomer_soal, kode_soal, soal, tipe, a, b, c, d, e, pasangan, kunci)

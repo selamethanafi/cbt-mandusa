@@ -24,11 +24,7 @@ if(isset($_GET['id']))
 					$nama_siswa = $dm['nama'];
 					$kelas = $dm['nama_kelas'];
 					$ruang = $dm['ruang'];
-				        // Enkripsi password
-					$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($method));
-					$encrypted = openssl_encrypt($password, $method, $rahasia, 0, $iv);
-					$final = base64_encode($iv . $encrypted);
-					$db->query("UPDATE `siswa` SET `nama_siswa`= '$nama_siswa',`password`='$final',`username`= '$username', `kelas`= '$kelas',`rombel`='$ruang' WHERE `id_siswa` = '$id'");
+					$db->query("UPDATE `siswa` SET `nama_siswa`= '$nama_siswa',`password`='$password',`username`= '$username', `kelas`= '$kelas',`rombel`='$ruang' WHERE `id_siswa` = '$id'");
 					echo 'sukses memperbarui data siswa';
 					?>
 					<script>
