@@ -27,6 +27,7 @@ if(!$u || time() > strtotime($u['tanggal_selesai'])){
     exit('Ujian sudah berakhir');
 }
 $durasi = $u['waktu_ujian']; // menit
+$exambrowser = $u['exambrowser'];
 /* ===============================
    CATAT WAKTU UJIAN (1x)
 ================================ */
@@ -106,12 +107,43 @@ while ($r = $qj->fetch_assoc()) {
 <div class="container-fluid">
 
 <div class="text-center mb-3">
-    <h4>UJIAN SEKOLAH</h4>
+    <h4>CBT <?= $sek_nama;?> Ruang <?= $ruang;?></h4>
     <small><?= date('Y') ?></small>
 </div>
 
 <div class="card shadow-sm">
-
+<?php
+$boleh = 0;
+if($exambrowser == 1)
+    {
+          $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown User Agent';
+//        echo "The user agent is: " . $userAgent;
+    	$q_a = $db->query("SELECT * FROM agen WHERE nama = '$userAgent'");
+    	if (mysqli_num_rows($q_a) > 0) 
+	    {
+             $boleh++; // kalau perangkat sesuai
+        }
+        else
+        {
+        	$q_a = $db->query("SELECT * FROM agen");
+        	while($da = mysqli_fetch_assoc($q_a))
+        	{
+        	    $agen_terdaftar = $da['nama'];
+        	    $p = strlen($agen_terdaftar);
+        	    if(substr($userAgent,-$p) == $agen_terdaftar)
+        	    {
+        	        $boleh++;
+        	    }
+        	}
+        }
+    }
+    else
+    {
+        $boleh++;
+    }
+    if($boleh > 0 )
+    {
+    ?>
 <div class="d-flex justify-content-between mb-3">
     <div>Soal <?= $no ?> / <?= $total ?></div>
     <div class="timer">⏱ <?= gmdate("H:i:s", $sisa) ?></div>
@@ -318,6 +350,20 @@ onclick="return confirm('Akhiri ujian?')">Selesai</a>
 ?>
 
 </form>
+<?php
+}
+else
+{
+?>
+<div class="card-header text-white">
+                                        <h1 class="mb-0 text-white"><i class="fas fa-clipboard-check"></i> Gunakan Exambrowser</h1>
+                                    </div>
+                                    <div class="card-body">
+                                    <a href="../logout.php" class="btn btn-danger">Keluar</a>   
+                                    <?php 
+}
+
+?>
 </div>
 </div>
 

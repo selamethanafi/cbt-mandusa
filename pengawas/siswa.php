@@ -39,7 +39,7 @@ $q = $db->query($query);
 <form method="POST">
 <div class="mb-3">
 <label for="nopes" class="form-label">Nomor Peserta</label>
-<input type="number" class="form-control" id="nopes" name="nopes" required autofocus>
+<input type="text" class="form-control" id="nopes" name="nopes" required autofocus>
 </div>
 <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Masukkan ke Ruang Ini</button>
 									

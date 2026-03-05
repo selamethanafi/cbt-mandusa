@@ -60,7 +60,21 @@ if(mysqli_num_rows($qs) == 0)
     <td><a href="token.php?id=<?= $id_ujian?>" class="btn btn-primary mb-2">Kerjakan</a></td>
     </td>
 </tr>
-<?php }} ?>
+<?php }
+else
+{
+?>
+<tr class="text-center">
+    <td><?= $no++ ?></td>
+    <td class="text-start"><?= htmlspecialchars($r['nama_soal']) ?></td>
+    <td><?= tanggal_jam($r['tanggal']) ?> s.d. <?= tanggal_jam($r['tanggal_selesai']) ?></td>
+    <td><?= $r['waktu_ujian'] ?> menit</td>
+    <td></td>
+    </td>
+</tr>
+<?php
+}
+} ?>
 </tbody>
 </table>
 

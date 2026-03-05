@@ -67,9 +67,21 @@ AND id_siswa = '$id_siswa'
 <?php
 // simpan nilai
 $db->query("REPLACE INTO nilai (id_siswa, id_ujian, nilai) VALUES ($id_siswa, $id_ujian, $nilai_akhir)");
-echo 'Cacah soal '.$nosoal;
-echo '<div class="alert-danger">Nilai sementara: '.round($nilai_akhir,2).'</div>';
-echo '<br />';
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='tampil_nilai'");
+$da = mysqli_fetch_assoc($ta);
+$batas = $da['konfigurasi_isi'] ?? '0';
+if($batas > 0)
+{
+	echo 'Cacah soal '.$nosoal;
+	echo '<div class="alert-danger">Nilai sementara: '.round($nilai_akhir,2).'</div>';
+	echo '<br />';
+}
+else
+{
+	echo 'Cacah soal '.$nosoal;
+	echo '<div class="alert-danger">Nilai menunggu dikoreksi oleh guru mapel</div>';
+	echo '<br />';
+}
 echo '<a href="../logout.php" class="btn btn-primary mb-2">Keluar</a>';
 ?>
 </div>
