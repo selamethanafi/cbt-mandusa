@@ -22,6 +22,7 @@ if (isValidDateTime($waktu)) {
 $q = $db->query("
 SELECT 
     s.id_siswa,
+    s.username,
     s.nama_siswa,
     s.kelas,
     s.rombel,
@@ -67,6 +68,8 @@ ORDER BY s.kelas ASC, s.nama_siswa ASC
 <h4 class="mb-2">Dashboard Pengawas</h4>
 <table width="100%"><tr><td width="33%"  align="left"><a href="menu.php">Menu</a></td><td align="center">Ruang: <strong><?= htmlspecialchars($ruang) ?></strong></td><td width="33%" align="right">Jam Peladen:  <?= date("d-m-Y H:i");?></td></tr></table><hr>
 <?php
+$belum = 0;
+$tidak = 0;
 $ta = mysqli_query($db, "SELECT * FROM `reset`");
                                 if(mysqli_num_rows($ta) > 0)
 				{
@@ -97,6 +100,7 @@ $ta = mysqli_query($db, "SELECT * FROM `reset`");
 <thead class="table-light text-center">
 <tr>
     <th style="width:40px;">No</th>
+    <th style="width:150px;">No Peserta</th>    
     <th>Nama Siswa</th>
     <th style="width:90px;">Kelas</th>
     <th style="width:90px;">Status</th>
@@ -115,6 +119,7 @@ while($r = $q->fetch_assoc()){
     // badge warna
     if($status == 'aktif'){
         $badge = 'success';
+        $belum++;
     } elseif($status == 'selesai'){
         $badge = 'secondary';
     } else {
@@ -130,6 +135,7 @@ while($r = $q->fetch_assoc()){
 ?>
 <tr>
     <td><?= $no++ ?></td>
+    <td class="text-start"><?= htmlspecialchars($r['username']) ?></td>        
     <td class="text-start"><?= htmlspecialchars($r['nama_siswa']) ?></td>
     <td><?= $r['kelas'] ?></td>
     <td>

@@ -250,7 +250,7 @@ if(($cacah_siswa < 26) and ($cacah_siswa > 0))
 										$nis = $da['id_siswa'];
 										$namasiswa = $da['nama_siswa'];
 										$kelas = $da['kelas'];
-										$tb = mysqli_query($db,"SELECT * FROM `soal` where `tanggal`='$waktu' and `kelas` = '$kelas'");
+										$tb = mysqli_query($db,"SELECT * FROM `ujian_aktif` where `tanggal`='$waktu' and `kelas` = '$kelas'");
 										$kode_soal = '';
 										$waktu_siswa_mengerjakan = '';
 										$nilai = '';										
@@ -259,7 +259,10 @@ if(($cacah_siswa < 26) and ($cacah_siswa > 0))
 											while($db = mysqli_fetch_assoc($tb))
 											{
 											 	$kode_soal = $db['kode_soal'];
-											 	$tc = mysqli_query($db,"select * from `jawaban_siswa` where `kode_soal` = '$kode_soal' and `id_siswa` = '$nis'");						
+											 	$id_ujian = $db['id_ujian'];
+											 //	echo $id_ujian.' '.$nis;
+											 //	echo "<br >select * from `ujian` where `id_ujian` = '$id_ujian' and `id_siswa` = '$nis'";
+											 	$tc = mysqli_query($db,"select * from `ujian` where `id_ujian` = '$id_ujian' and `id_siswa` = '$nis'");						
 											 	$dc = mysqli_fetch_assoc($tc);
 											 	$waktu_siswa_mengerjakan = $dc['waktu_dijawab'] ?? '';
 											 	$td = mysqli_query($db,"select * from `nilai` where `kode_soal` = '$kode_soal' and `id_siswa` = '$nis'");						

@@ -42,8 +42,13 @@ if($id == 0)
 {
 	$db->query("truncate table `siswa`");
 }
-echo 'Total = '.$total;
+echo 'Total = '.$total.'<br />';
 //die('id '.$id.' dari '.$total);
+if($total == 0)
+{
+	echo '<a href="'.$url.'" target="blank_">Cek</a><br />';
+	die('tidak ada peserta di simamad');
+}
 $progress = $id * 100 / $total;
 $progress = round($progress);
 if($id < $total)
