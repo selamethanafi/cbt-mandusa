@@ -110,7 +110,7 @@ if (version_compare($versi_baru, $versi_saat_ini, '>'))
 			// 📝 Log setiap update (disimpan di file update_log.txt)
 			file_put_contents(
 			__DIR__ . '/update_log.txt',
-			"[" . date('Y-m-d H:i:s') . "] Update berhasil → versi baru: $versi_baru_safe\n",
+			"[" . date('Y-m-d H:i:s') . "] Update berhasil → versi baru: $versi_baru\n",
 			FILE_APPEND
 			);
 			echo '<br />success';

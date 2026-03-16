@@ -64,7 +64,7 @@ body{
 <body>
 
 <h2>Daftar Soal Ujian</h2>
-
+<a href="unduh_soal.php?id=<?= $id_ujian;?>">Unduh soal</a>
 <?php
 $no = 1;
 
