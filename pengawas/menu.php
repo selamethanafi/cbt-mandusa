@@ -43,7 +43,8 @@ Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php
 </td>
     <td>
        	<p><a class="btn btn-primary" href="soal_hari_ini.php">Daftar Tes Hari Ini</a></p>
-    	<p><a class="btn btn-primary" href="daftar_tes.php">Daftar Tes</a></p>    	
+    	<p><a class="btn btn-primary" href="daftar_tes.php">Daftar Tes</a></p>
+    	    	<p><a class="btn btn-primary" href="daftar_tes_per_tanggal.php">Daftar Tes Per Sesi</a></p>    	    	
     </td>
     <td><p><a class="btn btn-primary" href="soal_hari_ini.php">Pengawasan</a></p>
     <p><a class="btn btn-primary" href="kirim_nilai.php">Kirim Hasil</a></p></td>

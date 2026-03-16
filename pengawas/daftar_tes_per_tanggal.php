@@ -2,18 +2,37 @@
 require_once '../inc/config.php';
 require_once '../inc/fungsi.php';
 require_once '../inc/admin.php';
-$hal = 0;
-if(isset($_GET['hal']))
-{
-	$hal = $_GET['hal'];
-	
-}
-$limit = $hal * 10;
-$semester = cari_semester();
-$ajaran = cari_thnajaran();
 
-//$query = "SELECT * FROM `ujian_aktif` ORDER BY `ujian_aktif`.`tanggal` ASC";
-$query= "SELECT ua.id_ujian,
+$ke = $_GET['ke'] ?? 0;
+if (!$db) {
+    die("Koneksi database gagal: " . mysqli_connect_error());
+}
+$aksi = '';
+$nama_pengawas = '';
+$catatan = '';
+$ta =  mysqli_query($db, "SELECT DISTINCT `tanggal` FROM `ujian_aktif` order by `tanggal` limit $ke,1 ");
+$da = mysqli_fetch_assoc($ta);
+$waktu = $da['tanggal'];
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Tes</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+<p><a class="btn btn-primary" href="menu.php">Menu</a></p>
+<?php
+echo $waktu;
+?>
+                    <div class="row">
+                    <?php
+	$query= "SELECT ua.id_ujian,
     ua.kode_soal,
     ua.nama_soal,
     ua.mapel, ua.kelas,ua.tampilan_soal, ua.status, ua.token,
@@ -23,34 +42,17 @@ $query= "SELECT ua.id_ujian,
 FROM ujian_aktif ua
 LEFT JOIN soal s 
     ON s.id_ujian = ua.id_ujian
+    WHERE ua.tanggal = '$waktu'
 GROUP BY 
     ua.id_ujian,
     ua.kode_soal,
     ua.nama_soal,
     ua.mapel,
     ua.waktu_ujian,
-    ua.tanggal
-ORDER BY ua.tanggal ASC limit $limit,10;
-";
+    ua.tanggal";
 $result = mysqli_query($db, $query);
-
-// Check if the query was successful
-if (!$result) {
-    // If there's an error with the query, display the error message
-    die('Error with the query: ' . mysqli_error($koneksi));
-}
-?>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Daftar Tes</title>
-<link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
-<div class="container-fluid">
-<p><a class="btn btn-primary" href="menu.php">Menu</a></p>
+	                    $no = 1;
+	                    ?>
 <table class="table table-bordered table-striped table-sm align-middle">
                                         <thead>
                                             <tr>
@@ -70,7 +72,7 @@ if (!$result) {
                                             <?php $no = 1; while ($row = mysqli_fetch_assoc($result)) { ?>
                                             <tr>
                                                 <td><?php echo '<a href="ubah_tes.php?id='.$row['id_ujian'].'">'.$no++.'</a>'; ?></td>
-                                                <td><?php echo '<a href="sinkron_jadwal.php?id='.$row['id_ujian'].'">'.$row['kode_soal']; ?></a></td>
+                                                <td><?php echo $row['kode_soal']; ?></td>
                                                 <td><?php echo $row['mapel']; ?></td>
                                                 <td><?php echo $row['kelas']; ?></td>
                                                 <td><?php echo '<a href="view_soal.php?id_ujian='.$row['id_ujian'].'" target="_blank">'.$row['cacah_soal']; ?></a></td>
@@ -91,26 +93,24 @@ if (!$result) {
                                             <?php } ?>
                                         </tbody>
                                     </table>
-<?php
-if($hal == 0)
+                 <?php                   
+if($ke == 0)
 {
-	echo '<a href="daftar_tes.php?hal=1">Halaman Selanjutnya</a>'; 
+	echo '<a href="daftar_tes_per_tanggal.php?ke=1">Halaman Selanjutnya</a>'; 
 }
-elseif($hal == 1)
+elseif($ke == 1)
 {
-	echo '<a href="daftar_tes.php">Halaman Sebelumnya</a> '; 
-	echo '<a href="daftar_tes.php?hal=2">Halaman Selanjutnya</a> '; 
+	echo '<a href="daftar_tes_per_tanggal.php">Halaman Sebelumnya</a> '; 
+	echo '<a href="daftar_tes_per_tanggal.php?ke=2">Halaman Selanjutnya</a> '; 
 }
 else
 {
-	$prev = $hal - 1;
-	$nex = $hal + 1;
-	echo '<a href="daftar_tes.php?hal='.$prev.'">Halaman Sebelumnya</a> '; 
-	echo '<a href="daftar_tes.php?hal='.$nex.'">Halaman Selanjutnya</a> '; 	
+	$prev = $ke - 1;
+	$nex = $ke + 1;
+	echo '<a href="daftar_tes_per_tanggal.php?ke='.$prev.'">Halaman Sebelumnya</a> '; 
+	echo '<a href="daftar_tes_per_tanggal.php?ke='.$nex.'">Halaman Selanjutnya</a> '; 	
 }
 ?>
-    </div>
-  
 </body>
 
 </html>
