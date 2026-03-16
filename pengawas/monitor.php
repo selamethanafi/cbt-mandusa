@@ -67,7 +67,9 @@ ORDER BY s.kelas ASC, s.nama_siswa ASC
 <div class="container-fluid">
 <h4 class="mb-2">Dashboard Pengawas</h4>
 <table width="100%"><tr><td width="33%"  align="left"><a href="menu.php">Menu</a></td><td align="center">Ruang: <strong><?= htmlspecialchars($ruang) ?></strong></td><td width="33%" align="right">Jam Peladen:  <?= date("d-m-Y H:i");?></td></tr></table><hr>
+
 <?php
+echo '<a href="monitor.php?tanggal='.$tanggal.'&jam='.$pukul.'" class="btn btn-success">Muat Ulang</a>';
 $belum = 0;
 $tidak = 0;
 $ta = mysqli_query($db, "SELECT * FROM `reset`");

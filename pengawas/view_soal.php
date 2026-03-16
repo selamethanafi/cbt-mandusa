@@ -141,7 +141,7 @@ elseif($row['tipe'] == "ESAI"){
 
 }
 
-echo "<div class='kunci'>Kunci: xxx {$row['kunci']}</div>";
+echo "<div class='kunci'>Kunci: {$row['kunci']}</div>";
 
 echo "</div>";
 

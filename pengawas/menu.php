@@ -5,6 +5,9 @@ require_once '../inc/admin.php';
 $ta = $db->query("SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'cbt_ruang'");
                                         $da = mysqli_fetch_assoc($ta);
                                         $ruang = $da['konfigurasi_isi'];
+$ta = $db->query("SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'versi'");
+                                        $da = mysqli_fetch_assoc($ta);
+                                        $versi = $da['konfigurasi_isi'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -49,9 +52,10 @@ Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php
 </tr>
 </tbody>
 </table>
-<a href="update.php">Update</a>
+Versi <?= $versi;?> <a href="update.php"  class="btn btn-success">Update</a>
 </div>
 </div>
+
 </body>
 </html>
 

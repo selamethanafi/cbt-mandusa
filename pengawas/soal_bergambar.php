@@ -2,7 +2,7 @@
 require_once '../inc/config.php';
 require_once '../inc/fungsi.php';
 require_once '../inc/admin.php';
-
+echo 'Soal ada gambar<br />';
 $sql = "SELECT soal, a, b, c, d, e
         FROM soal
         WHERE soal LIKE ?
