@@ -12,7 +12,7 @@ $nama_pengawas = '';
 $catatan = '';
 $ta =  mysqli_query($db, "SELECT DISTINCT `tanggal` FROM `ujian_aktif` order by `tanggal` limit $ke,1 ");
 $da = mysqli_fetch_assoc($ta);
-$waktu = $da['tanggal'];
+$waktu = $da['tanggal'] ?? date("Y-m-d H:i:d");
 
 ?>
 <!DOCTYPE html>
@@ -51,6 +51,8 @@ GROUP BY
     ua.waktu_ujian,
     ua.tanggal";
 $result = mysqli_query($db, $query);
+if(mysqli_num_rows($result) > 0)
+{
 	                    $no = 1;
 	                    ?>
 <table class="table table-bordered table-striped table-sm align-middle">
@@ -93,7 +95,8 @@ $result = mysqli_query($db, $query);
                                             <?php } ?>
                                         </tbody>
                                     </table>
-                 <?php                   
+                 <?php        
+                 }           
 if($ke == 0)
 {
 	echo '<a href="daftar_tes_per_tanggal.php?ke=1">Halaman Selanjutnya</a>'; 
