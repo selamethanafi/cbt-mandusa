@@ -61,19 +61,14 @@ while($da = mysqli_fetch_assoc($ta))
 		if(empty($nama_mapel))
 		{
 			$nama_mapel .= $da['mapel'];
+			$nama_mapel .= ' ('.$da['kelas'].')';
 		}
 		else
 		{
 			$nama_mapel .= ', '.$da['mapel'];
+			$nama_mapel .= ' ('.$da['kelas'].')';
 		}
-		if(empty($nama_kelas))
-		{
-			$nama_kelas .= $da['kelas'];
-		}
-		else
-		{
-			$nama_kelas .= ', '.$da['kelas'];
-		}
+		
 	}
  }
 $jml_hadir = 0;
@@ -129,7 +124,7 @@ $cacah_siswa = mysqli_num_rows($tsisru);
 	<table width="100%">
 		<tbody>
 			<tr>
-				<td width="100"><img src="../assets/images/logo_kiri.png" height="75"></td>
+				<td width="100"><img src="../img/logo_kiri.png" height="75"></td>
 				<td><center>
 					<strong class="f12">
 									BERITA ACARA PELAKSANAAN<br>
@@ -140,7 +135,7 @@ $cacah_siswa = mysqli_num_rows($tsisru);
 									echo strtoupper($nama_ujian);?><br />TAHUN AJARAN <?php echo $thnajaran;?></strong>
 									</center>
 								</td>
-									<td width="100"><img src="../assets/images/logo_kanan.png" height="75"></td>
+									<td width="100"><img src="../img/logo_kanan.png" height="75"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -172,11 +167,6 @@ $cacah_siswa = mysqli_num_rows($tsisru);
 				<td>
 					<span class="full"><?php echo $ruang;?></span>
 			</td></tr>
-			<tr>
-				<td>Kelas</td>
-				<td>:</td>
-				<td><span class="full"><?php echo $nama_kelas;?></span></td>
-			</tr>
 			<tr>
 				<td>Jumlah Peserta Seharusnya</td>
 				<td>:</td>

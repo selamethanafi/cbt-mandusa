@@ -70,7 +70,7 @@ if (!$result) {
                                             <?php $no = 1; while ($row = mysqli_fetch_assoc($result)) { ?>
                                             <tr>
                                                 <td><?php echo '<a href="ubah_tes.php?id='.$row['id_ujian'].'">'.$no++.'</a>'; ?></td>
-                                                <td><?php echo '<a href="sinkron_jadwal.php?id='.$row['id_ujian'].'">'.$row['kode_soal']; ?></a></td>
+                                                <td><?php echo '<a href="sinkron_jadwal.php?id='.$row['id_ujian'].'&hal='.$hal.'">'.$row['kode_soal']; ?></a></td>
                                                 <td><?php echo $row['mapel']; ?></td>
                                                 <td><?php echo $row['kelas']; ?></td>
                                                 <td><?php echo '<a href="view_soal.php?id_ujian='.$row['id_ujian'].'" target="_blank">'.$row['cacah_soal']; ?></a></td>

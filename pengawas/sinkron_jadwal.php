@@ -16,7 +16,14 @@ else
 {
 	$id = '';
 }
-
+if(isset($_GET['hal']))
+{
+	$hal = $_GET['hal'];
+}
+else
+{
+	$hal = '';
+}
 $ta = $db->query( "SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'app_key_server_cbt_lokal'");
 $da = mysqli_fetch_assoc($ta);
 $key = $da['konfigurasi_isi'];
@@ -73,7 +80,7 @@ if((!empty($key)) and (!empty($url_bank_soal)))
 				$stmt->execute();
 			}
 		}
-		header('Location: daftar_tes.php');
+		header('Location: daftar_tes.php?hal='.$hal);
 	}
 	else
 	{

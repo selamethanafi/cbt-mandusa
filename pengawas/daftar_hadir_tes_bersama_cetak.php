@@ -62,7 +62,7 @@ if(($cacah_siswa < 26) and ($cacah_siswa > 0))
 						<div class="page">
 							<table width="100%">
 								<tbody><tr>
-									<td width="100"><img src="../assets/images/logo_kiri.png" height="75"></td>
+									<td width="100"><img src="../img/logo_kiri.png" height="75"></td>
 									<td><center><strong class="f12">
 									DAFTAR HADIR PESERTA<br>
 									<?php 
@@ -72,7 +72,7 @@ if(($cacah_siswa < 26) and ($cacah_siswa > 0))
 									echo strtoupper($kegiatan);?><br />TAHUN AJARAN <?php echo $thnajaran;?></strong>
 									</center>
 									</td>
-									<td width="100"><img src="../assets/images/logo_kanan.png" height="75"></td>
+									<td width="100"><img src="../img/logo_kanan.png" height="75"></td>
 									</tr>
 								</tbody>
 							</table>
@@ -101,7 +101,7 @@ if(($cacah_siswa < 26) and ($cacah_siswa > 0))
 										<th>No.</th>
 										<th>NISM</th>
 										<th>Nama Peserta<br> </th><th>Selesai Mengerjakan</th>
-										<th>Nilai</th>
+										<th>Tanda Tangan</th>
 									</tr>
 									<?php
 									while($da = mysqli_fetch_assoc($ta))
@@ -137,7 +137,7 @@ if(($cacah_siswa < 26) and ($cacah_siswa > 0))
 										}
 										
 										echo '<tr><td align="center" width="15">'.$nomor.'</td>
-											<td align="center" width="100">'.$nis.'</td><td>'.$namasiswa.'</td><td align="center">'.$waktu_siswa_mengerjakan.'</td><td align="center">'.$nilai.'</td>';
+											<td align="center" width="100">'.$nis.'</td><td>'.$namasiswa.'</td><td align="center">'.$waktu_siswa_mengerjakan.'</td><td align="center"></td>';
 
 										echo '</tr>';
 										$nomor++;
@@ -242,7 +242,7 @@ if(($cacah_siswa < 26) and ($cacah_siswa > 0))
 										<th>No.</th>
 										<th>NISM</th>
 										<th>Nama Peserta<br> </th><th>Waktu Mengerjakan</th>
-										<th>Nilai</th>
+										<th>Tanda Tangan</th>
 									</tr>
 									<?php
 									while($da = mysqli_fetch_assoc($ta))
@@ -279,7 +279,7 @@ if(($cacah_siswa < 26) and ($cacah_siswa > 0))
 											$jml_hadir++;
 										}
 										echo '<tr><td align="center" width="15">'.$nomor.'</td>
-											<td align="center" width="100">'.$nis.'</td><td>'.$namasiswa.'</td><td align="center">'.$waktu_siswa_mengerjakan.'</td><td align="center">'.$nilai.'</td>';
+											<td align="center" width="100">'.$nis.'</td><td>'.$namasiswa.'</td><td align="center">'.$waktu_siswa_mengerjakan.'</td><td align="center"></td>';
 
 										echo '</tr>';
 										$nomor++;
@@ -343,7 +343,7 @@ if(($cacah_siswa < 26) and ($cacah_siswa > 0))
 										<th>No.</th>
 										<th>NISM</th>
 										<th>Nama Peserta<br> </th><th>Waktu Mengerjakan</th>
-										<th>Nilai</th>
+										<th>Tanda Tangan</th>
 									</tr>
 									<?php
 									while($da = mysqli_fetch_assoc($ta))
@@ -377,7 +377,7 @@ $td = mysqli_query($db,"select * from `nilai` where `kode_soal` = '$kode_soal' a
 											$jml_hadir++;
 										}
 										echo '<tr><td align="center" width="15">'.$nomor.'</td>
-											<td align="center" width="100">'.$nis.'</td><td>'.$namasiswa.'</td><td align="center">'.$waktu_siswa_mengerjakan.'</td><td align="center">'.$nilai.'</td>';
+											<td align="center" width="100">'.$nis.'</td><td>'.$namasiswa.'</td><td align="center">'.$waktu_siswa_mengerjakan.'</td><td align="center"></td>';
 
 										echo '</tr>';
 										$nomor++;

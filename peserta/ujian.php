@@ -159,7 +159,13 @@ if($exambrowser == 1)
 <a href="?no=<?= $i+1 ?>" class="<?= $kelas ?>"><?= $i+1 ?></a>
 <?php endforeach; ?>
 </div>
-
+<div class="d-flex justify-content-between mb-2">
+    <div>
+        <button class="btn btn-outline-secondary" onclick="fontMinus()">A-</button>
+        <button class="btn btn-outline-secondary" onclick="fontReset()">A</button>
+        <button class="btn btn-outline-secondary" onclick="fontPlus()">A+</button>
+    </div>
+</div>
 <!-- SOAL -->
 <div class="soal"><?= $s['soal'] ?>
 </div>
@@ -366,7 +372,43 @@ else
 ?>
 </div>
 </div>
+<script>
+let fontSize = localStorage.getItem('fontSoal') || 1.1;
 
+function applyFont(){
+    document.querySelectorAll('.soal').forEach(el=>{
+        el.style.fontSize = fontSize + 'rem';
+    });
+
+    document.querySelectorAll('.opsi-teks').forEach(el=>{
+        el.style.fontSize = (fontSize * 0.95) + 'rem';
+    });
+}
+
+function fontPlus(){
+    if(fontSize < 2){
+        fontSize = parseFloat(fontSize) + 0.1;
+        localStorage.setItem('fontSoal', fontSize);
+        applyFont();
+    }
+}
+
+function fontMinus(){
+    if(fontSize > 0.8){
+        fontSize = parseFloat(fontSize) - 0.1;
+        localStorage.setItem('fontSoal', fontSize);
+        applyFont();
+    }
+}
+
+function fontReset(){
+    fontSize = 1.1;
+    localStorage.setItem('fontSoal', fontSize);
+    applyFont();
+}
+
+applyFont();
+</script>
 </body>
 </html>
 
