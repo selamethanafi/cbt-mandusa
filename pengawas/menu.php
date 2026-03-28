@@ -39,6 +39,7 @@ Ruang: <strong><?= htmlspecialchars($ruang) ?></strong>
 Unduh Peserta</a></p><p><a class="btn btn-primary" href="sinkron_peserta_per_ruang.php" onclick="return confirm('Yakin mengunduh peserta di ruang ini?')">
 Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php"  onclick="return confirm('Yakin mengunduh tes dari server pusat?')">Unduh Tes</a></p><p><a class="btn btn-primary" href="unduh_soal_per_kode_soal.php"  onclick="return confirm('Yakin mengunduh soal dari server pusat?')">Unduh Soal</a></p>
 <p><a class="btn btn-primary" href="siswa.php">Daftar Peserta</a></p>
+<p><a class="btn btn-primary" href="update_jadwal.php"  onclick="return confirm('Yakin memutahirkan data cbt dari server pusat?')">Update CBT</a></p>
 <p><a class="btn btn-primary" href="pengaturan.php">Pengaturan</a></p>
 </td>
     <td>
