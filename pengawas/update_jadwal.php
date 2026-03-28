@@ -35,12 +35,11 @@ $ta = $db->query("SELECT * FROM `ujian_aktif`");
 $total = mysqli_num_rows($ta);
 $tb = $db->query("SELECT * FROM `ujian_aktif` order by `id_ujian` limit $ke,1");
 $ada = mysqli_num_rows($tb);
-echo 'halo';
 if($ada > 0)
 {
 	$data = mysqli_fetch_assoc($tb);
 	$id = $data['id_ujian'];
-	$nama_soale = $data['nama_soal'];
+	$nama_soale = $data['kode_soal'].' '.$data['nama_soal'];
 	if((!empty($key)) and (!empty($url_bank_soal)))
 	{
 		$url = $url_bank_soal.'/tukardata/jadwal_json.php?app_key='.$key.'&id='.$id;
