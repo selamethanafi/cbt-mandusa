@@ -66,7 +66,21 @@ AND id_siswa = '$id_siswa'
 <h4 class="mb-2">Hasil Tes</h4>
 <?php
 // simpan nilai
-$db->query("REPLACE INTO nilai (id_siswa, id_ujian, nilai) VALUES ($id_siswa, $id_ujian, $nilai_akhir)");
+$db->query("
+UPDATE ujian
+SET status = 'Selesai'
+WHERE id_ujian = '$id_ujian'
+AND id_siswa = '$id_siswa'
+");
+$stmt = $db->prepare("
+INSERT INTO nilai (id_siswa, id_ujian, nilai) 
+VALUES (?, ?, ?)
+ON DUPLICATE KEY UPDATE nilai = VALUES(nilai)
+");
+
+$stmt->bind_param("iid", $id_siswa, $id_ujian, $nilai_akhir);
+$stmt->execute();
+
 $ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='tampil_nilai'");
 $da = mysqli_fetch_assoc($ta);
 $batas = $da['konfigurasi_isi'] ?? '0';

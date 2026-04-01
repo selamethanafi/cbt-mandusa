@@ -33,6 +33,7 @@ if(isset($_GET['tanggal']))
 </head>
 
 <body>
+<p><a class="btn btn-primary" href="menu.php">Menu</a></p>
                                
                                     <form method="POST">
                                         <div class="row mb-3">

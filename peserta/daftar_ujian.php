@@ -63,6 +63,7 @@ if(mysqli_num_rows($qs) == 0)
 <?php }
 else
 {
+/*
 ?>
 <tr class="text-center">
     <td><?= $no++ ?></td>
@@ -73,6 +74,7 @@ else
     </td>
 </tr>
 <?php
+*/
 }
 } ?>
 </tbody>
