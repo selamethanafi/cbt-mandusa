@@ -157,12 +157,14 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	}
 	else
 	{
+		$ket_absen = '';
 		foreach($json as $dt)
 		{
 			$pesan = $dt['pesan'];
 			if($pesan == 'ada')
 			{
 				$hadir = $dt['hadir'];
+				$ket_absen = $dt['keterangan'];
 			}
 			
 		}
@@ -172,7 +174,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	{
 		$sql = "update `siswa` set `password` = '$token' where `id_siswa` = '$id_siswa'";
 		$insert = $db->query($sql); 
-		echo ' password berubah karena '.$hadir;
+		echo 'password berubah karena '.$hadir.' '.$ket_absen;
 		$waktu = 2000;
 	}
 	$ke++;
