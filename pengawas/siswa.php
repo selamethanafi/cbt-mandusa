@@ -54,6 +54,7 @@ $q = $db->query($query);
     <th>Nomor Peserta</th>
     <th>Password</th>
     <th style="width:90px;">Kelas</th>
+    <th>Hasil</th>
         <th>Sinkron</th>
         <th>Keluarkan</th>
 </tr>
@@ -70,6 +71,7 @@ $nama_siswa = $r['nama_siswa'];
     <td class="text-start"><?= htmlspecialchars($r['username']) ?></td>    
     <td class="text-start"><?= htmlspecialchars($r['password']) ?></td>    
     <td><?= $r['kelas'] ?></td>
+    <td><a class="btn btn-primary" href="hasil_siswa.php?id=<?= $r['id_siswa'];?>">Lihat Hasil</a></td>
     <td><a class="btn btn-primary" href="sinkron_siswa.php?id=<?= $r['id_siswa'];?>">Sinkron</a></td>
     <td>
     <a class="btn btn-primary" href="siswa.php?nopes=<?php echo $r['username'];?>" onclick="return confirm('Yakin mengeluarkan siswa ini dari ruang ini?')">Keluarkan</a> </td>

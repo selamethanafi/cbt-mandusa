@@ -148,7 +148,21 @@ echo "</div>";
 $no++;
 
 endwhile;
-?>
+$qsoal = $db->query("SELECT * FROM `soal` WHERE `id_ujian`= '$id_ujian' order by `nomer_soal` ASC");
+	$kunci_jawaban = '';
+	while($dq = mysqli_fetch_assoc($qsoal))
+	{
+		if(empty($kunci_jawaban))
+		{
+			$kunci_jawaban .= $dq['kunci'];
+		}
+		else
+		{
+			$kunci_jawaban .= '#'.$dq['kunci'];
+		}
+		
+	}
+echo $kunci_jawaban;?>
 
 </body>
 </html>

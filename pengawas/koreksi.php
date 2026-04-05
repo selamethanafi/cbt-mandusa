@@ -1,15 +1,12 @@
 <?php
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 require_once '../inc/config.php';
 require_once '../inc/fungsi.php';
 require_once '../inc/admin.php';
-include '../siswa/fungsi_nilai.php';
+include '../peserta/fungsi_nilai.php';
 $id_siswa = (int) $_GET['id_siswa'];
 $id_ujian = (int) $_GET['id_ujian'];
-$tanggal=$_GET['tanggal'];
-$jam = $_GET['jam'];
+$tanggal=$_GET['tanggal'] ?? '';
+$jam = $_GET['jam'] ?? '';
 
 $q = $db->query("
 SELECT j.id,
@@ -61,10 +58,25 @@ ON DUPLICATE KEY UPDATE nilai = VALUES(nilai)
 
 $stmt->bind_param("iid", $id_siswa, $id_ujian, $nilai_akhir);
 $stmt->execute();
-echo $nilai_akhir;
+echo 'Nilai '.$nilai_akhir;
+if((empty($tanggal)) or (empty($jam) ))
+{
 ?>
 <script>setTimeout(function () {
-			   window.location.href= 'nilai.php?tanggal=<?php echo $tanggal;?>&jam=<?php echo $jam;?>';
-				},100);
+			   window.location.href= 'hasil_siswa.php?id=<?php echo $id_siswa;?>';
+				},1000);
 			</script>
 			<?php
+
+
+}
+else
+{
+?>
+
+<script>setTimeout(function () {
+			   window.location.href= 'nilai.php?tanggal=<?php echo $tanggal;?>&jam=<?php echo $jam;?>';
+				},10);
+			</script>
+			<?php
+}
