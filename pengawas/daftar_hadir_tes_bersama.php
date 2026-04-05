@@ -12,7 +12,7 @@ $catatan = '';
 if(isset($_GET['tanggal']))
 {
 	$tanggal_tes = $_GET['tanggal'];
-	$ta =  mysqli_query($db, "SELECT * FROM `pengawas` WHERE `waktu` = '$tanggal_tes'");
+	$ta =  mysqli_query($db, "SELECT * FROM `daftar_pengawas` WHERE `waktu` = '$tanggal_tes'");
 	if(mysqli_num_rows($ta) > 0)
 	{
 		$aksi = 'ubah';
