@@ -8,6 +8,28 @@ $ta = $db->query("SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'cb
 $ta = $db->query("SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'versi'");
                                         $da = mysqli_fetch_assoc($ta);
                                         $versi = $da['konfigurasi_isi'];
+$stmt = $db->prepare("
+    SELECT COUNT(*) 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_SCHEMA = DATABASE() 
+    AND TABLE_NAME = ? 
+    AND COLUMN_NAME = ?
+");
+
+$table = 'ujian_aktif';
+$column = 'nilai';
+
+$stmt->bind_param("ss", $table, $column);
+$stmt->execute();
+$stmt->bind_result($exists);
+$stmt->fetch();
+$stmt->close();
+
+if (!$exists) {
+    $db->query("ALTER TABLE ujian_aktif 
+                ADD nilai TINYINT(1) NOT NULL DEFAULT 1 
+                AFTER tanggal_selesai");
+}                                        
 ?>
 <!DOCTYPE html>
 <html>

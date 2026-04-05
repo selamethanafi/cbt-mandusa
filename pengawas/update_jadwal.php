@@ -69,12 +69,13 @@ if($ada > 0)
 					$exambrowser= clean($dm['exambrowser']);
 					$tahun= clean($dm['tahun']);
 					$semester= clean($dm['semester']);
-					$sql = "UPDATE ujian_aktif SET kode_soal = ?, nama_soal = ?, mapel = ?, kelas = ?, waktu_ujian = ?, tanggal = ?, status = ?, tampilan_soal = ?, kunci = ?, token = ?, user_id = ?, exambrowser = ?, tahun = ?, semester = ?, tanggal_selesai = ? WHERE id_ujian = ?";
+					$nilai = clean($dm['nilai']);
+					$sql = "UPDATE ujian_aktif SET kode_soal = ?, nama_soal = ?, mapel = ?, kelas = ?, waktu_ujian = ?, tanggal = ?, status = ?, tampilan_soal = ?, kunci = ?, token = ?, user_id = ?, exambrowser = ?, tahun = ?, semester = ?, tanggal_selesai = ?, nilai = ? WHERE id_ujian = ?";
 					$stmt = $db->prepare($sql);
 					if (!$stmt) {
 					    die("Prepare error: " . $db->error);
 					}
-					$stmt->bind_param("ssssisssssiisssi", $kode_soal,$nama_soal,$mapel,$kelas,$waktu_ujian,$tanggal,$status,$tampilan_soal,$kunci,$token,$user_id,$exambrowser,$tahun,$semester,$tanggal_selesai,$id);
+					$stmt->bind_param("ssssisssssiisssii", $kode_soal,$nama_soal,$mapel,$kelas,$waktu_ujian,$tanggal,$status,$tampilan_soal,$kunci,$token,$user_id,$exambrowser,$tahun,$semester,$tanggal_selesai,$nilai,$id);
 					$stmt->execute();
 					if (!$stmt->execute()) 
 					{

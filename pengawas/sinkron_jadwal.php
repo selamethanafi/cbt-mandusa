@@ -71,12 +71,13 @@ if((!empty($key)) and (!empty($url_bank_soal)))
 				$exambrowser= clean($dm['exambrowser']);
 				$tahun= clean($dm['tahun']);
 				$semester= clean($dm['semester']);
-				$sql = "INSERT INTO `ujian_aktif` (`id_ujian`, `kode_soal`, `nama_soal`, `mapel`, `kelas`, `waktu_ujian`, `tanggal`, `status`, `tampilan_soal`, `kunci`, `token`, `user_id`, `exambrowser`, `tahun`, `semester`, `tanggal_selesai`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				$nilai = clean($dm['nilai']);
+				$sql = "INSERT INTO `ujian_aktif` (`id_ujian`, `kode_soal`, `nama_soal`, `mapel`, `kelas`, `waktu_ujian`, `tanggal`, `status`, `tampilan_soal`, `kunci`, `token`, `user_id`, `exambrowser`, `tahun`, `semester`, `tanggal_selesai`,`nilai`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 				$stmt = $db->prepare($sql);
 				if (!$stmt) {
 				    die("Prepare error: " . $db->error);
 				}
-				$stmt->bind_param("issssisssssiisss",$id_soal, $kode_soal,$nama_soal, $mapel, $kelas, $waktu_ujian, $tanggal, $status, $tampilan_soal, $kunci, $token, $user_id, $exambrowser, $tahun, $semester, $tanggal_selesai);
+				$stmt->bind_param("issssisssssiisssi",$id_soal, $kode_soal,$nama_soal, $mapel, $kelas, $waktu_ujian, $tanggal, $status, $tampilan_soal, $kunci, $token, $user_id, $exambrowser, $tahun, $semester, $tanggal_selesai,$nilai);
 				$stmt->execute();
 			}
 		}

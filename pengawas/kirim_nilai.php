@@ -74,6 +74,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	$qnu = $db->query("SELECT * FROM `ujian_aktif` WHERE `id_ujian` = '$id_ujian'");
 	$dnu = mysqli_fetch_assoc($qnu);
 	$kode_soal = $dnu['kode_soal'] ?? '';
+	$boleh = $dnu['nilai'] ?? '1';
 	$token = substr(str_shuffle('ABCDEFGHJKLMNPQRSTWXYZ123456789'), 0, 6);
 	$qj = $db->query("SELECT * FROM `jawaban` where `id_siswa` = '$id_siswa' and `id_ujian` = '$id_ujian' ORDER BY `id_soal` ASC");
 	$jwb_siswa = '';
@@ -112,6 +113,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 			'hasil_analisis' => $analisis,
 			'kunci_jawaban' => $kunci_jawaban,
 			'skor_per_soal' => $skor_per_soal,
+			'boleh' => $boleh,
 			];
 	//print_r($params);
 	if($hasil = postcurl($url,$params))
