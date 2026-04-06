@@ -10,11 +10,18 @@ $query= "SELECT * from siswa where `id_siswa` = '$id_siswa'";
 
 $q = $db->query($query);
 $qn = $db->query("
-    SELECT u.id_ujian, n.nilai
+    SELECT 
+        u.id_ujian,
+        ua.kode_soal,
+        ua.nama_soal,
+        ua.mapel,
+        n.nilai
     FROM ujian u
     LEFT JOIN nilai n 
         ON u.id_siswa = n.id_siswa 
         AND u.id_ujian = n.id_ujian
+    LEFT JOIN ujian_aktif ua
+        ON u.id_ujian = ua.id_ujian
     WHERE u.id_siswa = '$id_siswa'
 ");
 
@@ -53,7 +60,7 @@ while($n = $qn->fetch_assoc()){
 ?>
 <tr>
     <td><?= $no++ ?></td>
-    <td class="text-start"><?= $n['id_ujian'];?></td>    
+    <td class="text-start"><?= $n['nama_soal'];?></td>    
     <td class="text-start"><?= $n['nilai']; ?></td>    
     <td><a href="koreksi.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>">Koreksi</a></td>
     <td><a href="kirim_per_siswa.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" target="_blank">Kirim</a></td>
@@ -66,3 +73,4 @@ while($n = $qn->fetch_assoc()){
 </body>
 
 </html>
+
