@@ -6,7 +6,7 @@ require_once '../inc/admin.php';
 $id_ujian = $_GET['id_ujian'] ?? '';
 
 $stmt = $db->prepare("
-    SELECT nomer_soal, kode_soal, tipe, soal, a, b, c, d, e, pasangan, kunci
+    SELECT id, nomer_soal, kode_soal, tipe, soal, a, b, c, d, e, pasangan, kunci
     FROM soal
     WHERE id_ujian = ?
     ORDER BY nomer_soal
@@ -67,9 +67,8 @@ body{
 <a href="unduh_soal.php?id=<?= $id_ujian;?>">Unduh soal</a>
 <?php
 $no = 1;
-
+$kunci_jawaban = '';
 while ($row = $result->fetch_assoc()):
-
 echo "<div class='soalbox'>";
 
 echo "<div class='nomor'>Soal $no ({$row['tipe']})</div>";
@@ -144,25 +143,21 @@ elseif($row['tipe'] == "ESAI"){
 echo "<div class='kunci'>Kunci: {$row['kunci']}</div>";
 
 echo "</div>";
-
-$no++;
-
-endwhile;
-$qsoal = $db->query("SELECT * FROM `soal` WHERE `id_ujian`= '$id_ujian' order by `nomer_soal` ASC");
-	$kunci_jawaban = '';
-	while($dq = mysqli_fetch_assoc($qsoal))
-	{
-		if(empty($kunci_jawaban))
+if(empty($kunci_jawaban))
 		{
-			$kunci_jawaban .= $dq['kunci'];
+			$kunci_jawaban .= $row['kunci'];
 		}
 		else
 		{
-			$kunci_jawaban .= '#'.$dq['kunci'];
-		}
-		
-	}
-echo $kunci_jawaban;?>
+			$kunci_jawaban .= '#'.$row['kunci'];
+		}      
+$no++;
 
+endwhile;
+
+echo 'Kunci '.$kunci_jawaban;?>
+<br /><br />
+<a href="perbarui_kunci.php?id_ujian=<?= $id_ujian;?>">Perbarui Kunci</a> <a href="koreksi_per_ujian.php?id_ujian=<?= $id_ujian;?>">Koreksi Per Ujian</a>
 </body>
 </html>
+
