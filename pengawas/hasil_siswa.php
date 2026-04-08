@@ -50,7 +50,8 @@ echo $nama_siswa;
     <th>Ujian</th>
     <th>Nilai</th>
     <th>Koreksi</th>
-    <th>Kirim</th>
+    <th>Tambah Waktu</th>
+    <th>Kirim</th>    
 </tr>
 </thead>
 <tbody>
@@ -63,7 +64,8 @@ while($n = $qn->fetch_assoc()){
     <td class="text-start"><?= $n['nama_soal'];?></td>    
     <td class="text-start"><?= $n['nilai']; ?></td>    
     <td><a href="koreksi.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>">Koreksi</a></td>
-    <td><a href="kirim_per_siswa.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" target="_blank">Kirim</a></td>
+    <td><a href="tambah_waktu.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" title="Tambah Waktu <?= $n['nama_soal'];?>" target="_blank">Tambah Waktu</a></td>
+    <td><a href="kirim_per_siswa.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" title="Kirim Hasil <?= $n['nama_soal'];?>" target="_blank">Kirim</a></td>
 </tr>
 <?php } ?>
 </tbody>
