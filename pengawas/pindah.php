@@ -23,6 +23,9 @@ $ta = $db->query( "SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'a
 $da = mysqli_fetch_assoc($ta);
 $key = $da['konfigurasi_isi'];
 $query_nilai = $db->query("SELECT * FROM `ujian` WHERE `id_siswa` = '$id_siswa' and `id_ujian` = '$id_ujian'");
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='ubk_pusat'");
+$da = mysqli_fetch_assoc($ta);
+$ubk_pusat = $da['konfigurasi_isi'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,7 +49,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	while ($row = $qj->fetch_assoc()) {
 	    $data[] = $row;
 	}
-	$url = "https://ubk.mantengaran.sch.id/api/terima_jawaban.php";
+	$url = $ubk_pusat."/tukardata/terima_jawaban.php";
 	$payload = [
 	    'id_siswa' => $id_siswa,
 	    'id_ujian' => $id_ujian,
