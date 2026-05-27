@@ -55,6 +55,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	$kode_soal = $dnu['kode_soal'] ?? '';
 	$boleh = $dnu['nilai'] ?? '1';
 	$token = substr(str_shuffle('ABCDEFGHJKLMNPQRSTWXYZ123456789'), 0, 6);
+	$db->query("delete FROM `jawaban` where `id_siswa` = '$id_siswa' and `id_ujian` = '$id_ujian' and `id_soal` is NULL");
 	$qj = $db->query("SELECT * FROM `jawaban` where `id_siswa` = '$id_siswa' and `id_ujian` = '$id_ujian' ORDER BY `id_soal` ASC");
 	$jwb_siswa = '';
 	$analisis = '';
@@ -77,7 +78,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 		$awal++;
 	}
 	$nilai_akhir = $dnilai['nilai'] ?? 0;
-	$url = $sianis.'/tukardata/terimajawabanubk';
+	$url = $sianis.'/cbt/terimajawabanubk';
 	$jwb_siswa = str_replace('"','',$jwb_siswa);
 	$jwb_siswa = str_replace('[','',$jwb_siswa);
 	$jwb_siswa = str_replace(']','',$jwb_siswa);

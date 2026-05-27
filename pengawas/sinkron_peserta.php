@@ -6,7 +6,7 @@ require_once '../inc/admin.php';
 // ----------------------
 // Ambil Total Peserta
 // ----------------------
-$url = $sianis.'/cbtzya/jml_peserta/'.$key.'/semua';
+$url = $sianis.'/cbt/jml_peserta/'.$key.'/semua';
 $json = via_curl($url);
 $total = 0;
 
@@ -54,7 +54,7 @@ $progress = round($progress);
 if($id < $total)
 {
 
-    $url = $sianis.'/cbtzya/peserta/'.$key.'/'.$id;
+    $url = $sianis.'/cbt/peserta/'.$key.'/'.$id;
     $json = via_curl($url);
     $pesan = "[Data tidak ditemukan]";
     if($json)
@@ -84,13 +84,13 @@ if($id < $total)
 		$cek->store_result();
 		if ($cek->num_rows > 0) 
 		{
-		   $stmt = $db->prepare("UPDATE siswa SET nama_siswa = ?, username = ?, password = ?, kelas = ?, rombel = ? WHERE id_siswa = ? ");
-			$stmt->bind_param("ssssss", $nama, $username, $password, $kelas, $rombel, $nis );
+		   $stmt = $db->prepare("UPDATE siswa SET nama_siswa = ?, username = ?, password = ?, kelas = ?, rombel = ?, nis =? WHERE id_siswa = ? ");
+			$stmt->bind_param("sssssss", $nama, $username, $password, $kelas, $rombel, $nis,$versi );
 			$stmt->execute();
 		} else 
 		{
-			$stmt = $db->prepare("INSERT INTO siswa (id_siswa, nama_siswa, username, password, kelas, rombel) VALUES (?,?,?,?,?,?)");
-			$stmt->bind_param("ssssss", $nis, $nama, $username, $password, $kelas, $rombel);
+			$stmt = $db->prepare("INSERT INTO siswa (id_siswa, nama_siswa, username, password, kelas, rombel, nis) VALUES (?,?,?,?,?,?,?)");
+			$stmt->bind_param("sssssss", $nis, $nama, $username, $password, $kelas, $rombel,$versi);
 			$stmt->execute();
 		}
 	    }

@@ -52,18 +52,38 @@ $q = $db->query($query);
                 <th>No</th>
                 <th>ID Soal</th>
                 <th>Jawaban</th>
+                <th>Kunci</th>
                 <th>Nilai</th>
             </tr>
         </thead>
         <tbody>
         <?php
+        $kunci_jawaban = '';
+        $benar = 0;
         if ($q->num_rows > 0) {
             $no = 1;
             while ($row = $q->fetch_assoc()) {
+            $id = $row['id_soal'];
+            $ts = $db->query("SELECT * FROM `soal` WHERE `id` = '$id'");
+            $ds = mysqli_fetch_assoc($ts);
+            $kunci = $ds['kunci'] ?? '?';
+            if(empty($kunci_jawaban))
+		{
+			$kunci_jawaban .= $row['jawaban'];
+		}
+		else
+		{
+			$kunci_jawaban .= '#'.$row['jawaban'];
+		}      
+	if($kunci == $row['jawaban'])
+	{
+	$benar++;
+	}
                 echo "<tr>
                         <td>{$row['nomer_soal']}</td>
-                        <td>{$row['id_soal']}</td>
+                        <td>{$id}</td>
                         <td>{$row['jawaban']}</td>
+                        <td>{$kunci}</td>                        
                         <td>{$row['nilai']}</td>
                       </tr>";
                 $no++;
@@ -74,6 +94,9 @@ $q = $db->query($query);
         ?>
         </tbody>
     </table>
+    Nilai 
+    <?= $benar;?></br>
+    <?= $kunci_jawaban;?>
 </div>
 
 </body>

@@ -19,151 +19,212 @@ if (isValidDateTime($waktu)) {
 					<?php	
 					exit;
 }
-$q = $db->query("
-SELECT 
-    s.id_siswa,
-    s.username,
-    s.nama_siswa,
-    s.kelas,
-    s.rombel,
-    u.mulai,
-    u.selesai,
-    u.status,
-    COUNT(j.id_soal) AS dijawab
-FROM siswa s
 
-LEFT JOIN ujian u 
-    ON u.id_siswa = s.id_siswa
-    AND u.id_ujian IN (
-        SELECT id_ujian 
-        FROM ujian_aktif 
-        WHERE tanggal = '$waktu'
-    )
 
-LEFT JOIN jawaban j 
-    ON j.id_siswa = s.id_siswa
-    AND j.id_ujian = u.id_ujian
-    AND j.jawaban IS NOT NULL
-    AND TRIM(j.jawaban) != ''
-
-WHERE s.rombel = '$ruang'
-
-GROUP BY s.id_siswa
-ORDER BY s.kelas ASC, s.nama_siswa ASC
-");
-
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='kode_qr'");
+$da = mysqli_fetch_assoc($ta);
+$kode_qr = $da['konfigurasi_isi'] ?? '0';
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='kamera'");
+$da = mysqli_fetch_assoc($ta);
+$kamera = strtoupper($da['konfigurasi_isi']) ?? 'OFF';
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='token_kamera'");
+$da = mysqli_fetch_assoc($ta);
+$token_kamera = $da['konfigurasi_isi'] ?? 'sdfghfhgjhkhgkhgwdasda';
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='ubk_pusat'");
+$da = mysqli_fetch_assoc($ta);
+$ubk_pusat = $da['konfigurasi_isi'] ?? '';
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='ubk_stream'");
+$da = mysqli_fetch_assoc($ta);
+$ubk_stream = $da['konfigurasi_isi'] ?? '';
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<meta http-equiv="refresh" content="30">
-
 <title>Pengawasan</title>
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 <div class="container-fluid">
-<h4 class="mb-2">Dashboard Pengawas</h4>
-<table width="100%"><tr><td width="33%"  align="left"><a href="menu.php">Menu</a></td><td align="center">Ruang: <strong><?= htmlspecialchars($ruang) ?></strong></td><td width="33%" align="right">Jam Peladen:  <?= date("d-m-Y H:i");?></td></tr></table><hr>
-
-<?php
-echo '<a href="monitor.php?tanggal='.$tanggal.'&jam='.$pukul.'" class="btn btn-success">Muat Ulang</a>';
-$belum = 0;
-$tidak = 0;
-$ta = mysqli_query($db, "SELECT * FROM `reset`");
-                                if(mysqli_num_rows($ta) > 0)
-				{
-					?>
-                                    <h5 class="card-title mb-0">Daftar Permintaan Reset</h5>
-                                    <div class="card-body">
-	                                    <div class="table-wrapper">
-                             		           <table class="table table-bordered table-striped" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nama Siswa</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <?php
-                                            while($da=mysqli_fetch_assoc($ta))
-                                            {
-                                            	echo '<tr><td width="60%">'.$da['nama'].'</td><td>';
-                                       		echo '<a href="reset_siswa.php?id_siswa='.$da['id_siswa'].'&tanggal='.$tanggal.'&jam='.$pukul.'" class="btn btn-danger">Reset</a>';
-                                            	echo '</td></tr>';
-                                            }
-                                           ?>
-                                        </table>
-                                        <?php
-                                        }
-                                        ?>
-<table class="table table-bordered table-striped table-sm align-middle">
-<thead class="table-light text-center">
-<tr>
-    <th style="width:40px;">No</th>
-    <th style="width:150px;">No Peserta</th>    
-    <th>Nama Siswa</th>
-    <th style="width:90px;">Kelas</th>
-    <th style="width:90px;">Status</th>
-    <th style="width:80px;">Dijawab</th>
-    <th style="width:110px;">Sisa Waktu</th>
-</tr>
-</thead>
-<tbody>
-<?php
-$no = 1;
-while($r = $q->fetch_assoc()){
-
-    // status default
-    $status = $r['status'] ?? 'belum';
-
-    // badge warna
-    if($status == 'aktif'){
-        $badge = 'success';
-        $belum++;
-    } elseif($status == 'selesai'){
-        $badge = 'secondary';
-    } else {
-        $badge = 'warning';
-    }
-
-    // hitung sisa waktu
-    $sisa = '-';
-    if($status == 'aktif' && !empty($r['selesai'])){
-        $detik = strtotime($r['selesai']) - time();
-        $sisa = $detik > 0 ? gmdate("H:i:s",$detik) : '00:00:00';
-    }
-?>
-<tr>
-    <td><?= $no++ ?></td>
-    <td class="text-start"><?= htmlspecialchars($r['username']) ?></td>        
-    <td class="text-start"><?= htmlspecialchars($r['nama_siswa']) ?></td>
-    <td><?= $r['kelas'] ?></td>
-    <td>
-        <span class="badge bg-<?= $badge ?>">
-            <?= strtoupper($status) ?>
-        </span>
-    </td>
-    <td><?= $r['dijawab'] ?></td>
-    <td><?= $sisa ?></td>
-</tr>
-<?php } ?>
-</tbody>
+	<h4 class="mb-2">Dashboard Pengawas</h4>
+	<table width="100%">
+    <tr>
+        <td width="33%" align="left">
+            <a href="menu.php">Menu</a>
+        </td>
+        <td align="center">
+            Ruang: <strong><?= htmlspecialchars($ruang) ?></strong>
+        </td>
+        <td width="33%" align="right">
+            Jam Peladen: <span id="jam-server"><?= date("d-m-Y H:i:s"); ?></span>
+        </td>
+    </tr>
 </table>
-<div class="mt-2 small">
-<span class="badge bg-success">AKTIF</span> Sedang ujian &nbsp;
-<span class="badge bg-warning text-dark">BELUM</span> Belum mulai &nbsp;
-<span class="badge bg-secondary">SELESAI</span> Sudah selesai
+<hr>
+
+<div id="reset-container">
+    <!-- nanti diisi via AJAX -->
+</div>
+<div id="pekerjaan-container">
+    <!-- nanti diisi via AJAX -->
 </div>
 
+</div>
+<script>
+function loadReset(){
+const tanggal = "<?= htmlspecialchars($tanggal, ENT_QUOTES) ?>";
+const pukul= "<?= htmlspecialchars($pukul, ENT_QUOTES) ?>";
+    fetch('reset_list.php?tanggal=' + tanggal + '&jam=' + pukul)
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById('reset-container').innerHTML = html;
+    });
+}
 
-</div>
-</div>
-    		<script>setTimeout(function () {
-		 window.location.href= 'monitor.php';
-			},<?php echo 60000;?>);
-			</script>
+// refresh tiap 30 detik
+setInterval(loadReset, 30000);
+
+// load pertama
+loadReset();
+</script>
+<script>
+function loadPeserta(){
+const tanggal = "<?= htmlspecialchars($tanggal, ENT_QUOTES) ?>";
+const pukul= "<?= htmlspecialchars($pukul, ENT_QUOTES) ?>";
+    fetch('pekerjaan_peserta_list.php?tanggal=' + tanggal + '&jam=' + pukul)
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById('pekerjaan-container').innerHTML = html;
+    });
+}
+
+// refresh tiap 30 detik
+setInterval(loadPeserta, 30000);
+
+// load pertama
+loadPeserta();
+</script>
+<?php if(isset($kamera) && $kamera =='ON'){ ?>
+
+<video id="video" autoplay playsinline style="display:none;"></video>
+<canvas id="canvas" style="display:none;"></canvas>
+
+<script>
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+
+const ruang = "<?= htmlspecialchars($ruang, ENT_QUOTES) ?>";
+const ubk_stream = "<?= htmlspecialchars($ubk_stream, ENT_QUOTES) ?>";
+const token = "<?= htmlspecialchars($token_kamera ?? '', ENT_QUOTES) ?>";
+
+let capturing = false;
+
+// aktifkan kamera
+navigator.mediaDevices.getUserMedia({ 
+    video: { 
+        width: 640, 
+        height: 480,
+        frameRate: { ideal: 10, max: 15 }
+    }
+})
+.then(stream => {
+    video.srcObject = stream;
+
+    video.onloadedmetadata = () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+    };
+})
+.catch(err => {
+    alert("Kamera error: " + err.message);
+});
+
+// 🔥 fungsi capture paling stabil
+function captureFrame(callback){
+    const ctx = canvas.getContext('2d');
+
+    // trick: double draw untuk hilangkan tearing
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    setTimeout(() => {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        callback();
+    }, 10); // delay kecil
+}
+
+// kirim gambar
+function send(){
+    if (capturing) return;
+    if (video.readyState !== 4) return;
+
+    capturing = true;
+
+    requestAnimationFrame(() => {
+
+        captureFrame(() => {
+
+            canvas.toBlob(blob => {
+
+                if (!blob) {
+                    capturing = false;
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onloadend = () => {
+
+                    fetch(ubk_stream + '/upload.php?ruang=' + ruang, {
+                        method: 'POST',
+                        mode: 'cors',
+                        body: JSON.stringify({ 
+                            image: reader.result,
+                            token: token
+                        }),
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .catch(err => console.error("Upload error:", err))
+                    .finally(() => {
+                        capturing = false;
+                    });
+
+                };
+
+                reader.readAsDataURL(blob);
+
+            }, 'image/jpeg', 0.6);
+
+        });
+
+    });
+}
+
+// interval (jangan terlalu cepat)
+setInterval(send, 5000);
+
+</script>
+
+<?php } ?>
+<script>
+function updateJam() {
+    const now = new Date();
+
+    const dd = String(now.getDate()).padStart(2, '0');
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const yyyy = now.getFullYear();
+
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mi = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+
+    document.getElementById('jam-server').textContent =
+        `${dd}-${mm}-${yyyy} ${hh}:${mi}:${ss}`;
+}
+
+setInterval(updateJam, 1000);
+</script>
+
 </body>
 </html>
 

@@ -48,24 +48,32 @@ echo $nama_siswa;
 <tr>
     <th style="width:40px;">No</th>
     <th>Ujian</th>
+    <th>Cacah Jawaban</th>
     <th>Nilai</th>
     <th>Koreksi</th>
     <th>Tambah Waktu</th>
-    <th>Kirim</th>    
+    <th>Kirim</th>
+    <th>Pindah Ruang</th>            
 </tr>
 </thead>
 <tbody>
 <?php
 $no = 1;
 while($n = $qn->fetch_assoc()){
+$id_ujian = $n['id_ujian'];
+$ta = $db->query("SELECT * FROM `jawaban` WHERE `id_siswa` = '$id_siswa' and `id_ujian` = '$id_ujian'");
+$cacah = mysqli_num_rows($ta);
+
 ?>
 <tr>
     <td><?= $no++ ?></td>
-    <td class="text-start"><?= $n['nama_soal'];?></td>    
+    <td class="text-start"><?= $n['nama_soal'];?></td> 
+    <td class="text-start"><?= $cacah;?></td>        
     <td class="text-start"><?= $n['nilai']; ?></td>    
     <td><a href="koreksi.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>">Koreksi</a></td>
     <td><a href="tambah_waktu.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" title="Tambah Waktu <?= $n['nama_soal'];?>" target="_blank">Tambah Waktu</a></td>
     <td><a href="kirim_per_siswa.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" title="Kirim Hasil <?= $n['nama_soal'];?>" target="_blank">Kirim</a></td>
+    <td><a href="pindah.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" title="Pindah ruang <?= $n['nama_soal'];?>" target="_blank">Pindah</a></td>
 </tr>
 <?php } ?>
 </tbody>

@@ -86,10 +86,17 @@ if (!$result) {
                                 	{
                                 		echo '<p><a href="susulan.php?tgl='.$tanggal.'&jam='.substr($da['tanggal'],-8).'">'.substr($da['tanggal'],-8).'</a></p>';
                                 	}
+                                	echo '<p><a href="susulan.php?tgl='.$tanggal.'&jam=07:00:00">07:00:00</a></p>';
+                                	echo '<p><a href="susulan.php?tgl='.$tanggal.'&jam=08:00:00">08:00:00</a></p>';
+                                	echo '<p><a href="susulan.php?tgl='.$tanggal.'&jam=09:00:00">09:00:00</a></p>';
+                                	echo '<p><a href="susulan.php?tgl='.$tanggal.'&jam=10:00:00">10:00:00</a></p>';
+                                	echo '<p><a href="susulan.php?tgl='.$tanggal.'&jam=11:00:00">11:00:00</a></p>';
+                                	echo '<p><a href="susulan.php?tgl='.$tanggal.'&jam=12:00:00">12:00:00</a></p>';
+                                	echo '<p><a href="susulan.php?tgl='.$tanggal.'&jam=13:00:00">13:00:00</a></p>';
                                 }
                                 else
                                 {
-                                $url = $sianis.'/cbtzya/jadwalsusulan/'.$key;
+                                $url = $sianis.'/cbt/jadwalsusulan/'.$key;
 //echo $url;
 echo '<br />';
 echo 'Ruang '.$ruang.'<br />';

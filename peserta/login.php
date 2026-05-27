@@ -11,7 +11,7 @@ if(isset($_GET['nopes']))
 }
 else
 {
-$get_kode = '';
+$get_nopes = '';
 }
 if(isset($_GET['kode']))
 {
@@ -19,10 +19,13 @@ if(isset($_GET['kode']))
 }
 else
 {
-$get_nopes = '';
+$get_kode = '';
 }
 
 $error = '';
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='kode_qr'");
+$da = mysqli_fetch_assoc($ta);
+$kode_qr = $da['konfigurasi_isi'] ?? '0';
 
 // Proses login
 if($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -78,13 +81,34 @@ else
 <?php endif; ?>
 
 <form method="post">
+<?php
+
+if($kode_qr == 1)
+{?>
+
+<div class="mb-3">
+<input type="text" name="nis" class="form-control" placeholder="Username" value="<?= $get_nopes;?>" readonly required>
+</div>
+<div class="mb-3">
+<input type="password" name="password" class="form-control" placeholder="Password" value="<?= $get_kode;?>" readonly required>
+</div>
+<?php
+}
+else
+{
+?>
+
 <div class="mb-3">
 <input type="text" name="nis" class="form-control" placeholder="Username" value="<?= $get_nopes;?>" required>
 </div>
 <div class="mb-3">
 <input type="password" name="password" class="form-control" placeholder="Password" value="<?= $get_kode;?>" required>
 </div>
+<?php
+}
+?>
 <button class="btn btn-primary w-100">Login</button>
+
 </form>
 
 </div>

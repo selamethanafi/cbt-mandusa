@@ -21,7 +21,31 @@ if(mysqli_num_rows($ta) == 0)
 {
 	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('tampil_nilai', '0', 'Siswa boleh melihat nilai, 1 = boleh, 0 = tidak boleh')");
 }
-
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='kode_qr'");
+if(mysqli_num_rows($ta) == 0)
+{
+	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('kode_qr', '0', 'Wajib memakai Kode QR, 1 = ya, 0 = tidak')");
+}
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='kamera'");
+if(mysqli_num_rows($ta) == 0)
+{
+	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('kamera', 'OFF', 'Monitoring lewat kamera?, ON = ya, OFF = tidak')");
+}
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='token_kamera'");
+if(mysqli_num_rows($ta) == 0)
+{
+	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('token_kamera', '0', 'Token kamera')");
+}
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='ubk_pusat'");
+if(mysqli_num_rows($ta) == 0)
+{
+	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('ubk_pusat', '0', 'url ubk pusat')");
+}
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='ubk_stream'");
+if(mysqli_num_rows($ta) == 0)
+{
+	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('ubk_stream', '', 'url kirim stream')");
+}
 /* AMBIL DATA */
 $result = $db->query("SELECT konfigurasi_id, konfigurasi_kode, konfigurasi_isi, konfigurasi_keterangan 
                         FROM cbt_konfigurasi 

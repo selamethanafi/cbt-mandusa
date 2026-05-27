@@ -1,0 +1,6 @@
+<video autoplay playsinline id="v"></video>
+<script>
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(s => v.srcObject = s)
+.catch(e => alert(e));
+</script>

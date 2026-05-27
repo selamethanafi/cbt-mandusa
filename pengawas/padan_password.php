@@ -58,12 +58,17 @@ $nama_siswa = $r['nama_siswa'];
     <td><?= $no++ ?></td>
     <td class="text-start"><?= htmlspecialchars($nama_siswa) ?></td>    
     <td class="text-start"><?= htmlspecialchars($r['username']) ?></td>    
-    <td class="text-start"><?= htmlspecialchars($r['password']) ?></td>    
+    <td class="text-start"><?php
+    if($r['nis'] == 1)
+	{
+		echo htmlspecialchars($r['password']);
+		} ?>
+</td>    
     <td><?= $r['kelas'] ?></td>
     <?php
     $padan = 'tidak';
     $id = $r['id_siswa'];
-    $url = $sianis.'/cbtzya/updatepeserta/'.$key.'/'.$id;
+    $url = $sianis.'/cbt/updatepeserta/'.$key.'/'.$id;
 	if((!empty($key)) and (!empty($sianis)))
 	{
 		$json = via_curl($url);    
