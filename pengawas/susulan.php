@@ -109,18 +109,18 @@ $json = via_curl($url);
 				if($pesan == 'ada')
 				{
 					$namasiswa = $dm['namasiswa'];
-					echo $namasiswa.' <br />';
 				        $kode_soal = clean($dm['tmujian_id']);
 				        $id_siswa = $dm['tmsiswa_id'];
+					echo $namasiswa.' '.$kode_soal.'<br />';				        
 				        $date = new DateTime($waktu);
 					$date->modify('+1 month');
 					$tanggal_selesai = $date->format('Y-m-d H:i:s');
-				        $sql = "UPDATE ujian_aktif SET  tanggal = ?, tanggal_selesai = ? WHERE kode_soal = ?";
+				        $sql = "UPDATE ujian_aktif SET  kelas=?, tanggal = ?, tanggal_selesai = ? WHERE kode_soal = ?";
 					$stmt = $db->prepare($sql);
 					if (!$stmt) {
 					    die("Prepare error: " . $db->error);
 					}
-					$stmt->bind_param("sss", $waktu,$tanggal_selesai,$kode_soal);
+					$stmt->bind_param("ssss", $kode_soal,$waktu,$tanggal_selesai,$kode_soal);
 					$stmt->execute();
 					if (!$stmt->execute()) 
 					{
@@ -132,7 +132,7 @@ $json = via_curl($url);
 					} else {
 					    //echo "Tidak ada perubahan";
 					}
-					$db->query("update `siswa` set `rombel` = '$ruang' where `id_siswa` = '$id_siswa'");
+					$db->query("update `siswa` set `kelas` = '$kode_soal', `rombel` = '$ruang' where `id_siswa` = '$id_siswa'");
 				}
 			}
 			echo '<a href="soal_hari_ini.php">Aktifkan Tes</a>';

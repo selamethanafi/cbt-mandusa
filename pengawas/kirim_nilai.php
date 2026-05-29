@@ -31,6 +31,9 @@ die('tanggal salah');
 $ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='ubk_pusat'");
 $da = mysqli_fetch_assoc($ta);
 $ubk_pusat = $da['konfigurasi_isi'] ?? '';
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='url_cbt'");
+$da = mysqli_fetch_assoc($ta);
+$url_cbt = $da['konfigurasi_isi'] ?? '';
 //echo $sianis.'<br />';
 ?>
 <?php
@@ -112,8 +115,14 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	    'nilai'   => $nilai,
 	    'jawaban' => $jawaban
 	];
-	$ch = curl_init();
-	curl_setopt_array($ch, [
+	if($url_cbt == $ubk_pusat)
+	{
+		echo '<br >tidak mengirim ke pusat<br />';
+	}
+	else
+	{
+		$ch = curl_init();
+		curl_setopt_array($ch, [
 		CURLOPT_URL => $ubk_pusat."/tukardata/terima_data.php",
 	    CURLOPT_POST => true,
 	    CURLOPT_RETURNTRANSFER => true,
@@ -128,6 +137,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	}
 	curl_close($ch);
 	echo 'Jawaban Ubk Pusat '.$response;	
+	}
 	$qsoal = $db->query("SELECT * FROM `soal` WHERE `id_ujian`= '$id_ujian' order by `nomer_soal` ASC");
 	$kunci_jawaban = '';
 	while($dq = mysqli_fetch_assoc($qsoal))
@@ -189,8 +199,6 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 			'skor_per_soal' => $skor_per_soal,
 			'boleh' => $boleh,
 			];
-	//print_r($params);
-	
 	if($hasil = postcurl($url,$params))
 	{
 		echo 'Jawaban dari Simamad '.$hasil.'<br />';
@@ -252,7 +260,6 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 		$sql = "update `siswa` set `password` = '$token' where `id_siswa` = '$id_siswa'";
 		$insert = $db->query($sql); 
 		echo 'password berubah karena '.$hadir.' '.$ket_absen;
-		$waktu = 2000;
 	}
 	$ke++;
 	?>

@@ -49,6 +49,7 @@ while ($r = mysqli_fetch_assoc($q)) {
 }
 $payload = json_encode([
     'token' => $key,
+    'ruang' => $ruang,
     'data'  => $data
 ]);
 
