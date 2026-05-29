@@ -249,5 +249,9 @@ $cacah_siswa = mysqli_num_rows($tsisru);
 		</div>
 </body></html>
 <?php
+if(empty($siswa_absen))
+{
+	$siswa_absen = 'Nihil';
+}
 $ta = mysqli_query($db,"update `daftar_pengawas` set `murid` = '$siswa_absen' where `waktu` = '$tanggal_tes'");
 
