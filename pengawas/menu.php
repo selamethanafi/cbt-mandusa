@@ -75,6 +75,7 @@ Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php
     <td><p><a class="btn btn-primary" href="soal_hari_ini.php">Pengawasan</a></p>
     <p><a class="btn btn-primary" href="kirim_nilai.php">Kirim Hasil</a></p></td>
     <td><p><a class="btn btn-primary" href="daftar_hadir_tes_bersama.php">Daftar Hadir dan Berita Acara</a></p>
+    <p><a class="btn btn-primary" href="laporan.php">Daftar Pekerjaan Peserta</a></p>
     </td>
 </tr>
 </tbody>

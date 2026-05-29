@@ -15,7 +15,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	// Update data soal
 	$nopes = $_POST['nopes'];
-	$db->query("update `siswa` set `rombel` = '$ruang' where `username` = '$nopes'");
+	$ta  = $db->query("select * from `siswa` where `username` = '$nopes'");
+	if(mysqli_num_rows($ta) == 0)
+	{
+		die('siswa tidak ditemukan <a href="tambah_siswa.php">Tambah peseserta');
+	}
+	else
+	{
+		$db->query("update `siswa` set `rombel` = '$ruang' where `username` = '$nopes'");
+	}
 
 }
 

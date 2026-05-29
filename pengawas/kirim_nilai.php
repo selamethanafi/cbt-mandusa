@@ -42,7 +42,12 @@ if(mysqli_num_rows($query_nilai) == 0)
 	{
 		$db->query("update `siswa` set `session_token` = '' where 1");
 	}
-	 echo 'Rampung <a href="menu.php">Kembali</a>';
+	 ?>
+		<script>setTimeout(function () {
+		 window.location.href= 'kirim_berita_acara.php?tanggal=<?php echo $tanggal;?>';
+			},<?php echo $waktu;?>);
+			</script>
+		<?php
 }
 ?>
 <!DOCTYPE html>

@@ -6,6 +6,21 @@ require_once '../inc/admin.php';
 if (!$db) {
     die("Koneksi database gagal: " . mysqli_connect_error());
 }
+$cek = mysqli_query($db, "SHOW COLUMNS FROM `daftar_pengawas` LIKE 'murid'");
+if (mysqli_num_rows($cek) == 0) {
+    $sql = "
+        ALTER TABLE `daftar_pengawas`
+        ADD `murid` TEXT NULL DEFAULT NULL
+        AFTER `catatan`
+    ";
+    if (mysqli_query($db, $sql)) {
+        echo "Kolom murid berhasil ditambahkan";
+    } else {
+        echo "Error: " . mysqli_error($db);
+    }
+} else {
+    //echo "Kolom murid sudah ada";
+}
 $aksi = '';
 $nama_pengawas = '';
 $catatan = '';
