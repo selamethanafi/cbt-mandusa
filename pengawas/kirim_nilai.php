@@ -159,7 +159,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	$kode_soal = $dnu['kode_soal'] ?? '';
 	$boleh = $dnu['nilai'] ?? '1';
 	$token = substr(str_shuffle('ABCDEFGHJKLMNPQRSTWXYZ123456789'), 0, 6);
-	$qj = $db->query("SELECT * FROM `jawaban` where `id_siswa` = '$id_siswa' and `id_ujian` = '$id_ujian' ORDER BY `id_soal` ASC");
+	$qj = $db->query("SELECT * FROM `jawaban` where `id_siswa` = '$id_siswa' and `id_ujian` = '$id_ujian' ORDER BY `nomer_soal` ASC");
 	$jwb_siswa = '';
 	$analisis = '';
 	$skor_per_soal = '';

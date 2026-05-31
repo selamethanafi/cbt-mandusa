@@ -53,7 +53,8 @@ echo $nama_siswa;
     <th>Koreksi</th>
     <th>Tambah Waktu</th>
     <th>Kirim</th>
-    <th>Pindah Ruang</th>            
+    <th>Pindah Ruang</th>
+    <th>Hapus</th>            
 </tr>
 </thead>
 <tbody>
@@ -74,6 +75,7 @@ $cacah = mysqli_num_rows($ta);
     <td><a href="tambah_waktu.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" title="Tambah Waktu <?= $n['nama_soal'];?>" target="_blank">Tambah Waktu</a></td>
     <td><a href="kirim_per_siswa.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" title="Kirim Hasil <?= $n['nama_soal'];?>" target="_blank">Kirim</a></td>
     <td><a href="pindah.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" title="Pindah ruang <?= $n['nama_soal'];?>" target="_blank">Pindah</a></td>
+    <td><a href="hapus_hasil.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" title="Hapus Hasil <?= $n['nama_soal'];?>">Hapus</a>
 </tr>
 <?php } ?>
 </tbody>

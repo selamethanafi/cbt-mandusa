@@ -174,7 +174,7 @@ if($exambrowser == 1)
 <input type="hidden" name="id_soal" value="<?= $id_soal ?>">
 <input type="hidden" name="no" value="<?= $no ?>">
 <input type="hidden" name="nomer_soal" value="<?= $s['nomer_soal'] ?>">
-
+<input type="hidden" name="tipe" value="<?= $s['tipe'] ?>">
 <?php
 /* ===============================
    TAMPIL SOAL SESUAI TIPE
