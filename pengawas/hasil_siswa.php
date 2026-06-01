@@ -50,6 +50,7 @@ echo $nama_siswa;
     <th>Ujian</th>
     <th>Cacah Jawaban</th>
     <th>Nilai</th>
+    <th>Detil</th>
     <th>Koreksi</th>
     <th>Tambah Waktu</th>
     <th>Kirim</th>
@@ -70,7 +71,8 @@ $cacah = mysqli_num_rows($ta);
     <td><?= $no++ ?></td>
     <td class="text-start"><?= $n['nama_soal'];?></td> 
     <td class="text-start"><?= $cacah;?></td>        
-    <td class="text-start"><?= $n['nilai']; ?></td>    
+    <td class="text-start"><?= $n['nilai']; ?></td> 
+    <td><a href="jawaban.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>">Detil</a></td>
     <td><a href="koreksi.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>">Koreksi</a></td>
     <td><a href="tambah_waktu.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" title="Tambah Waktu <?= $n['nama_soal'];?>" target="_blank">Tambah Waktu</a></td>
     <td><a href="kirim_per_siswa.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>" title="Kirim Hasil <?= $n['nama_soal'];?>" target="_blank">Kirim</a></td>

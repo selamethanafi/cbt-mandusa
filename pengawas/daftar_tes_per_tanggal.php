@@ -29,6 +29,7 @@ $waktu = $da['tanggal'] ?? date("Y-m-d H:i:d");
 <p><a class="btn btn-primary" href="menu.php">Menu</a></p>
 <?php
 echo $waktu;
+echo '<h4>Kolom Nomor untuk menyunting tes, kolom jumlah soal untuk melihat daftar soal</h4>';
 ?>
                     <div class="row">
                     <?php

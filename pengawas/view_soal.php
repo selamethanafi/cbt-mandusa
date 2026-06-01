@@ -143,6 +143,10 @@ elseif($row['tipe'] == "ESAI"){
 echo "<div class='kunci'>Kunci: {$row['kunci']}</div>";
 
 echo "</div>";
+$tipe = $row['tipe'];
+$id_soal = $row['id'];
+$query = "update `jawaban` set `tipe` ='$tipe' where `id_soal` = '$id_soal'";
+mysqli_query($db, $query);
 if(empty($kunci_jawaban))
 		{
 			$kunci_jawaban .= $row['kunci'];

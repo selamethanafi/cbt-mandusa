@@ -10,7 +10,7 @@ $id_siswa = isset($_GET['id_siswa']) ? $db->real_escape_string($_GET['id_siswa']
 $id_ujian = isset($_GET['id_ujian']) ? $db->real_escape_string($_GET['id_ujian']) : '';
 
 $query = "
-SELECT id, id_siswa, id_ujian, id_soal, jawaban, nomer_soal, nilai 
+SELECT id, id_siswa, id_ujian, id_soal, jawaban, nomer_soal, nilai , tipe, waktu_menjawab
 FROM jawaban 
 WHERE id_siswa = '$id_siswa' 
 AND id_ujian = '$id_ujian'
@@ -49,11 +49,13 @@ $q = $db->query($query);
     <table>
         <thead>
             <tr>
-                <th>No</th>
-                <th>ID Soal</th>
-                <th>Jawaban</th>
-                <th>Kunci</th>
+                <th width="50">No</th>
+                <th width="100">ID Soal</th>
+                <th width="100">Jawaban</th>
+                <th width="100">Kunci</th>
                 <th>Nilai</th>
+                <th>Tipe Soal</th>                
+                <th>Waktu Menjawab</th>              
             </tr>
         </thead>
         <tbody>
@@ -85,6 +87,8 @@ $q = $db->query($query);
                         <td>{$row['jawaban']}</td>
                         <td>{$kunci}</td>                        
                         <td>{$row['nilai']}</td>
+                        <td>{$row['tipe']}</td>
+                        <td>{$row['waktu_menjawab']}</td>                        
                       </tr>";
                 $no++;
             }

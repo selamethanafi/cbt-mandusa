@@ -20,6 +20,13 @@ else
 $id_ujian = '0';
 }
 $query_nilai = $db->query("SELECT * FROM `ujian` WHERE `id_siswa` = '$id_siswa' and `id_ujian` = '$id_ujian'");
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='ubk_pusat'");
+$da = mysqli_fetch_assoc($ta);
+$ubk_pusat = $da['konfigurasi_isi'] ?? '';
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='url_cbt'");
+$da = mysqli_fetch_assoc($ta);
+$url_cbt = $da['konfigurasi_isi'] ?? '';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,6 +41,78 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 {
 	$id_ujian = $hu['id_ujian'];
 	$id_siswa = $hu['id_siswa'];
+	/*
+	|--------------------------------------------------------------------------
+	| Ambil data ujian
+	|--------------------------------------------------------------------------
+	*/
+	$stmt = $db->prepare("SELECT id_siswa, id_ujian, mulai, selesai, status FROM ujian WHERE id_siswa = ? AND id_ujian = ?");
+	$stmt->bind_param("ii", $id_siswa, $id_ujian);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	$ujian = $result->fetch_assoc();
+	$stmt->close();
+	/*
+	|--------------------------------------------------------------------------
+	| Ambil data nilai
+	|--------------------------------------------------------------------------
+	*/
+	$stmt = $db->prepare("SELECT id_siswa, id_ujian, nilai FROM nilai WHERE id_siswa = ? AND id_ujian = ?");
+	$stmt->bind_param("ii", $id_siswa, $id_ujian);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	$nilai = $result->fetch_assoc();
+	$stmt->close();
+	/*
+	|--------------------------------------------------------------------------
+	| Ambil data jawaban
+	|--------------------------------------------------------------------------
+	*/
+	$stmt = $db->prepare("SELECT id_siswa, id_ujian, id_soal, jawaban, nomer_soal, nilai, waktu_menjawab,tipe FROM jawaban WHERE id_siswa = ? AND id_ujian = ?");
+	$stmt->bind_param("ii", $id_siswa, $id_ujian);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	$jawaban = [];
+	while ($row = $result->fetch_assoc()) 
+	{
+	    $jawaban[] = $row;
+	}
+	//print_r($jawaban);
+	$stmt->close();
+	/*
+	|--------------------------------------------------------------------------
+	| Paket data
+	|--------------------------------------------------------------------------
+	*/
+	$data = [
+	    'token'   => $key,
+	    'ujian'   => $ujian,
+	    'nilai'   => $nilai,
+	    'jawaban' => $jawaban
+	];
+	if($url_cbt == $ubk_pusat)
+	{
+		echo '<br >tidak mengirim ke pusat<br />';
+	}
+	else
+	{
+		$ch = curl_init();
+		curl_setopt_array($ch, [
+		CURLOPT_URL => $ubk_pusat."/tukardata/terima_data.php",
+	    CURLOPT_POST => true,
+	    CURLOPT_RETURNTRANSFER => true,
+	    CURLOPT_HTTPHEADER => [
+	        'Content-Type: application/json'
+	    ],
+	    CURLOPT_POSTFIELDS => json_encode($data, JSON_UNESCAPED_UNICODE)
+		]);
+	$response = curl_exec($ch);
+	if (curl_errno($ch)) {
+	    die(curl_error($ch));
+	}
+	curl_close($ch);
+	echo 'Jawaban Ubk Pusat '.$response.'<br />';	
+	}
 	$qsoal = $db->query("SELECT * FROM `soal` WHERE `id_ujian`= '$id_ujian' order by `nomer_soal` ASC");
 	$kunci_jawaban = '';
 	while($dq = mysqli_fetch_assoc($qsoal))
@@ -56,7 +135,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	$boleh = $dnu['nilai'] ?? '1';
 	$token = substr(str_shuffle('ABCDEFGHJKLMNPQRSTWXYZ123456789'), 0, 6);
 	$db->query("delete FROM `jawaban` where `id_siswa` = '$id_siswa' and `id_ujian` = '$id_ujian' and `id_soal` is NULL");
-	$qj = $db->query("SELECT * FROM `jawaban` where `id_siswa` = '$id_siswa' and `id_ujian` = '$id_ujian' ORDER BY `id_soal` ASC");
+	$qj = $db->query("SELECT * FROM `jawaban` where `id_siswa` = '$id_siswa' and `id_ujian` = '$id_ujian' ORDER BY `nomer_soal` ASC");
 	$jwb_siswa = '';
 	$analisis = '';
 	$skor_per_soal = '';
@@ -98,7 +177,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	//print_r($params);
 	if($hasil = postcurl($url,$params))
 	{
-		echo $hasil;
+		echo $hasil.'<br />';
 		$json = json_decode($hasil, true);
 		if($json)
 		{

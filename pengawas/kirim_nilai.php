@@ -94,7 +94,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	| Ambil data jawaban
 	|--------------------------------------------------------------------------
 	*/
-	$stmt = $db->prepare("SELECT id_siswa, id_ujian, id_soal, jawaban, nomer_soal, nilai, waktu_menjawab FROM jawaban WHERE id_siswa = ? AND id_ujian = ?");
+	$stmt = $db->prepare("SELECT id_siswa, id_ujian, id_soal, jawaban, nomer_soal, nilai, waktu_menjawab, tipe FROM jawaban WHERE id_siswa = ? AND id_ujian = ?");
 	$stmt->bind_param("ii", $id_siswa, $id_ujian);
 	$stmt->execute();
 	$result = $stmt->get_result();
