@@ -122,7 +122,7 @@ while($r = $q->fetch_assoc()){
     <td><?= $no++ ?></td>
     <td class="text-start"><?= htmlspecialchars($r['username']) ?></td>        
     <td class="text-start"><?= htmlspecialchars($r['nama_siswa']) ?></td>
-    <td class="text-start"><?= htmlspecialchars($r['id_ujian']) ?></td>
+    <td class="text-start"><?= htmlspecialchars($r['id_ujian'] ?? '')?></td>
     <td><?= $r['kelas'] ?></td>
     <td>
         <span class="badge bg-<?= $badge ?>">
