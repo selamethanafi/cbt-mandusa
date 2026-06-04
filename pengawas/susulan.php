@@ -99,19 +99,28 @@ if (!$result) {
                                 $url = $sianis.'/cbt/jadwalsusulan/'.$key;
 //echo $url;
 echo '<br />';
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='url_cbt'");
+$da = mysqli_fetch_assoc($ta);
+$url_cbt = $da['konfigurasi_isi'] ?? '';
+
 echo 'Ruang '.$ruang.'<br />';
-$json = via_curl($url);    
-		if($json)
+if (str_contains($url_cbt, 'susulan')) 
+{
+	$json = via_curl($url);    
+	if($json)
+	{
+		$db->query("UPDATE ujian_aktif SET status = 'Nonaktif', token = '' WHERE 1");	
+		$db->query("update `siswa` set `kelas` = '', `rombel` = '' where 1");		
+	       	foreach($json as $dm)
 		{
-		       	foreach($json as $dm)
+			$pesan = $dm['pesan'];
+			if($pesan == 'ada')
 			{
-				$pesan = $dm['pesan'];
-				if($pesan == 'ada')
-				{
-					$namasiswa = $dm['namasiswa'];
-				        $kode_soal = clean($dm['tmujian_id']);
-				        $id_siswa = $dm['tmsiswa_id'];
-					echo $namasiswa.' '.$kode_soal.'<br />';				        
+				$namasiswa = $dm['namasiswa'];
+			        $kode_soal = clean($dm['tmujian_id']);
+			        $id_siswa = $dm['tmsiswa_id'];
+			        $password = $dm['password'];
+				echo $namasiswa.' '.$kode_soal.'<br />';				        
 				        $date = new DateTime($waktu);
 					$date->modify('+1 month');
 					$tanggal_selesai = $date->format('Y-m-d H:i:s');
@@ -132,16 +141,22 @@ $json = via_curl($url);
 					} else {
 					    //echo "Tidak ada perubahan";
 					}
-					$db->query("update `siswa` set `kelas` = '$kode_soal', `rombel` = '$ruang' where `id_siswa` = '$id_siswa'");
-				}
+					$db->query("update `siswa` set `kelas` = '$kode_soal',`password`='$password', `rombel` = '$ruang' where `id_siswa` = '$id_siswa'");
 			}
-			echo '<a href="soal_hari_ini.php">Aktifkan Tes</a>';
 		}
-		else
-		{
-			echo 'Gagal tersambung ke simamad';
-		}
-      }?>
+		echo '<a href="soal_hari_ini.php">Aktifkan Tes</a>';
+	}
+	else
+	{
+		echo 'Gagal tersambung ke simamad';
+	}
+}
+else
+{
+	echo 'server ini tidak bisa digunakan untuk susulan';
+}
+}
+?>
 </div>
 </body>
 

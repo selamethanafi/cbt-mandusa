@@ -100,6 +100,12 @@ while($r = $q->fetch_assoc()){
     </td>
     <td><?= $r['dijawab'] ?></td><td>
     <?php
+    if (strtoupper($status) == 'SELESAI')
+    {
+    	echo '';
+    	}
+    else
+    {
 	if (!empty($r['terakhir_menjawab'])) 
 	{
 		$menit = floor((time() - strtotime($r['terakhir_menjawab'])) / 60);
@@ -108,6 +114,7 @@ while($r = $q->fetch_assoc()){
 	        : $menit;
 	} else {
 	    echo '-';
+	}
 	}
      	?>
     	</td>

@@ -2,7 +2,7 @@
 require_once '../inc/config.php';
 require_once '../inc/fungsi.php';
 require_once '../inc/admin.php';
-mysqli_query($db, "UPDATE ujian_aktif SET status = 'Nonaktif', 	token = '' WHERE 1");
+mysqli_query($db, "UPDATE ujian_aktif SET status = 'Nonaktif', token = '' WHERE 1");
 $waktu = 10;
 if(isset($_GET['tanggal']))
 {

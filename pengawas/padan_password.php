@@ -88,6 +88,7 @@ $nama_siswa = $r['nama_siswa'];
 					{
 						$padan = 'padan';
 					}
+					
 				}
 			}
 		}

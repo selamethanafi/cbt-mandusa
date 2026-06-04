@@ -86,6 +86,7 @@ $tidak = 0;
     <th style="width:40px;">No</th>
     <th style="width:150px;">No Peserta</th>    
     <th>Nama Siswa</th>
+    <th style="width:90px;">Id Ujian</th>    
     <th style="width:90px;">Kelas</th>
     <th style="width:90px;">Status</th>
     <th style="width:80px;">Dijawab</th>
@@ -121,6 +122,7 @@ while($r = $q->fetch_assoc()){
     <td><?= $no++ ?></td>
     <td class="text-start"><?= htmlspecialchars($r['username']) ?></td>        
     <td class="text-start"><?= htmlspecialchars($r['nama_siswa']) ?></td>
+    <td class="text-start"><?= htmlspecialchars($r['id_ujian']) ?></td>
     <td><?= $r['kelas'] ?></td>
     <td>
         <span class="badge bg-<?= $badge ?>">

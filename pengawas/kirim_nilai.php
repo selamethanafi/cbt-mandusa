@@ -259,7 +259,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	{
 		$sql = "update `siswa` set `password` = '$token' where `id_siswa` = '$id_siswa'";
 		$insert = $db->query($sql); 
-		echo 'password berubah karena '.$hadir.' '.$ket_absen;
+		echo 'password berubah karena '.$hadir.' '.$ket_absen.' password '.$token;
 	}
 	$ke++;
 	?>
