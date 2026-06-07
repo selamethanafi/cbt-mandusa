@@ -51,6 +51,7 @@ $q = $db->query($query);
 <tbody>
 <?php
 $no = 1;
+$siswa_tidak_padan = '';
 while($r = $q->fetch_assoc()){
 $nama_siswa = $r['nama_siswa'];
 ?>
@@ -93,6 +94,7 @@ $nama_siswa = $r['nama_siswa'];
 					}
 					else
 					{
+						$siswa_tidak_padan .= '<br />'.$nama_siswa;
 						$db->query("UPDATE `siswa` SET `password`='$password', `nis` = '$versi' WHERE `id_siswa` = '$id'");					
 					}
 					
@@ -120,6 +122,8 @@ $nama_siswa = $r['nama_siswa'];
 <?php } ?>
 </tbody>
 </table>
+<hr />
+<?= $siswa_tidak_padan;?><br /><br />
 <a href="padan_password.php">Sinkron Password Semua Peserta</a>
   
 </body>

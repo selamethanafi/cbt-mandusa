@@ -6,7 +6,7 @@ require_once '../inc/admin.php';
 $tanggal = $_GET['tanggal'] ?? date('Y-m-d');
 $kelas   = $_GET['kelas'] ?? '';
 $mapel   = $_GET['mapel'] ?? '';
-
+$ada_belum = 0;
 // validasi tanggal
 $d = DateTime::createFromFormat('Y-m-d', $tanggal);
 if (!$d || $d->format('Y-m-d') !== $tanggal) {
@@ -95,6 +95,11 @@ $dataPesan = [];
 <head>
     <meta charset="UTF-8">
     <title>Laporan Ujian</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="container-fluid">
     <style>
         body{
             font-family:Arial;
@@ -207,6 +212,12 @@ $dataPesan = [];
                     <td><?= htmlspecialchars($row['mulai']) ?></td>
                     <td><?= htmlspecialchars($row['selesai']) ?></td>
                     <td><?= htmlspecialchars($row['status']) ?></td>
+                    <?php
+                    if($row['status'] == 'aktif')
+                    {
+                    	$ada_belum++;
+                    }
+                    ?>
                 </tr>
             <?php endwhile; ?>
         <?php else: ?>
@@ -218,6 +229,14 @@ $dataPesan = [];
 </table>
 
 <?php
+if($ada_belum == 0)
+{
+    echo '<p><a class="btn btn-primary" href="laporan.php?tanggal='.$tanggal.'">Kirim Hasil</a></p>';
+}
+else
+{
+	echo '<h2>Belum bisa dikirim, ada yang belum menyelesaikan tes</h2>';
+}
 $templatePesan = '';
 
 if (!empty($dataPesan)) {
