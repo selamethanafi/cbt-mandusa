@@ -69,6 +69,7 @@ $nama_siswa = $r['nama_siswa'];
     $padan = 'tidak';
     $id = $r['id_siswa'];
     $url = $sianis.'/cbt/updatepeserta/'.$key.'/'.$id;
+    $versi = 0;
 	if((!empty($key)) and (!empty($sianis)))
 	{
 		$json = via_curl($url);    
@@ -84,9 +85,15 @@ $nama_siswa = $r['nama_siswa'];
 					$nama_siswa = $dm['nama'];
 					$kelas = $dm['nama_kelas'];
 					$ruang = $dm['ruang'];
+					$versi = $dm['versi'];
 					if($password == $r['password'])
 					{
 						$padan = 'padan';
+						$db->query("UPDATE `siswa` SET `nis` = '$versi' WHERE `id_siswa` = '$id'");											
+					}
+					else
+					{
+						$db->query("UPDATE `siswa` SET `password`='$password', `nis` = '$versi' WHERE `id_siswa` = '$id'");					
 					}
 					
 				}
@@ -99,7 +106,7 @@ $nama_siswa = $r['nama_siswa'];
 	} 
 	?>
 	    <td><?= $padan;
-	    if($r['nis'] == 1)
+	    if($versi == 1)
     {?>
     <td><a class="btn btn-primary" href="sinkron_siswa.php?id=<?= $r['id_siswa'];?>">Sinkron</a></td>
     <?php
@@ -113,7 +120,7 @@ $nama_siswa = $r['nama_siswa'];
 <?php } ?>
 </tbody>
 </table>
-
+<a href="padan_password.php">Sinkron Password Semua Peserta</a>
   
 </body>
 

@@ -67,6 +67,16 @@ while($ds = mysqli_fetch_assoc($qs))
 		$token = substr(str_shuffle('123456789'), 0, 6);
 		$sql = "update `siswa` set `password` = '$token', `nis` = '0' where `id_siswa` = '$id_siswa'";
 		$insert = $db->query($sql); 
+		$url = $sianis.'/cbt/updatepassword';
+		$params=[
+			'app_key'=>$key,
+			'password' => $token,
+			'nis' => $id_siswa,
+			];
+		if($hasil = postcurl($url,$params))
+		{
+			echo ' Jawaban dari Simamad '.$hasil.'<br />';
+		}
 	}
 	echo $ds['nama_siswa'].' cacah tes '.$cacah_tes.' '.$dikerjakan.'<br />';
 	$ke++;
