@@ -85,7 +85,17 @@ $nama_siswa = $r['nama_siswa'];
     ?></td>    
     <td><?= $r['kelas'] ?></td>
     <td><a class="btn btn-primary" href="hasil_siswa.php?id=<?= $r['id_siswa'];?>">Lihat Hasil</a></td>
+    <?php
+    if($r['nis'] == 1)
+    {?>
     <td><a class="btn btn-primary" href="sinkron_siswa.php?id=<?= $r['id_siswa'];?>">Sinkron</a></td>
+    <?php
+    }
+    else
+    {
+    	echo '<td></td>';
+    	}
+    	?>
     <td>
     <a class="btn btn-primary" href="siswa.php?nopes=<?php echo $r['username'];?>" onclick="return confirm('Yakin mengeluarkan siswa ini dari ruang ini?')">Keluarkan</a> </td>
 </tr>

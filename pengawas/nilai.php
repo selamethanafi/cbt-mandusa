@@ -35,13 +35,14 @@ SELECT
 
 FROM siswa s
 
-LEFT JOIN ujian u 
+    LEFT JOIN ujian u
     ON u.id_siswa = s.id_siswa
-    AND u.id_ujian IN (
-        SELECT id_ujian 
-        FROM ujian_aktif 
-        WHERE tanggal = '$waktu'
-    )
+
+LEFT JOIN ujian_aktif ua
+    ON ua.id_ujian = u.id_ujian
+    AND ua.tanggal = '$waktu'
+    
+    
 
 LEFT JOIN jawaban j 
     ON j.id_siswa = s.id_siswa
@@ -54,6 +55,10 @@ LEFT JOIN nilai n
     AND n.id_ujian = u.id_ujian
 
 WHERE s.rombel = '$ruang'
+AND (
+    ua.id_ujian IS NOT NULL
+    OR u.id_ujian IS NULL
+)
 
 GROUP BY s.id_siswa, u.id_ujian
 

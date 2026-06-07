@@ -5,13 +5,13 @@ require_once '../inc/admin.php';
 $semester = cari_semester();
 $ajaran = cari_thnajaran();
 $id_siswa = $_GET['id'] ?? '';
-
+$mapel_dicari = trim($_GET['mapel'] ?? '');
 $query= "SELECT * from siswa where `id_siswa` = '$id_siswa'";
 
 $q = $db->query($query);
 $qn = $db->query("
     SELECT 
-        u.id_ujian,
+        u.id_ujian,u.mulai,
         ua.kode_soal,
         ua.nama_soal,
         ua.mapel,
@@ -22,7 +22,7 @@ $qn = $db->query("
         AND u.id_ujian = n.id_ujian
     LEFT JOIN ujian_aktif ua
         ON u.id_ujian = ua.id_ujian
-    WHERE u.id_siswa = '$id_siswa'
+    WHERE u.id_siswa = '$id_siswa' order by u.mulai ASC
 ");
 
 ?>
@@ -36,18 +36,19 @@ $qn = $db->query("
 </head>
 <body>
 <div class="container-fluid">
-<p><a class="btn btn-primary" href="menu.php">Menu</a></p>
+<p><a class="btn btn-primary" href="menu.php">Menu</a> <a class="btn btn-primary" href="siswa.php">Daftar Peserta</a></p>
  <div class="card">
  <?php
 $r = $q->fetch_assoc();
 $nama_siswa = $r['nama_siswa'];
-echo $nama_siswa;
+echo $nama_siswa.' mapel dicari '.$mapel_dicari;
 ?>
 <table class="table table-bordered table-striped table-sm align-middle">
 <thead class="table-light text-center">
 <tr>
     <th style="width:40px;">No</th>
     <th>Ujian</th>
+    <th>Waktu</th>
     <th>Cacah Jawaban</th>
     <th>Nilai</th>
     <th>Detil</th>
@@ -65,11 +66,23 @@ while($n = $qn->fetch_assoc()){
 $id_ujian = $n['id_ujian'];
 $ta = $db->query("SELECT * FROM `jawaban` WHERE `id_siswa` = '$id_siswa' and `id_ujian` = '$id_ujian'");
 $cacah = mysqli_num_rows($ta);
+    $cocok = !empty($mapel_dicari)
+          && stripos($n['nama_soal'], $mapel_dicari) !== false;
 
+    // warna baris jika cocok
+    $style = $cocok ? ' style="background:#ffff99;"' : '';
+
+    echo "<tr{$style}>";
 ?>
-<tr>
     <td><?= $no++ ?></td>
-    <td class="text-start"><?= $n['nama_soal'];?></td> 
+    <td class="text-start"><?= $n['nama_soal'];
+    if ($cocok) {
+        echo '<b>' . htmlspecialchars($n['mapel']) . '</b> ⭐';
+    } else {
+    }
+    echo '</td>';
+    ?>
+    <td class="text-start"><?= $n['mulai'];?></td>        
     <td class="text-start"><?= $cacah;?></td>        
     <td class="text-start"><?= $n['nilai']; ?></td> 
     <td><a href="jawaban.php?id_siswa=<?= $id_siswa;?>&id_ujian=<?= $n['id_ujian'];?>">Detil</a></td>

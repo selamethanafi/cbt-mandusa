@@ -11,9 +11,11 @@ if (isValidDateTime($waktu)) {
     echo "Format waktu salah";
 	die();
 }
+
 $q = $db->query("
 SELECT 
     s.id_siswa,
+    s.kelas,
     s.username,
     s.nama_siswa,
     s.kelas,
@@ -26,13 +28,13 @@ SELECT
 
 FROM siswa s
 
-LEFT JOIN ujian u 
+LEFT JOIN ujian_aktif ua
+    ON ua.tanggal = '$waktu'
+    AND ua.kelas = s.kelas
+
+LEFT JOIN ujian u
     ON u.id_siswa = s.id_siswa
-    AND u.id_ujian IN (
-        SELECT id_ujian 
-        FROM ujian_aktif 
-        WHERE tanggal = '$waktu'
-    )
+    AND u.id_ujian = ua.id_ujian
 
 LEFT JOIN jawaban j 
     ON j.id_siswa = s.id_siswa
@@ -46,6 +48,25 @@ GROUP BY s.id_siswa
 
 ORDER BY s.kelas ASC, s.nama_siswa ASC
 ");
+/*
+$q = $db->query("SELECT
+    s.id_siswa,
+    s.nama_siswa,
+    s.kelas,
+    u.id_ujian,
+    u.status
+FROM siswa s
+LEFT JOIN ujian u
+    ON u.id_siswa = s.id_siswa
+    AND u.id_ujian IN (
+        SELECT id_ujian
+        FROM ujian_aktif
+        WHERE tanggal = '$waktu'
+        AND kelas = s.kelas
+    )
+WHERE s.rombel = '$ruang'
+ORDER BY s.nama_siswa");
+*/
 ?>
 <table class="table table-bordered table-striped table-sm align-middle">
 <thead class="table-light text-center">

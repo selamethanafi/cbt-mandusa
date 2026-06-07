@@ -43,7 +43,7 @@ if(isset($_GET['id']))
 					$ada = mysqli_num_rows($ta) ;
 					if($nis_lama == $id)
 					{
-						$db->query("UPDATE `siswa` SET `nama_siswa`= '$nama_siswa',`password`='$password',`username`= '$username', `kelas`= '$kelas',`rombel`='$ruang', `nis` = '$versi' WHERE `id_siswa` = '$id'");
+						$db->query("UPDATE `siswa` SET `nama_siswa`= '$nama_siswa',`password`='$password',`username`= '$username', `kelas`= '$kelas', `nis` = '$versi' WHERE `id_siswa` = '$id'");
 						echo 'sukses memperbarui data siswa';
 											?>
 					<script>

@@ -98,8 +98,17 @@ $nama_siswa = $r['nama_siswa'];
 		}
 	} 
 	?>
-	    <td><?= $padan;?>
+	    <td><?= $padan;
+	    if($r['nis'] == 1)
+    {?>
     <td><a class="btn btn-primary" href="sinkron_siswa.php?id=<?= $r['id_siswa'];?>">Sinkron</a></td>
+    <?php
+    }
+    else
+    {
+    	echo '<td></td>';
+    	}
+    	?>
 </tr>
 <?php } ?>
 </tbody>
