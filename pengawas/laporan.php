@@ -231,7 +231,7 @@ $dataPesan = [];
 <?php
 if($ada_belum == 0)
 {
-    echo '<p><a class="btn btn-primary" href="laporan.php?tanggal='.$tanggal.'">Kirim Hasil</a></p>';
+    echo '<p><a class="btn btn-primary" href="kirim_nilai.php?tanggal='.$tanggal.'">Kirim Hasil</a></p>';
 }
 else
 {
