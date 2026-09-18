@@ -63,6 +63,7 @@ $q = $db->query($query);
     <th>Password</th>
     <th style="width:90px;">Kelas</th>
     <th>Hasil</th>
+    <th>Kode QR</th>
         <th>Sinkron</th>
         <th>Keluarkan</th>
 </tr>
@@ -85,6 +86,13 @@ $nama_siswa = $r['nama_siswa'];
     ?></td>    
     <td><?= $r['kelas'] ?></td>
     <td><a class="btn btn-primary" href="hasil_siswa.php?id=<?= $r['id_siswa'];?>">Lihat Hasil</a></td>
+    <td class="text-center">
+    <a href="generate_qrcode.php?nopes=<?= urlencode($r['username']) ?>&kode=<?= urlencode($r['password']) ?>"
+       class="btn btn-success btn-sm"
+       target="_blank">
+        QR Code
+    </a>
+</td>
     <?php
     if($r['nis'] == 1)
     {?>
