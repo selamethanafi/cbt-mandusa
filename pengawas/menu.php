@@ -70,9 +70,14 @@ Ruang: <strong><?= htmlspecialchars($ruang) ?></strong>
 </thead>
 <tbody>
 <tr>
-    <td><p><a class="btn btn-primary" href="sinkron_peserta.php" onclick="return confirm('Yakin mengunduh peserta semua?')">
+    <td>
+    <p><a class="btn btn-primary" href="sinkron_peserta_simulasi.php" onclick="return confirm('Yakin mengunduh peserta simulasi?')">
+Unduh Peserta Simulasi</a></p>
+
+    <p><a class="btn btn-primary" href="sinkron_peserta.php" onclick="return confirm('Yakin mengunduh peserta semua?')">
 Unduh Peserta</a></p><p><a class="btn btn-primary" href="sinkron_peserta_per_ruang.php" onclick="return confirm('Yakin mengunduh peserta di ruang ini?')">
 Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php"  onclick="return confirm('Yakin mengunduh tes dari server pusat?')">Unduh Tes</a></p><p><a class="btn btn-primary" href="unduh_soal_per_kode_soal.php"  onclick="return confirm('Yakin mengunduh soal dari server pusat?')">Unduh Soal</a></p>
+<p><a class="btn btn-primary" href="tambah_tes.php"> Tambah Tes</a></p>
 <p><a class="btn btn-primary" href="siswa.php">Daftar Peserta</a></p>
 <p><a class="btn btn-primary" href="padan_password.php"  onclick="return confirm('Yakin memeriksa password dari server pusat?')">Password Peserta</a></p>
 <p><a class="btn btn-primary" href="update_jadwal.php"  onclick="return confirm('Yakin memutahirkan data cbt dari server pusat?')">Update CBT</a></p>
