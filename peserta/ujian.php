@@ -101,6 +101,21 @@ while ($r = $qj->fetch_assoc()) {
 <meta charset="utf-8">
 <title>Ujian</title>
 <link rel="stylesheet" href="../css/ujian.css?v=<?= time() ?>">
+<style>
+@font-face {
+    font-family: 'Noto Sans Javanese';
+    src: url('../fonts/NotoSansJavanese-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+.soal,
+.opsi-teks {
+    font-family: 'Noto Sans Javanese', Arial, sans-serif;
+    line-height: 1.9;
+}
+</style>
 </head>
 <body>
 
