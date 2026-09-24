@@ -23,6 +23,7 @@ if (mysqli_num_rows($cek) == 0) {
 }
 $aksi = '';
 $nama_pengawas = '';
+$pengawas_dua = '';
 $catatan = '';
 if(isset($_GET['tanggal']))
 {
@@ -33,6 +34,7 @@ if(isset($_GET['tanggal']))
 		$aksi = 'ubah';
 		$da = mysqli_fetch_assoc($ta);
 		$nama_pengawas = $da['nama_pengawas'];
+		$pengawas_dua = $da['pengawas_dua'];
 		$catatan = $da['catatan'];
 	}
 }
@@ -99,6 +101,12 @@ if(isset($_GET['tanggal']))
                                                     required></textarea>
                                             </div>
                                             <div class="col-md-12 mt-3">
+                                                <label for="pengawas_dua" class="form-label">Nama Pengawas Kedua</label>
+                                                <input name="pengawas_dua" id="pengawas_dua" class="form-control" 
+                                                    placeholder="pengawas dua" value="<?= $pengawas_dua;?>"
+                                                    required></textarea>
+                                            </div>
+                                            <div class="col-md-12 mt-3">
                                                 <button type="submit" name="tampilkan"
                                                     class="btn btn-secondary w-100">Simpan data Berita Acara</button>
                                             </div>
@@ -111,17 +119,18 @@ if(isset($_GET['tanggal']))
                             <?php
 	                        $post_tanggal_tes = mysqli_real_escape_string($db, $_POST['post_tanggal_tes']);
 	                        $pengawas = mysqli_real_escape_string($db, $_POST['pengawas']);
+	                        $pengawas_dua = mysqli_real_escape_string($db, $_POST['pengawas_dua']);
 	                        $catatan = mysqli_real_escape_string($db, $_POST['catatan']);
 	                        
                             	$ta = mysqli_query($db,"select * from `daftar_pengawas` where `waktu` = '$post_tanggal_tes'");
                             	
                             	if(mysqli_num_rows($ta) == 0)
                             	{
-	                            	mysqli_query($db,"insert into `daftar_pengawas` (`waktu`, `nama_pengawas`, `catatan`) values ('$post_tanggal_tes', '$pengawas', '$catatan')");
+	                            	mysqli_query($db,"insert into `daftar_pengawas` (`waktu`, `nama_pengawas`, `catatan`, `pengawas_dua`) values ('$post_tanggal_tes', '$pengawas', '$catatan', '$pengawas_dua')");
                             	}
                             	else
                             	{
-	                            	mysqli_query($db,"update `daftar_pengawas` set `nama_pengawas`= '$pengawas', `catatan` ='$catatan' where `waktu` = '$post_tanggal_tes'");
+	                            	mysqli_query($db,"update `daftar_pengawas` set `nama_pengawas`= '$pengawas', `catatan` ='$catatan',`pengawas_dua` = '$pengawas_dua' where `waktu` = '$post_tanggal_tes'");
                             	}
                             endif; ?>
                         </div>
@@ -136,7 +145,8 @@ if(isset($_GET['tanggal']))
 		                    <tr>
 		                        <th>Nomor</th>
 	                	        <th>Waktu Pelaksanaan</th>
-		                        <th>Pengawas</th>
+		                        <th>Pengawas I</th>
+		                        <th>Pengawas II</th>
 		                        <th>Catatan</th>
 		                        <th>Ubah</th>
 		                        <th colspan="2">Cetak</th>
@@ -146,8 +156,16 @@ if(isset($_GET['tanggal']))
 		                <?php
 		                 while ($da = mysqli_fetch_assoc($ta)) 
 		                 {
-			            echo "<tr><td>{$no}</td><td>{$da['waktu']}</td><td>{$da['nama_pengawas']}</td><td>{$da['catatan']}</td>";
-			            echo '<td><a href="daftar_hadir_tes_bersama.php?tanggal='.$da['waktu'].'" class="btn btn-primary">Ubah</a></td><td><a href="berita_acara_tes_bersama_cetak.php?tanggal='.$da['waktu'].'" class="btn btn-warning" target="_blank">BA</a></td><td><a href="daftar_hadir_tes_bersama_cetak.php?tanggal='.$da['waktu'].'" class="btn btn-success" target="_blank">DH</a></td></tr>';
+			            echo "<tr><td>{$no}</td><td>{$da['waktu']}</td><td>{$da['nama_pengawas']}</td><td>{$da['pengawas_dua']}</td><td>{$da['catatan']}</td>";
+			            
+			            echo '<td><a href="daftar_hadir_tes_bersama.php?tanggal='.$da['waktu'].'" class="btn btn-primary">Ubah</a></td><td>';
+			            echo '<a href="berita_acara_tes_bersama_cetak.php?tanggal='.$da['waktu'].'"
+   class="btn btn-warning"
+   target="_blank"
+   onclick="return confirm(&quot;Cetak Berita Acara dan menonaktifkan tes untuk waktu '.$da['waktu'].'?&quot;);">
+   BA
+</a>';
+echo '</td><td><a href="daftar_hadir_tes_bersama_cetak.php?tanggal='.$da['waktu'].'" class="btn btn-success" target="_blank">DH</a></td></tr>';
 			            $no++;
 			        }
 			 echo '</tbody></table>';

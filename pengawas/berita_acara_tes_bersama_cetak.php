@@ -36,6 +36,7 @@ $da = mysqli_fetch_assoc($ta);
 $nip_kamad = $da['konfigurasi_isi'];
 
 $tanggal_tes = mysqli_real_escape_string($db, $_GET['tanggal']);
+$updateStatus = mysqli_query($db, "UPDATE ujian_aktif SET status = 'Nonaktif', 	token = '' WHERE tanggal = '$tanggal_tes'");
 $ta = mysqli_query($db,"select * from `daftar_pengawas` where `waktu` = '$tanggal_tes'");
 $da = mysqli_fetch_assoc($ta);
 $nama_pengawas = $da['nama_pengawas'];

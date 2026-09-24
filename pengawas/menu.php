@@ -2,12 +2,24 @@
 require_once '../inc/config.php';
 require_once '../inc/fungsi.php';
 require_once '../inc/admin.php';
-
+/*
 $cek = mysqli_query($db, "SHOW COLUMNS FROM `jawaban` LIKE 'tipe'");
 if (mysqli_num_rows($cek) == 0) {
     $sql = "ALTER TABLE `jawaban` ADD `tipe` VARCHAR(100) NULL DEFAULT NULL AFTER `waktu_menjawab`";
     if (mysqli_query($db, $sql)) {
         echo "Kolom tipe berhasil ditambahkan";
+    } else {
+        echo "Error: " . mysqli_error($db);
+    }
+} else {
+    //echo "Kolom murid sudah ada";
+}
+*/
+$cek = mysqli_query($db, "SHOW COLUMNS FROM `daftar_pengawas` LIKE 'pengawas_dua'");
+if (mysqli_num_rows($cek) == 0) {
+    $sql = "ALTER TABLE `daftar_pengawas` ADD `pengawas_dua` TEXT NULL DEFAULT NULL AFTER `murid`;";
+    if (mysqli_query($db, $sql)) {
+        echo "Kolom pengawas_dua berhasil ditambahkan";
     } else {
         echo "Error: " . mysqli_error($db);
     }
