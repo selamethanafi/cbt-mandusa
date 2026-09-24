@@ -69,7 +69,8 @@ $ubk_stream = $da['konfigurasi_isi'] ?? '';
 <div id="pekerjaan-container">
     <!-- nanti diisi via AJAX -->
 </div>
-
+<hr />
+<a href="daftar_hadir_tes_bersama.php" class="btn btn-primary">Isi berita acara</a>
 </div>
 <script>
 function loadReset(){

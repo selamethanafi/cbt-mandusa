@@ -26,7 +26,16 @@ if (mysqli_num_rows($cek) == 0) {
 } else {
     //echo "Kolom murid sudah ada";
 }
-
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='waktu_semula'");
+if(mysqli_num_rows($ta) == 0)
+{
+	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('waktu_semula', '07:00:00', 'waktu awal / sesi pertama')");
+}
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='waktu_akhir'");
+if(mysqli_num_rows($ta) == 0)
+{
+	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('waktu_akhir', '12:45:00', 'waktu akhir / sesi 4')");
+}
 $ta = $db->query("SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode` = 'cbt_ruang'");
                                         $da = mysqli_fetch_assoc($ta);
                                         $ruang = $da['konfigurasi_isi'];

@@ -19,6 +19,13 @@ $ambil_tahun = substr($tanggal,0,4);
 $ambil_bulan = substr($tanggal,5,2);
 $ambil_tanggal = substr($tanggal,8,2);
 $nama_bulan = angka_jadi_bulan($ambil_bulan);
+$ta = mysqli_query($db, "select * from `cbt_konfigurasi` where `konfigurasi_kode` = 'waktu_semula'");
+$da = mysqli_fetch_assoc($ta);
+$waktu_awal = $da['konfigurasi_isi'];
+$ta = mysqli_query($db, "select * from `cbt_konfigurasi` where `konfigurasi_kode` = 'waktu_akhir'");
+$da = mysqli_fetch_assoc($ta);
+$waktu_akhir = $da['konfigurasi_isi'];
+
 $ta = mysqli_query($db, "select * from `cbt_konfigurasi` where `konfigurasi_kode` = 'nama_tes_bersama'");
 $da = mysqli_fetch_assoc($ta);
 $nama_ujian = $da['konfigurasi_isi'];
@@ -37,6 +44,15 @@ $nip_kamad = $da['konfigurasi_isi'];
 
 $tanggal_tes = mysqli_real_escape_string($db, $_GET['tanggal']);
 $updateStatus = mysqli_query($db, "UPDATE ujian_aktif SET status = 'Nonaktif', 	token = '' WHERE tanggal = '$tanggal_tes'");
+if((!empty($waktu_akhir)) and (!empty($waktu_akhir)))
+{
+	$waf = date("Y-m-d").' '.$waktu_awal;
+	$waa = date("Y-m-d").' '.$waktu_akhir;
+	if($waf == $tanggal_tes)
+	{
+		$updateStatus = mysqli_query($db, "UPDATE ujian_aktif SET tanggal = '$waa' WHERE tanggal = '$tanggal_tes'");
+	}
+}
 $ta = mysqli_query($db,"select * from `daftar_pengawas` where `waktu` = '$tanggal_tes'");
 $da = mysqli_fetch_assoc($ta);
 $nama_pengawas = $da['nama_pengawas'];
