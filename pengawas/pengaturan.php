@@ -51,7 +51,6 @@ if(mysqli_num_rows($ta) == 0)
 {
 	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('app_key_ekinerja', '', 'key guru ke simamad')");
 }
-
 /* AMBIL DATA */
 $result = $db->query("SELECT konfigurasi_id, konfigurasi_kode, konfigurasi_isi, konfigurasi_keterangan 
                         FROM cbt_konfigurasi 
