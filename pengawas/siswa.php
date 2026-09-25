@@ -86,6 +86,11 @@ $nama_siswa = $r['nama_siswa'];
     	else
     	{
     		echo $r['nis'].'/'.$r['page_url'];
+    		if($r['nis'] == 0)
+    		{?>
+    		<a class="btn btn-primary" href="ikutkansusulan.php?id_siswa=<?= $r['id_siswa'];?>">SUSULAN</a>
+    		<?php
+    		}
     	}
     ?></td>    
     <td><?= $r['kelas'] ?></td>
