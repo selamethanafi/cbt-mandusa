@@ -5,6 +5,7 @@ require_once '../inc/admin.php';
 $semester = cari_semester();
 $ajaran = cari_thnajaran();
 $getnopes = $_GET['nopes'] ?? '';
+$aksi = $_GET['aksi'] ?? '';
 if(!empty($getnopes))
 {
 	$db->query("update `siswa` set `rombel` = '' where `username` = '$getnopes'");
@@ -64,7 +65,16 @@ $q = $db->query($query);
     <th style="width:90px;">Kelas</th>
     <th>Hasil</th>
     <th>Kode QR</th>
-        <th>Sinkron</th>
+    <?php
+    if($aksi == 'pw')
+    {
+    	echo '<th>Ubah Password</th>';
+    }
+    else
+    {
+        echo '<th>Sinkron</th>';
+     }
+     ?>
         <th>Keluarkan</th>
 </tr>
 </thead>
@@ -111,6 +121,14 @@ $nama_siswa = $r['nama_siswa'];
     ?>
 </td>
     <?php
+    if($aksi == 'pw')
+    {
+    	?>
+	    <td><a class="btn btn-primary" href="ubah_password.php?id_siswa=<?= $r['id_siswa'];?>">Ubah</a></td>
+    <?php
+    }
+    else
+    {
 	if(($r['nis'] == 1) and ($r['page_url'] == 'Y'))
     {?>
     <td><a class="btn btn-primary" href="sinkron_siswa.php?id=<?= $r['id_siswa'];?>">Sinkron</a></td>
@@ -119,6 +137,7 @@ $nama_siswa = $r['nama_siswa'];
     else
     {
     	echo '<td></td>';
+    	}
     	}
     	?>
     <td>
