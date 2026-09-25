@@ -79,19 +79,30 @@ $nama_siswa = $r['nama_siswa'];
     <td class="text-start"><?= htmlspecialchars($nama_siswa) ?></td>    
     <td class="text-start"><?= htmlspecialchars($r['username']) ?></td>    
     <td class="text-start"><?php
-    if($r['nis'] == 1)
+    if(($r['nis'] == 1) or ($r['page_url'] == 'Y'))
     {
     	echo htmlspecialchars($r['password']);
+    	}
+    	else
+    	{
+    		echo $r['nis'].'/'.$r['page_url'];
     	}
     ?></td>    
     <td><?= $r['kelas'] ?></td>
     <td><a class="btn btn-primary" href="hasil_siswa.php?id=<?= $r['id_siswa'];?>">Lihat Hasil</a></td>
     <td class="text-center">
+    <?php
+    if(($r['nis'] == 1) or ($r['page_url'] == 'Y'))
+    {
+    ?>
     <a href="generate_qrcode.php?nopes=<?= urlencode($r['username']) ?>&kode=<?= urlencode($r['password']) ?>"
        class="btn btn-success btn-sm"
        target="_blank">
         QR Code
     </a>
+    <?php
+    }
+    ?>
 </td>
     <?php
     if($r['nis'] == 1)

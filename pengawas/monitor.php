@@ -62,7 +62,18 @@ $ubk_stream = $da['konfigurasi_isi'] ?? '';
     </tr>
 </table>
 <hr>
-
+<div>
+<?php
+$ts = mysqli_query($db,"SELECT * FROM `siswa` WHERE `rombel` = '$ruang' and `nis` = '0'");
+if(mysqli_num_rows($ts) > 0)
+{	echo '<h2>Daftar Peserta Susulan</h2><h3>';
+	while($ds = mysqli_fetch_assoc($ts))
+	{
+		echo $ds['nama_siswa'].', ';
+	}
+	echo '</h3>';
+}
+?>
 <div id="reset-container">
     <!-- nanti diisi via AJAX -->
 </div>

@@ -51,6 +51,24 @@ if(mysqli_num_rows($ta) == 0)
 {
 	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('app_key_ekinerja', '', 'key guru ke simamad')");
 }
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='kode_cbt'");
+if(mysqli_num_rows($ta) == 0)
+{
+	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('kode_cbt', '', 'awalan kode cbt')");
+}
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='semester'");
+if(mysqli_num_rows($ta) == 0)
+{
+	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('semester', '1', 'Semester')");
+}
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='thnajaran'");
+if(mysqli_num_rows($ta) == 0)
+{
+	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('thnajaran', '2026/2027', 'Tahun Ajaran')");
+}
+
+
+
 /* AMBIL DATA */
 $result = $db->query("SELECT konfigurasi_id, konfigurasi_kode, konfigurasi_isi, konfigurasi_keterangan 
                         FROM cbt_konfigurasi 

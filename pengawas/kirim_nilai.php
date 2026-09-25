@@ -66,6 +66,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 {
 	$id_ujian = $hu['id_ujian'];
 	$id_siswa = $hu['id_siswa'];
+	$peserta = '';
 	echo 'id_ujian '.$id_ujian.' NIS '.$id_siswa.'<br />';
 	/*
 	|--------------------------------------------------------------------------
@@ -250,6 +251,7 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 			{
 				$hadir = $dt['hadir'];
 				$ket_absen = $dt['keterangan'];
+				$peserta = $dt['peserta'];
 			}
 			
 		}
@@ -257,10 +259,15 @@ while($hu = mysqli_fetch_assoc($query_nilai))
 	
 	if(($hadir == 'NN') or ($hadir == 'N'))
 	{
-		$sql = "update `siswa` set `password` = '$token' where `id_siswa` = '$id_siswa'";
-		$insert = $db->query($sql); 
+		$sql = "update `siswa` set `password` = '$token', `page_url` = '$peserta' where `id_siswa` = '$id_siswa'";
 		echo 'password berubah karena '.$hadir.' '.$ket_absen.' password '.$token;
 	}
+	else
+	{
+		$sql = "update `siswa` set `page_url` = '$peserta' where `id_siswa` = '$id_siswa'";	
+		
+	}
+	$insert = $db->query($sql); 
 	$ke++;
 	?>
 		<script>setTimeout(function () {

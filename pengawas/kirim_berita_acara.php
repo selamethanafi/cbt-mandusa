@@ -77,4 +77,8 @@ echo sprintf(
     $result['jumlah'] ?? 0
 );
 ?>
+		<script>setTimeout(function () {
+		 window.location.href= 'periksa_belum_tes.php';
+			},<?php echo $waktu;?>);
+			</script>
 <br /><a href="menu.php">Kembali ke Menu</a>
