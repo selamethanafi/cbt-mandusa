@@ -10,6 +10,8 @@ if (isset($_GET['ke'])) {
     $ke = (int) $_GET['ke'];
 } else {
     $ke = 0;
+    $sql = "update `siswa` set `nis` = '1' where 1";
+	$insert = $db->query($sql); 
 }
 // ======================================================
 // AMBIL 1 SISWA
@@ -176,8 +178,6 @@ while ($ds = mysqli_fetch_assoc($qs)) {
                     if ($ujian) {
 
                         $id_ujian = (int) $ujian['id_ujian'];
-
-
 // ==================================================
 // INSERT SISWA SUSULAN
 // id_siswa = nis
@@ -218,6 +218,19 @@ while ($ds = mysqli_fetch_assoc($qs)) {
                                 echo '→ Sudah terdaftar sebagai susulan'
                                     . '<br>';
                             }
+				$token = substr(str_shuffle('123456789'), 0, 6);
+				$sql = "update `siswa` set `password` = '$token', `nis` = '0' where `id_siswa` = '$id_siswa'";
+				$insert = $db->query($sql); 	
+				$url = $sianis.'/cbt/updatepassword';
+				$params=[
+					'app_key'=>$key,
+					'password' => $token,
+					'nis' => $id_siswa,
+					];
+				if($hasil = postcurl($url,$params))
+				{
+					echo ' Jawaban dari Simamad '.$hasil.'<br />';
+				}
 
                         } else {
 
