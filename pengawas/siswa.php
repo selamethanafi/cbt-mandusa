@@ -79,7 +79,7 @@ $nama_siswa = $r['nama_siswa'];
     <td class="text-start"><?= htmlspecialchars($nama_siswa) ?></td>    
     <td class="text-start"><?= htmlspecialchars($r['username']) ?></td>    
     <td class="text-start"><?php
-    if(($r['nis'] == 1) or ($r['page_url'] == 'Y'))
+    if(($r['nis'] == 1) and ($r['page_url'] == 'Y'))
     {
     	echo htmlspecialchars($r['password']);
     	}
@@ -92,7 +92,7 @@ $nama_siswa = $r['nama_siswa'];
     <td><a class="btn btn-primary" href="hasil_siswa.php?id=<?= $r['id_siswa'];?>">Lihat Hasil</a></td>
     <td class="text-center">
     <?php
-    if(($r['nis'] == 1) or ($r['page_url'] == 'Y'))
+    if(($r['nis'] == 1) and ($r['page_url'] == 'Y'))
     {
     ?>
     <a href="generate_qrcode.php?nopes=<?= urlencode($r['username']) ?>&kode=<?= urlencode($r['password']) ?>"
