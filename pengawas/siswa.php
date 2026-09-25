@@ -78,7 +78,7 @@ $nama_siswa = $r['nama_siswa'];
     <td><?= $no++ ?></td>
     <td class="text-start"><?= htmlspecialchars($nama_siswa) ?></td>    
     <td class="text-start"><?= htmlspecialchars($r['username']) ?></td>    
-    <td class="text-start"><?php
+    <td class="text-start"><?php 
     if(($r['nis'] == 1) and ($r['page_url'] == 'Y'))
     {
     	echo htmlspecialchars($r['password']);
@@ -105,7 +105,7 @@ $nama_siswa = $r['nama_siswa'];
     ?>
 </td>
     <?php
-    if($r['nis'] == 1)
+	if(($r['nis'] == 1) and ($r['page_url'] == 'Y'))
     {?>
     <td><a class="btn btn-primary" href="sinkron_siswa.php?id=<?= $r['id_siswa'];?>">Sinkron</a></td>
     <?php
