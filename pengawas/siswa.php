@@ -91,6 +91,7 @@ $nama_siswa = $r['nama_siswa'];
     		<a class="btn btn-primary" href="ikutkansusulan.php?id_siswa=<?= $r['id_siswa'];?>">SUSULAN</a>
     		<?php
     		}
+    		//tambah
     	}
     ?></td>    
     <td><?= $r['kelas'] ?></td>
