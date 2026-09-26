@@ -61,9 +61,9 @@ $q = $db->query($query);
 
     <th>Nama Siswa</th>
     <th>Nomor Peserta</th>
-    <th>Password</th>
     <th style="width:90px;">Kelas</th>
     <th>Hasil</th>
+    <th>Susulan</th>    
     <th>Kode QR</th>
     <?php
     if($aksi == 'pw')
@@ -81,73 +81,53 @@ $q = $db->query($query);
 <tbody>
 <?php
 $no = 1;
-while($r = $q->fetch_assoc()){
-$nama_siswa = $r['nama_siswa'];
-?>
-<tr>
-    <td><?= $no++ ?></td>
-    <td class="text-start"><?= htmlspecialchars($nama_siswa) ?></td>    
-    <td class="text-start"><?= htmlspecialchars($r['username']) ?></td>    
-    <td class="text-start"><?php 
-    if(($r['nis'] == 1) and ($r['page_url'] == 'Y'))
-    {
-    	echo htmlspecialchars($r['password']);
-    	}
-    	else
-    	{
-    		echo $r['nis'].'/'.$r['page_url'];
+while($r = $q->fetch_assoc())
+{
+	$nama_siswa = $r['nama_siswa'];
+	?>
+	<tr>
+   		 <td><?= $no++ ?></td>
+		    <td class="text-start"><?= htmlspecialchars($nama_siswa) ?></td>    
+		    <td class="text-start"><?= htmlspecialchars($r['username']) ?></td>    
+		        <td><?= $r['kelas'] ?></td>
+	<?php
+	if($aksi == 'pw')
+	{
+    		echo '<td><a class="btn btn-primary" href="hasil_siswa.php?id='.$r['id_siswa'].'">Lihat Hasil</a></td>';
+    		echo '<td class="text-start">';
+		echo $r['nis'].'/'.$r['page_url'];
     		if($r['nis'] == 0)
     		{?>
     		<a class="btn btn-primary" href="ikutkansusulan.php?id_siswa=<?= $r['id_siswa'];?>">SUSULAN</a>
     		<?php
     		}
-    		//tambah
-    	}
-    ?></td>    
-    <td><?= $r['kelas'] ?></td>
-    <td><a class="btn btn-primary" href="hasil_siswa.php?id=<?= $r['id_siswa'];?>">Lihat Hasil</a></td>
-    <td class="text-center">
-    <?php
-    if($aksi == 'pw')
-    {
-    ?>
-		    <a href="generate_qrcode.php?nopes=<?= urlencode($r['username']) ?>&kode=<?= urlencode($r['password']) ?>"
+    		echo '</td><td>';
+    		?>
+    		<a href="generate_qrcode.php?nopes=<?= urlencode($r['username']) ?>&kode=<?= urlencode($r['password']) ?>"
        class="btn btn-success btn-sm"
        target="_blank">
         QR Code
 	    </a>
-	    <?php
-    }
-    else
-    {
-	    if(($r['nis'] == 1) and ($r['page_url'] == 'Y'))
-	    {
-	    ?>
-		    <a href="generate_qrcode.php?nopes=<?= urlencode($r['username']) ?>&kode=<?= urlencode($r['password']) ?>"
-       class="btn btn-success btn-sm"
-       target="_blank">
-        QR Code
-	    </a>
-	    <?php
-	    }
-	    }
-    ?>
-</td>
-    <?php
-if(($r['nis'] == 1) and ($r['page_url'] == 'Y'))
-    {?>
-    <td><a class="btn btn-primary" href="sinkron_siswa.php?id=<?= $r['id_siswa'];?>">Sinkron</a></td>
-    <?php
-    }
-    else
-    {
-    	echo '<td></td>';
-    	}
-    	?>
-    <td>
+	    	<?php
+	    	echo '</td>';
+ ?>
+ <td><a class="btn btn-primary" href="sinkron_siswa.php?id=<?= $r['id_siswa'];?>">Sinkron</a></td>
+		<td>
     <a class="btn btn-primary" href="siswa.php?nopes=<?php echo $r['username'];?>" onclick="return confirm('Yakin mengeluarkan siswa ini dari ruang ini?')">Keluarkan</a> </td>
-</tr>
-<?php } ?>
+		<?php
+    	}
+    	
+	else
+	{
+		echo '<td><a class="btn btn-primary" href="hasil_siswa.php?id='.$r['id_siswa'].'">Lihat Hasil</a></td>';
+		?>
+		<td colspan="3"></td>
+		<td>
+    <a class="btn btn-primary" href="siswa.php?nopes=<?php echo $r['username'];?>" onclick="return confirm('Yakin mengeluarkan siswa ini dari ruang ini?')">Keluarkan</a> </td>
+		<?php
+	}
+}
+?>
 </tbody>
 </table>
 

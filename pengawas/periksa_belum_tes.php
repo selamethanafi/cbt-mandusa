@@ -3,6 +3,15 @@ require_once '../inc/config.php';
 require_once '../inc/fungsi.php';
 require_once '../inc/admin.php';
 $waktu = 10;
+if(isset($_GET['tanggal']))
+{
+$tanggal = $_GET['tanggal'];
+}
+else
+{
+$tanggal = date("Y-m-d");
+}
+
 // ======================================================
 // POSISI SISWA
 // ======================================================
@@ -290,7 +299,7 @@ while ($ds = mysqli_fetch_assoc($qs)) {
 setTimeout(function () {
 
     window.location.href =
-        'periksa_belum_tes.php?ke=<?php echo $ke; ?>';
+        'periksa_belum_tes.php?ke=<?php echo $ke; ?>&tanggal=<?php echo $tanggal;?>';
 
 }, <?php echo $waktu; ?>);
 
