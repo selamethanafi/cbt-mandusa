@@ -28,9 +28,12 @@ $qs = $db->query(
 // ======================================================
 if (mysqli_num_rows($qs) == 0) {
 
-    echo 'Rampung';
-    echo '<br><a href="menu.php">Kembali ke Menu</a>';
-    exit;
+    ?>
+		<script>setTimeout(function () {
+		 window.location.href= 'belum_tes.php?tanggal=<?php echo $tanggal;?>';
+			},<?php echo $waktu;?>);
+			</script>
+		<?php
 }
 
 ?>

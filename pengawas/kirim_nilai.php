@@ -47,7 +47,7 @@ if(mysqli_num_rows($query_nilai) == 0)
 	}
 	 ?>
 		<script>setTimeout(function () {
-		 window.location.href= 'belum_tes.php?tanggal=<?php echo $tanggal;?>';
+		 window.location.href= 'periksa_belum_tes.php?tanggal=<?php echo $tanggal;?>';
 			},<?php echo $waktu;?>);
 			</script>
 		<?php
