@@ -120,8 +120,17 @@ while($r = $q->fetch_assoc())
 	else
 	{
 		echo '<td><a class="btn btn-primary" href="hasil_siswa.php?id='.$r['id_siswa'].'">Lihat Hasil</a></td>';
+		echo '<td class="text-start">';
+		echo $r['nis'].'/'.$r['page_url'];
+    		if($r['nis'] == 0)
+    		{?>
+    		<a class="btn btn-primary" href="ikutkansusulan.php?id_siswa=<?= $r['id_siswa'];?>">SUSULAN</a>
+    		<?php
+    		}
+    		echo '</td>';
 		?>
-		<td colspan="3"></td>
+		
+		<td colspan="2"></td>
 		<td>
     <a class="btn btn-primary" href="siswa.php?nopes=<?php echo $r['username'];?>" onclick="return confirm('Yakin mengeluarkan siswa ini dari ruang ini?')">Keluarkan</a> </td>
 		<?php

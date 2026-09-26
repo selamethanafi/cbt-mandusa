@@ -233,6 +233,7 @@ while ($ds = mysqli_fetch_assoc($qs)) {
 				$token = substr(str_shuffle('123456789'), 0, 6);
 				$sql = "update `siswa` set `password` = '$token', `nis` = '0' where `id_siswa` = '$id_siswa'";
 				$insert = $db->query($sql); 	
+				/*
 				$url = $sianis.'/cbt/updatepassword';
 				$params=[
 					'app_key'=>$key,
@@ -243,6 +244,7 @@ while ($ds = mysqli_fetch_assoc($qs)) {
 				{
 					echo ' Jawaban dari Simamad '.$hasil.'<br />';
 				}
+				*/
 
                         } else {
 
