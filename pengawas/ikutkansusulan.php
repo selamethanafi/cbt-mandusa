@@ -23,6 +23,188 @@ if ($id_siswa <= 0) {
 
     exit;
 }
+// ======================================================
+// URL API
+// ======================================================
+    $url = $sianis . '/cbt/caritesbelum';
+
+$nis = $id_siswa;
+// ======================================================
+// PARAMETER API
+// ======================================================
+    $params = [
+        'app_key' => $key,
+        'nis'     => $nis
+    ];
+// ======================================================
+// PANGGIL API
+// ======================================================
+    $json = postcurl($url, $params);
+
+
+    if (!$json) {
+
+        echo 'Gagal menghubungi server API.<br>';
+
+    } else {
+
+
+// ======================================================
+// DECODE JSON
+// ======================================================
+        $data = json_decode($json, true);
+
+// ======================================================
+// CEK JSON
+// ======================================================
+        if (json_last_error() !== JSON_ERROR_NONE) {
+
+            echo 'Response JSON tidak valid.<br>';
+
+        } elseif (!is_array($data)) {
+
+            echo 'Response bukan array.<br>';
+
+        } else {
+
+// ======================================================
+// PROSES DATA HASIL API
+// ======================================================
+            foreach ($data as $row) {
+
+
+// ==================================================
+// DATA TES DITEMUKAN
+// ==================================================
+                if (
+                    isset($row['nis']) &&
+                    isset($row['tes_id'])
+                ) {
+
+                    $nis_api = $row['nis'];
+                    $tes_id  = $row['tes_id'];
+
+                    echo 'Tes ditemukan: '
+                        . htmlspecialchars($tes_id)
+                        . '<br>';
+// ==================================================
+// CARI ID UJIAN
+// ==================================================
+                    $stmt = $db->prepare(
+                        "SELECT `id_ujian`
+                         FROM `ujian_aktif`
+                         WHERE `kode_soal` = ?
+                         LIMIT 1"
+                    );
+
+
+                    if (!$stmt) {
+
+                        echo 'Prepare query ujian gagal: '
+                            . htmlspecialchars($db->error)
+                            . '<br>';
+
+                        continue;
+                    }
+
+
+                    $stmt->bind_param(
+                        's',
+                        $tes_id
+                    );
+
+                    $stmt->execute();
+
+                    $result = $stmt->get_result();
+
+                    $ujian = $result->fetch_assoc();
+
+                    $stmt->close();
+
+
+// ==================================================
+// JIKA ID UJIAN DITEMUKAN
+// ==================================================
+                    if ($ujian) {
+
+                        $id_ujian = (int) $ujian['id_ujian'];
+// ==================================================
+// INSERT SISWA SUSULAN
+// id_siswa = nis
+// ==================================================
+                        $stmt = $db->prepare(
+                            "INSERT IGNORE INTO `siswa_susulan`
+                             (`id_siswa`, `id_ujian`)
+                             VALUES (?, ?)"
+                        );
+
+
+                        if (!$stmt) {
+
+                            echo 'Prepare insert gagal: '
+                                . htmlspecialchars($db->error)
+                                . '<br>';
+
+                            continue;
+                        }
+
+
+                        $stmt->bind_param(
+                            'ii',
+                            $nis_api,
+                            $id_ujian
+                        );
+
+
+                        if ($stmt->execute()) {
+
+                            if ($stmt->affected_rows > 0) {
+
+                                echo '→ Ditambahkan ke peserta susulan'
+                                    . '<br>';
+
+                            } else {
+
+                                echo '→ Sudah terdaftar sebagai susulan'
+                                    . '<br>';
+                            }
+				
+
+                        } else {
+
+                            echo '→ Gagal insert: '
+                                . htmlspecialchars($stmt->error)
+                                . '<br>';
+                        }
+
+
+                        $stmt->close();
+
+                    } else {
+
+                        echo '→ ID ujian tidak ditemukan untuk '
+                            . htmlspecialchars($tes_id)
+                            . '<br>';
+                    }
+                }
+
+
+// ==================================================
+// RESPONSE PESAN DARI API
+// ==================================================
+                elseif (
+                    isset($row['pesan'])
+                ) {
+
+                    $pesan = $row['pesan'];
+
+                    echo '→ '
+                        . htmlspecialchars($pesan)
+                        . '<br>';
+                }
+            }
+        }
+    }
 
 
 // ======================================================

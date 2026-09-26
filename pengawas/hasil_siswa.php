@@ -11,7 +11,8 @@ $query= "SELECT * from siswa where `id_siswa` = '$id_siswa'";
 $q = $db->query($query);
 $qn = $db->query("
     SELECT 
-        u.id_ujian,u.mulai,
+        u.id_ujian,
+        u.mulai,
         ua.kode_soal,
         ua.nama_soal,
         ua.mapel,
@@ -22,7 +23,10 @@ $qn = $db->query("
         AND u.id_ujian = n.id_ujian
     LEFT JOIN ujian_aktif ua
         ON u.id_ujian = ua.id_ujian
-    WHERE u.id_siswa = '$id_siswa' order by u.mulai ASC
+    WHERE u.id_siswa = '$id_siswa'
+      AND ua.tahun = '$ajaran'
+      AND ua.semester = '$semester'
+    ORDER BY u.mulai ASC
 ");
 
 ?>
