@@ -31,6 +31,7 @@ die('tanggal salah');
 $qs = $db->query("SELECT * FROM `siswa` WHERE `rombel` = '$ruang' limit $ke,1");
 if(mysqli_num_rows($qs) == 0)
 {
+die();
 	 ?>
 		<script>setTimeout(function () {
 		 window.location.href= 'kirim_berita_acara.php?tanggal=<?php echo $tanggal;?>';
@@ -60,25 +61,50 @@ while($ds = mysqli_fetch_assoc($qs))
 	{
 		$id_ujian = $dua['id_ujian'];
 		$qu = $db->query("SELECT * FROM `ujian` WHERE `id_ujian` = '$id_ujian' and `id_siswa` = '$id_siswa'");
-		$dikerjakan = $dikerjakan + mysqli_num_rows($qu);
-	}
-	if($dikerjakan < $cacah_tes)
-	{
-		$token = substr(str_shuffle('123456789'), 0, 6);
-		$sql = "update `siswa` set `password` = '$token', `nis` = '0' where `id_siswa` = '$id_siswa'";
-		$insert = $db->query($sql); 
-		/*
-		$url = $sianis.'/cbt/updatepassword';
-		$params=[
-			'app_key'=>$key,
-			'password' => $token,
-			'nis' => $id_siswa,
-			];
-		if($hasil = postcurl($url,$params))
+		if(mysqli_num_rows($qu) == 0)
 		{
-			echo ' Jawaban dari Simamad '.$hasil.'<br />';
+			$stmt = $db->prepare(
+                            "INSERT IGNORE INTO `siswa_susulan`
+                             (`id_siswa`, `id_ujian`)
+                             VALUES (?, ?)"
+                        );
+                        if (!$stmt) {
+
+                            echo 'Prepare insert gagal: '
+                                . htmlspecialchars($db->error)
+                                . '<br>';
+
+                            die();
+                        }
+
+
+                        $stmt->bind_param(
+                            'ii',
+                            $id_siswa,
+                            $id_ujian
+                        );
+                         if ($stmt->execute()) {
+
+                            if ($stmt->affected_rows > 0) {
+
+                                echo '→ Ditambahkan ke peserta susulan'
+                                    . '<br>';
+
+                            } else {
+
+                                echo '→ Sudah terdaftar sebagai susulan'
+                                    . '<br>';
+                            }
+				$sql = "update `siswa` set `nis` = '0' where `id_siswa` = '$id_siswa'";
+				$insert = $db->query($sql); 	
+                        } else {
+
+                            echo '→ Gagal insert: '
+                                . htmlspecialchars($stmt->error)
+                                . '<br>';
+                        }
+
 		}
-		*/
 	}
 	echo $ds['nama_siswa'].' cacah tes '.$cacah_tes.' '.$dikerjakan.'<br />';
 	$ke++;

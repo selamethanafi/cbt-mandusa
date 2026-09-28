@@ -168,8 +168,8 @@ $nis = $id_siswa;
                                 echo '→ Sudah terdaftar sebagai susulan'
                                     . '<br>';
                             }
-				
-
+				$sql = "update `siswa` set `nis` = '0' where `id_siswa` = '$id_siswa'";
+				$insert = $db->query($sql); 	
                         } else {
 
                             echo '→ Gagal insert: '
