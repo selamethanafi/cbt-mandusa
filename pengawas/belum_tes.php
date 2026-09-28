@@ -31,7 +31,6 @@ die('tanggal salah');
 $qs = $db->query("SELECT * FROM `siswa` WHERE `rombel` = '$ruang' limit $ke,1");
 if(mysqli_num_rows($qs) == 0)
 {
-die();
 	 ?>
 		<script>setTimeout(function () {
 		 window.location.href= 'kirim_berita_acara.php?tanggal=<?php echo $tanggal;?>';
