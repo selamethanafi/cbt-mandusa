@@ -11,8 +11,7 @@ $query= "SELECT * from siswa where `id_siswa` = '$id_siswa'";
 $q = $db->query($query);
 $qn = $db->query("
     SELECT 
-        u.id_ujian,
-        u.mulai,
+        u.id_ujian,u.mulai,
         ua.kode_soal,
         ua.nama_soal,
         ua.mapel,
@@ -23,10 +22,7 @@ $qn = $db->query("
         AND u.id_ujian = n.id_ujian
     LEFT JOIN ujian_aktif ua
         ON u.id_ujian = ua.id_ujian
-    WHERE u.id_siswa = '$id_siswa'
-      AND ua.tahun = '$ajaran'
-      AND ua.semester = '$semester'
-    ORDER BY u.mulai ASC
+    WHERE u.id_siswa = '$id_siswa' order by u.mulai ASC
 ");
 
 ?>
@@ -40,7 +36,12 @@ $qn = $db->query("
 </head>
 <body>
 <div class="container-fluid">
-<p><a class="btn btn-primary" href="menu.php">Menu</a> <a class="btn btn-primary" href="siswa.php">Daftar Peserta</a></p>
+<p><a class="btn btn-primary" href="menu.php">Menu</a> <a class="btn btn-primary" href="siswa.php">Daftar Peserta</a> <a
+                                    href="cari_peserta.php"
+                                
+                                >
+                                    Cari Peserta
+                                </a></p>
  <div class="card">
  <?php
 $r = $q->fetch_assoc();

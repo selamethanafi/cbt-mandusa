@@ -45,7 +45,12 @@ $q = $db->query($query);
 
 <div class="container mt-4">
     <h3>Detail Jawaban Siswa</h3>
-
+<a
+                                    href="hasil_siswa.php?id=<?= urlencode($id_siswa) ?>"
+                                    
+                                >
+                                    Kembali ke Hasil
+                                </a>
     <table>
         <thead>
             <tr>
@@ -55,7 +60,8 @@ $q = $db->query($query);
                 <th width="100">Kunci</th>
                 <th>Nilai</th>
                 <th>Tipe Soal</th>                
-                <th>Waktu Menjawab</th>              
+                <th>Waktu Menjawab</th>
+                 <th width="80">Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -81,15 +87,22 @@ $q = $db->query($query);
 	{
 	$benar++;
 	}
-                echo "<tr>
-                        <td>{$row['nomer_soal']}</td>
-                        <td>{$id}</td>
-                        <td>{$row['jawaban']}</td>
-                        <td>{$kunci}</td>                        
-                        <td>{$row['nilai']}</td>
-                        <td>{$row['tipe']}</td>
-                        <td>{$row['waktu_menjawab']}</td>                        
-                      </tr>";
+               echo "<tr>
+        <td>{$row['nomer_soal']}</td>
+        <td>{$id}</td>
+        <td>{$row['jawaban']}</td>
+        <td>{$kunci}</td>                        
+        <td>{$row['nilai']}</td>
+        <td>{$row['tipe']}</td>
+        <td>{$row['waktu_menjawab']}</td>
+        <td>
+            <a href=\"hapus_jawaban.php?id={$row['id']}&id_siswa={$id_siswa}&id_ujian={$id_ujian}\"
+               onclick=\"return confirm('Yakin ingin menghapus jawaban ini?');\"
+               style=\"color:red; text-decoration:none;\">
+               🗑️ Hapus
+            </a>
+        </td>
+      </tr>";
                 $no++;
             }
         } else {
