@@ -324,7 +324,7 @@ $result = $stmt->get_result();
 <div class="box-susulan">
 
     <h2>Ujian Susulan</h2>
-
+<p><a class="btn btn-primary" href="menu.php">Menu</a></p>
 
     <!-- ============================================= -->
     <!-- DATA SISWA -->

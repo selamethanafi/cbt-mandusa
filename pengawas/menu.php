@@ -116,6 +116,8 @@ Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php
     <td><p><a class="btn btn-primary" href="daftar_hadir_tes_bersama.php">Daftar Hadir dan Berita Acara</a></p>
     <p><a class="btn btn-primary" href="kirim_berita_acara.php"> Kirim Berita Acara</a></p>
     <p><a class="btn btn-primary" href="laporan.php">Daftar Pekerjaan Peserta</a></p>
+    <p><a class="btn btn-primary" href="cari_peserta.php">Cari Peserta</a></p>
+    <p><a class="btn btn-primary" href="belum_tes_ruang_ini.php">Belum Tes</a></p>
     </td>
 </tr>
 </tbody>

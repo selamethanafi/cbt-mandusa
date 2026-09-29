@@ -89,6 +89,7 @@ if (!$result) {
                                 }
                                 else
                                 {?>
+                                <h4>Kolom Nomor untuk menyunting tes, kolom kode soal untuk sinkron dengan pusat data, kolom jumlah soal untuk melihat daftar soal. Hati hati menggunakannya</h4>
                                  <a class="btn btn-primary" href="aktifkan_semua_tes.php?jam=<?php echo $jam;?>" onclick="return confirm('Yakin mengaktifkan tes?')">Aktifkan Semua Tes</a> <a class="btn btn-success" href="monitor.php?tanggal=<?= $tgl;?>&jam=<?php echo $jam;?>">MONITORING</a> <a class="btn btn-success" href="nilai.php?tanggal=<?= $tgl;?>&jam=<?php echo $jam;?>">Hasil</a><br /><br />
 
                                     <table id="soalTable" class="table table-striped">
@@ -109,11 +110,13 @@ if (!$result) {
                                         <tbody>
                                             <?php $no = 1; while ($row = mysqli_fetch_assoc($result)) { ?>
                                             <tr>
-                                                <td><?php echo $no++; ?></td>
+                                                <td><?php echo '<a href="ubah_tes.php?id='.$row['id_ujian'].'" target="_blank">'.$no++.'</a>'; ?></td>
+                                                <td><?php echo '<a href="sinkron_jadwal.php?id='.$row['id_ujian'].'" target="_blank">'.$row['kode_soal']; ?></a></td>
+
                                                 <td><?php echo $row['kode_soal']; ?></td>
                                                 <td><?php echo $row['mapel']; ?></td>
                                                 <td><?php echo $row['kelas']; ?></td>
-                                                <td><?php echo $row['cacah_soal']; ?></td>
+                                                <td><?php echo '<a href="view_soal.php?id_ujian='.$row['id_ujian'].'" target="_blank">'.$row['cacah_soal']; ?></a></td>
                                                 <td>
                                                     <?php echo $row['waktu_ujian']; ?></td>
                                                 <td>

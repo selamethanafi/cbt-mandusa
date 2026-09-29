@@ -141,7 +141,7 @@ if ($keyword !== '') {
 <div class="container">
 
     <div class="box-pencarian">
-
+<p><a class="btn btn-primary" href="menu.php">Menu</a></p>
         <h3>Pencarian Peserta Ujian</h3>
 
         <form method="get" class="form-cari">

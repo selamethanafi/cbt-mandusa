@@ -66,6 +66,11 @@ if(mysqli_num_rows($ta) == 0)
 {
 	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('thnajaran', '2026/2027', 'Tahun Ajaran')");
 }
+$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='tanggal_awal'");
+if(mysqli_num_rows($ta) == 0)
+{
+	mysqli_query($db,"insert into `cbt_konfigurasi` (`konfigurasi_kode`, `konfigurasi_isi`, `konfigurasi_keterangan`) values ('tanggal_awal', '2026-09-24 00:00:00', 'Tanggal awal penilaian bersama')");
+}
 
 
 
