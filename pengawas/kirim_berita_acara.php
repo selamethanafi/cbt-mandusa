@@ -77,5 +77,10 @@ echo sprintf(
     $result['jumlah'] ?? 0
 );
 ?>
+	?>
+		<script>setTimeout(function () {
+		 window.location.href= 'hutang_tugas.php?ruang=perruang';
+			},<?php echo $waktu;?>);
+			</script>
 
 <br /><a href="menu.php">Kembali ke Menu</a>

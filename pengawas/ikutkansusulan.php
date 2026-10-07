@@ -23,188 +23,6 @@ if ($id_siswa <= 0) {
 
     exit;
 }
-// ======================================================
-// URL API
-// ======================================================
-    $url = $sianis . '/cbt/caritesbelum';
-
-$nis = $id_siswa;
-// ======================================================
-// PARAMETER API
-// ======================================================
-    $params = [
-        'app_key' => $key,
-        'nis'     => $nis
-    ];
-// ======================================================
-// PANGGIL API
-// ======================================================
-    $json = postcurl($url, $params);
-
-
-    if (!$json) {
-
-        echo 'Gagal menghubungi server API.<br>';
-
-    } else {
-
-
-// ======================================================
-// DECODE JSON
-// ======================================================
-        $data = json_decode($json, true);
-
-// ======================================================
-// CEK JSON
-// ======================================================
-        if (json_last_error() !== JSON_ERROR_NONE) {
-
-            echo 'Response JSON tidak valid.<br>';
-
-        } elseif (!is_array($data)) {
-
-            echo 'Response bukan array.<br>';
-
-        } else {
-
-// ======================================================
-// PROSES DATA HASIL API
-// ======================================================
-            foreach ($data as $row) {
-
-
-// ==================================================
-// DATA TES DITEMUKAN
-// ==================================================
-                if (
-                    isset($row['nis']) &&
-                    isset($row['tes_id'])
-                ) {
-
-                    $nis_api = $row['nis'];
-                    $tes_id  = $row['tes_id'];
-
-                    echo 'Tes ditemukan: '
-                        . htmlspecialchars($tes_id)
-                        . '<br>';
-// ==================================================
-// CARI ID UJIAN
-// ==================================================
-                    $stmt = $db->prepare(
-                        "SELECT `id_ujian`
-                         FROM `ujian_aktif`
-                         WHERE `kode_soal` = ?
-                         LIMIT 1"
-                    );
-
-
-                    if (!$stmt) {
-
-                        echo 'Prepare query ujian gagal: '
-                            . htmlspecialchars($db->error)
-                            . '<br>';
-
-                        continue;
-                    }
-
-
-                    $stmt->bind_param(
-                        's',
-                        $tes_id
-                    );
-
-                    $stmt->execute();
-
-                    $result = $stmt->get_result();
-
-                    $ujian = $result->fetch_assoc();
-
-                    $stmt->close();
-
-
-// ==================================================
-// JIKA ID UJIAN DITEMUKAN
-// ==================================================
-                    if ($ujian) {
-
-                        $id_ujian = (int) $ujian['id_ujian'];
-// ==================================================
-// INSERT SISWA SUSULAN
-// id_siswa = nis
-// ==================================================
-                        $stmt = $db->prepare(
-                            "INSERT IGNORE INTO `siswa_susulan`
-                             (`id_siswa`, `id_ujian`)
-                             VALUES (?, ?)"
-                        );
-
-
-                        if (!$stmt) {
-
-                            echo 'Prepare insert gagal: '
-                                . htmlspecialchars($db->error)
-                                . '<br>';
-
-                            continue;
-                        }
-
-
-                        $stmt->bind_param(
-                            'ii',
-                            $nis_api,
-                            $id_ujian
-                        );
-
-
-                        if ($stmt->execute()) {
-
-                            if ($stmt->affected_rows > 0) {
-
-                                echo '→ Ditambahkan ke peserta susulan'
-                                    . '<br>';
-
-                            } else {
-
-                                echo '→ Sudah terdaftar sebagai susulan'
-                                    . '<br>';
-                            }
-				$sql = "update `siswa` set `nis` = '0' where `id_siswa` = '$id_siswa'";
-				$insert = $db->query($sql); 	
-                        } else {
-
-                            echo '→ Gagal insert: '
-                                . htmlspecialchars($stmt->error)
-                                . '<br>';
-                        }
-
-
-                        $stmt->close();
-
-                    } else {
-
-                        echo '→ ID ujian tidak ditemukan untuk '
-                            . htmlspecialchars($tes_id)
-                            . '<br>';
-                    }
-                }
-
-
-// ==================================================
-// RESPONSE PESAN DARI API
-// ==================================================
-                elseif (
-                    isset($row['pesan'])
-                ) {
-
-                    $pesan = $row['pesan'];
-
-                    echo '→ '
-                        . htmlspecialchars($pesan)
-                        . '<br>';
-                }
-            }
-        }
-    }
 
 
 // ======================================================
@@ -272,7 +90,7 @@ $result = $stmt->get_result();
     <style>
 
         .box-susulan {
-            max-width: 700px;
+            max-width: 800px;
             margin: 30px auto;
             padding: 20px;
         }
@@ -371,7 +189,10 @@ $result = $stmt->get_result();
             $ta  = mysqli_query($db, "SELECT `nama_soal` FROM `ujian_aktif` WHERE `id_ujian` = '$id_ujian'");
             $da = mysqli_fetch_assoc($ta);
             $nama_soal = $da['nama_soal'] ?? '?';            
-
+		$tb = mysqli_query($db, "SELECT id_siswa, id_ujian FROM `ujian` WHERE `id_ujian` = '$id_ujian' and `id_siswa` = '$id_siswa'");
+		if(mysqli_num_rows($tb) == 0)
+		{
+		//echo 'belum mengerjakan';
     ?>
 
             <div class="ujian">
@@ -389,15 +210,26 @@ $result = $stmt->get_result();
                         class="btn"
                         href="jadwal_susulan.php?id_siswa=<?php echo $id_siswa; ?>&id_ujian=<?php echo $id_ujian; ?>"
                     >
-                        Ikut Ujian
+                        Ikut Ujian Sesi Terakhir
                     </a>
-
+<p>
+                    <a
+                        class="btn"
+                        href="jadwal_susulan_sekarang.php?id_siswa=<?php echo $id_siswa; ?>&id_ujian=<?php echo $id_ujian; ?>"
+                    >
+                        Ikut Ujian Sekarang
+                    </a>
+</p>
                 </div>
-
             </div>
-
+	
     <?php
-
+		}
+		else
+		{
+//			mysqli_query($db, "delete from `siswa_susulan` WHERE `id_ujian` = '$id_ujian' and `id_siswa` = '$id_siswa'");
+//			mysqli_query($db, "update `siswa` set `nis` = '1' WHERE `id_siswa` = '$id_siswa'");
+		}
         }
     }
 

@@ -100,8 +100,7 @@ Unduh Peserta</a></p><p><a class="btn btn-primary" href="sinkron_peserta_per_rua
 Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php"  onclick="return confirm('Yakin mengunduh tes dari server pusat?')">Unduh Tes</a></p><p><a class="btn btn-primary" href="unduh_soal_per_kode_soal.php"  onclick="return confirm('Yakin mengunduh soal dari server pusat?')">Unduh Soal</a></p>
 <p><a class="btn btn-primary" href="tambah_tes.php"> Tambah Tes</a></p>
 <p><a class="btn btn-primary" href="siswa.php">Daftar Peserta</a></p>
-<p><a class="btn btn-primary" href="padan_password.php"  onclick="return confirm('Yakin memeriksa password dari server pusat?')">Password Peserta</a></p>
-<p><a class="btn btn-primary" href="update_jadwal.php"  onclick="return confirm('Yakin memutahirkan data cbt dari server pusat?')">Update CBT</a></p>
+<p><a class="btn btn-primary" href="update_jadwal.php"  onclick="return confirm('Yakin memutahirkan data cbt dari server pusat?')">Update Data CBT</a></p>
 <p><a class="btn btn-primary" href="pengaturan.php">Pengaturan</a></p>
 </td>
     <td>
@@ -109,9 +108,12 @@ Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php
        	<p><a class="btn btn-primary" href="soal_hari_ini.php">Daftar Tes Hari Ini</a></p>
     	<p><a class="btn btn-primary" href="daftar_tes.php">Daftar Tes</a></p>
     	<p><a class="btn btn-primary" href="daftar_tes_per_tanggal.php">Daftar Tes Per Sesi</a></p>
-    	<p><a class="btn btn-primary" href="susulan.php">Unduh Peserta Susulan</a></p>    	    	
+    	<p><a class="btn btn-primary" href="susulan.php">Unduh Peserta Susulan</a></p>
+    	<p><a class="btn btn-primary" href="peserta_susulan.php">Daftar Peserta Susulan</a></p>
+    	  	    	
     </td>
     <td><p><a class="btn btn-primary" href="soal_hari_ini.php">Pengawasan</a></p>
+    <p><a class="btn btn-primary" href="tes_susulan.php">Pengawasan Susulan</a></p>    
     <p><a class="btn btn-primary" href="laporan.php">Kirim Hasil</a></p></td>
     <td><p><a class="btn btn-primary" href="daftar_hadir_tes_bersama.php">Daftar Hadir dan Berita Acara</a></p>
     <p><a class="btn btn-primary" href="kirim_berita_acara.php"> Kirim Berita Acara</a></p>

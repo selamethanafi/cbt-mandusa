@@ -19,5 +19,23 @@ $da = mysqli_fetch_assoc($ta);
 $waktu_akhir = $da['konfigurasi_isi'];
 $waa = date("Y-m-d").' '.$waktu_akhir;
 $updateStatus = mysqli_query($db, "UPDATE ujian_aktif SET tanggal = '$waa' WHERE id_ujian = '$id_ujian'");
+$url = $sianis.'/cbt/updatepeserta/'.$key.'/'.$id_siswa;
+if((!empty($key)) and (!empty($sianis)))
+{
+	$json = via_curl($url);    
+	if($json)
+	{
+       	foreach($json as $dm)
+		{
+    		$pesan = $dm['pesan'];
+			if($pesan == 'ada')
+			{
+				$username = $dm['nopes'];
+				$password = $dm['password'];
+				$db->query("UPDATE `siswa` SET `password`='$password' WHERE `id_siswa` = '$id_siswa'");
+			}
+		}
+	}
+}
 header('Location: siswa.php');
 exit;

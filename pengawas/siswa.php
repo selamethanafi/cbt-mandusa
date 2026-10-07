@@ -101,6 +101,7 @@ while($r = $q->fetch_assoc())
     		<a class="btn btn-primary" href="ikutkansusulan.php?id_siswa=<?= $r['id_siswa'];?>">SUSULAN</a>
     		<?php
     		}
+    		    		echo '<a class="btn btn-danger" href="siswa_tertunda.php?id_siswa='.$r['id_siswa'].'"> HAPUS TUGAS/TES</a>';
     		echo '</td><td>';
     		?>
     		<a href="generate_qrcode.php?nopes=<?= urlencode($r['username']) ?>&kode=<?= urlencode($r['password']) ?>"
@@ -124,10 +125,9 @@ while($r = $q->fetch_assoc())
 		echo $r['nis'].'/'.$r['page_url'];
     		if($r['nis'] == 0)
     		{?>
-    		<a class="btn btn-primary" href="ikutkansusulan.php?id_siswa=<?= $r['id_siswa'];?>">SUSULAN</a>
+    		<a class="btn btn-primary" href="ikutkansusulan.php?id_siswa=<?= $r['id_siswa'];?>"> SUSULAN</a>
     		<?php
     		}
-    		echo '</td>';
 		?>
 		
 		<td colspan="2"></td>

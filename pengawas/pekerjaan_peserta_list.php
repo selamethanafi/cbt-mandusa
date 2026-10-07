@@ -127,12 +127,24 @@ while($r = $q->fetch_assoc()){
     	}
     else
     {
+    
 	if (!empty($r['terakhir_menjawab'])) 
 	{
 		$menit = floor((time() - strtotime($r['terakhir_menjawab'])) / 60);
+		if ($menit > 10) 
+		{
+    echo '<span class="alarm-peserta text-danger fw-bold"
+            data-id="' . $r['id_siswa'] . '">
+            🔔 ' . $menit . ' menit yang lalu
+          </span>';
+		}
+		else
+		{
 		    echo $menit > 5
 	        ? '<span style="color:red;">⚠️ '.$menit.' menit yang lalu</span>'
 	        : $menit;
+	        }
+	        
 	} else {
 	    echo '-';
 	}

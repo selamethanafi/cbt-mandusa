@@ -2,122 +2,271 @@
 require_once '../inc/config.php';
 require_once '../inc/fungsi.php';
 require_once '../inc/admin.php';
+
 $tanggal = $_GET['tanggal'] ?? '';
 $pukul = $_GET['jam'] ?? '';
-$waktu = $tanggal.' '.$pukul;
+$waktu = $tanggal . ' ' . $pukul;
+
 if (isValidDateTime($waktu)) {
 
 } else {
     echo "Format waktu salah";
     ?>
-					<script>
-					// Auto redirect setelah 2 detik
-					setTimeout(function(){
-					window.location.href = 'soal_hari_ini.php';
-					}, 2000);
-					</script>
-					<?php	
-					exit;
+    <script>
+        setTimeout(function(){
+            window.location.href = 'soal_hari_ini.php';
+        }, 2000);
+    </script>
+    <?php
+    exit;
 }
 
-
-$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='kode_qr'");
+$ta = mysqli_query($db, "SELECT * FROM cbt_konfigurasi WHERE konfigurasi_kode='kode_qr'");
 $da = mysqli_fetch_assoc($ta);
 $kode_qr = $da['konfigurasi_isi'] ?? '0';
-$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='kamera'");
+
+$ta = mysqli_query($db, "SELECT * FROM cbt_konfigurasi WHERE konfigurasi_kode='kamera'");
 $da = mysqli_fetch_assoc($ta);
-$kamera = strtoupper($da['konfigurasi_isi']) ?? 'OFF';
-$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='token_kamera'");
+$kamera = strtoupper($da['konfigurasi_isi'] ?? 'OFF');
+
+$ta = mysqli_query($db, "SELECT * FROM cbt_konfigurasi WHERE konfigurasi_kode='token_kamera'");
 $da = mysqli_fetch_assoc($ta);
 $token_kamera = $da['konfigurasi_isi'] ?? 'sdfghfhgjhkhgkhgwdasda';
-$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='ubk_pusat'");
+
+$ta = mysqli_query($db, "SELECT * FROM cbt_konfigurasi WHERE konfigurasi_kode='ubk_pusat'");
 $da = mysqli_fetch_assoc($ta);
 $ubk_pusat = $da['konfigurasi_isi'] ?? '';
-$ta = mysqli_query($db,"SELECT * FROM `cbt_konfigurasi` WHERE `konfigurasi_kode`='ubk_stream'");
+
+$ta = mysqli_query($db, "SELECT * FROM cbt_konfigurasi WHERE konfigurasi_kode='ubk_stream'");
 $da = mysqli_fetch_assoc($ta);
 $ubk_stream = $da['konfigurasi_isi'] ?? '';
 
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<meta charset="utf-8">
-<title>Pengawasan</title>
-<link rel="stylesheet" href="../css/style.css">
+    <meta charset="utf-8">
+    <title>Pengawasan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
+
 <div class="container-fluid">
-	<h4 class="mb-2">Dashboard Pengawas</h4>
-	<table width="100%">
-    <tr>
-        <td width="33%" align="left">
-            <a href="menu.php">Menu</a>
-        </td>
-        <td align="center">
-            Ruang: <strong><?= htmlspecialchars($ruang) ?></strong>
-        </td>
-        <td width="33%" align="right">
-            Jam Peladen: <span id="jam-server"><?= date("d-m-Y H:i:s"); ?></span>
-        </td>
-    </tr>
-</table>
-<hr>
-<div>
-<?php
-$ts = mysqli_query($db,"SELECT * FROM `siswa` WHERE `rombel` = '$ruang' and `nis` = '0'");
-if(mysqli_num_rows($ts) > 0)
-{	echo '<h2>Daftar Peserta Susulan</h2><h3>';
-	while($ds = mysqli_fetch_assoc($ts))
-	{
-		echo $ds['nama_siswa'].', ';
-	}
-	echo '</h3>';
-}
-?>
-<div id="reset-container">
-    <!-- nanti diisi via AJAX -->
+
+    <h4 class="mb-2">Dashboard Pengawas</h4>
+
+    <table width="100%">
+        <tr>
+            <td width="33%" align="left">
+                <a href="menu.php">Menu</a>
+            </td>
+
+            <td align="center">
+                Ruang:
+                <strong><?= htmlspecialchars($ruang) ?></strong>
+            </td>
+
+            <td width="33%" align="right">
+                Jam Peladen:
+                <span id="jam-server"><?= date("d-m-Y H:i:s"); ?></span>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <?php
+    $ts = mysqli_query(
+        $db,
+        "SELECT * FROM siswa
+         WHERE rombel = '$ruang'
+         AND nis = '0'"
+    );
+
+    if (mysqli_num_rows($ts) > 0) {
+        echo '<h2>Daftar Peserta Susulan</h2><h3>';
+
+        while ($ds = mysqli_fetch_assoc($ts)) {
+            echo htmlspecialchars($ds['nama_siswa']) . ', ';
+        }
+
+        echo '</h3>';
+    }
+    ?>
+
+    <div id="reset-container">
+        <!-- nanti diisi via AJAX -->
+    </div>
+
+    <div id="pekerjaan-container">
+        <!-- nanti diisi via AJAX -->
+    </div>
+
+    <!-- Alarm -->
+    <div class="mt-2 mb-2">
+        <button type="button" id="btnAlarm" class="btn btn-danger btn-sm">
+            🔔 Aktifkan Alarm
+        </button>
+
+        <span id="statusAlarm" class="small text-muted ms-2">
+            Alarm belum diaktifkan
+        </span>
+    </div>
+
+    <audio id="alarmAudio" preload="auto">
+        <source src="../peserta/alarm.mp3" type="audio/mpeg">
+    </audio>
+
+    <hr>
+
+    <a href="daftar_hadir_tes_bersama.php" class="btn btn-primary">
+        Isi berita acara
+    </a>
+
 </div>
-<div id="pekerjaan-container">
-    <!-- nanti diisi via AJAX -->
-</div>
-<hr />
-<a href="daftar_hadir_tes_bersama.php" class="btn btn-primary">Isi berita acara</a>
-</div>
+
+
 <script>
-function loadReset(){
-const tanggal = "<?= htmlspecialchars($tanggal, ENT_QUOTES) ?>";
-const pukul= "<?= htmlspecialchars($pukul, ENT_QUOTES) ?>";
+function loadReset() {
+    const tanggal = "<?= htmlspecialchars($tanggal, ENT_QUOTES) ?>";
+    const pukul = "<?= htmlspecialchars($pukul, ENT_QUOTES) ?>";
+
     fetch('reset_list.php?tanggal=' + tanggal + '&jam=' + pukul)
-    .then(res => res.text())
-    .then(html => {
-        document.getElementById('reset-container').innerHTML = html;
-    });
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('reset-container').innerHTML = html;
+        })
+        .catch(err => {
+            console.error('Gagal memuat reset:', err);
+        });
 }
 
-// refresh tiap 30 detik
 setInterval(loadReset, 30000);
-
-// load pertama
 loadReset();
 </script>
+
+
 <script>
-function loadPeserta(){
-const tanggal = "<?= htmlspecialchars($tanggal, ENT_QUOTES) ?>";
-const pukul= "<?= htmlspecialchars($pukul, ENT_QUOTES) ?>";
-    fetch('pekerjaan_peserta_list.php?tanggal=' + tanggal + '&jam=' + pukul)
-    .then(res => res.text())
-    .then(html => {
-        document.getElementById('pekerjaan-container').innerHTML = html;
+let alarmAktif = false;
+let pesertaSudahAlarm = new Set();
+
+const alarmAudio = document.getElementById('alarmAudio');
+const btnAlarm = document.getElementById('btnAlarm');
+const statusAlarm = document.getElementById('statusAlarm');
+
+
+// Aktifkan alarm setelah pengawas menekan tombol
+btnAlarm.addEventListener('click', function() {
+
+    alarmAudio.play()
+        .then(function() {
+
+            alarmAudio.pause();
+            alarmAudio.currentTime = 0;
+
+            alarmAktif = true;
+
+            btnAlarm.innerHTML = '🔔 Alarm Aktif';
+            btnAlarm.classList.remove('btn-danger');
+            btnAlarm.classList.add('btn-success');
+
+            statusAlarm.innerHTML =
+                'Alarm aktif - memantau peserta > 10 menit';
+
+            statusAlarm.classList.remove('text-muted');
+            statusAlarm.classList.add('text-success');
+
+            // langsung cek kondisi peserta
+            cekAlarmPeserta();
+
+        })
+        .catch(function(error) {
+            console.error('Audio tidak dapat diaktifkan:', error);
+        });
+
+});
+
+
+// Cek peserta yang sudah lebih dari 10 menit
+function cekAlarmPeserta() {
+
+    if (!alarmAktif) {
+        return;
+    }
+
+    const peserta = document.querySelectorAll('.alarm-peserta');
+
+    let alarmBaru = false;
+
+    peserta.forEach(function(element) {
+
+        const idSiswa = element.dataset.id;
+
+        if (idSiswa && !pesertaSudahAlarm.has(idSiswa)) {
+
+            pesertaSudahAlarm.add(idSiswa);
+
+            alarmBaru = true;
+        }
+    });
+
+
+    // Jika ada peserta baru yang > 10 menit
+    if (alarmBaru) {
+
+        alarmAudio.currentTime = 0;
+
+        alarmAudio.play()
+            .catch(function(error) {
+                console.error('Alarm gagal dimainkan:', error);
+            });
+    }
+
+
+    // Hapus dari daftar jika peserta sudah
+    // menyimpan jawaban lagi
+    pesertaSudahAlarm.forEach(function(idSiswa) {
+
+        const masihAlarm = document.querySelector(
+            '.alarm-peserta[data-id="' + idSiswa + '"]'
+        );
+
+        if (!masihAlarm) {
+            pesertaSudahAlarm.delete(idSiswa);
+        }
     });
 }
+</script>
 
-// refresh tiap 30 detik
+
+<script>
+function loadPeserta() {
+    const tanggal = "<?= htmlspecialchars($tanggal, ENT_QUOTES) ?>";
+    const pukul = "<?= htmlspecialchars($pukul, ENT_QUOTES) ?>";
+
+    fetch('pekerjaan_peserta_list.php?tanggal=' + tanggal + '&jam=' + pukul)
+        .then(res => res.text())
+        .then(html => {
+
+            document.getElementById('pekerjaan-container').innerHTML = html;
+
+            // Setelah hasil AJAX masuk, cek alarm
+            cekAlarmPeserta();
+
+        })
+        .catch(err => {
+            console.error('Gagal memuat peserta:', err);
+        });
+}
+
 setInterval(loadPeserta, 30000);
-
-// load pertama
 loadPeserta();
 </script>
-<?php if(isset($kamera) && $kamera =='ON'){ ?>
+
+
+<?php if (isset($kamera) && $kamera == 'ON') { ?>
 
 <video id="video" autoplay playsinline style="display:none;"></video>
 <canvas id="canvas" style="display:none;"></canvas>
@@ -132,43 +281,72 @@ const token = "<?= htmlspecialchars($token_kamera ?? '', ENT_QUOTES) ?>";
 
 let capturing = false;
 
-// aktifkan kamera
-navigator.mediaDevices.getUserMedia({ 
-    video: { 
-        width: 640, 
+
+// Aktifkan kamera
+navigator.mediaDevices.getUserMedia({
+    video: {
+        width: 640,
         height: 480,
-        frameRate: { ideal: 10, max: 15 }
+        frameRate: {
+            ideal: 10,
+            max: 15
+        }
     }
 })
 .then(stream => {
+
     video.srcObject = stream;
 
     video.onloadedmetadata = () => {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
     };
+
 })
 .catch(err => {
     alert("Kamera error: " + err.message);
 });
 
-// 🔥 fungsi capture paling stabil
-function captureFrame(callback){
+
+// Capture frame
+function captureFrame(callback) {
+
     const ctx = canvas.getContext('2d');
 
-    // trick: double draw untuk hilangkan tearing
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(
+        video,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
     setTimeout(() => {
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        ctx.drawImage(
+            video,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
         callback();
-    }, 10); // delay kecil
+
+    }, 10);
 }
 
-// kirim gambar
-function send(){
-    if (capturing) return;
-    if (video.readyState !== 4) return;
+
+// Kirim gambar
+function send() {
+
+    if (capturing) {
+        return;
+    }
+
+    if (video.readyState !== 4) {
+        return;
+    }
 
     capturing = true;
 
@@ -187,16 +365,23 @@ function send(){
 
                 reader.onloadend = () => {
 
-                    fetch(ubk_stream + '/upload.php?ruang=' + ruang, {
-                        method: 'POST',
-                        mode: 'cors',
-                        body: JSON.stringify({ 
-                            image: reader.result,
-                            token: token
-                        }),
-                        headers: { 'Content-Type': 'application/json' }
+                    fetch(
+                        ubk_stream + '/upload.php?ruang=' + ruang,
+                        {
+                            method: 'POST',
+                            mode: 'cors',
+                            body: JSON.stringify({
+                                image: reader.result,
+                                token: token
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }
+                    )
+                    .catch(err => {
+                        console.error("Upload error:", err);
                     })
-                    .catch(err => console.error("Upload error:", err))
                     .finally(() => {
                         capturing = false;
                     });
@@ -212,14 +397,16 @@ function send(){
     });
 }
 
-// interval (jangan terlalu cepat)
-setInterval(send, 5000);
 
+setInterval(send, 5000);
 </script>
 
 <?php } ?>
+
+
 <script>
 function updateJam() {
+
     const now = new Date();
 
     const dd = String(now.getDate()).padStart(2, '0');
@@ -239,4 +426,3 @@ setInterval(updateJam, 1000);
 
 </body>
 </html>
-

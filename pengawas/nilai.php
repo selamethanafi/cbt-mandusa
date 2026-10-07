@@ -96,6 +96,7 @@ $tidak = 0;
     <th style="width:90px;">Status</th>
     <th style="width:80px;">Dijawab</th>
     <th style="width:110px;">Nilai</th>
+    <th style="width:110px;">Hapus</th>    
 </tr>
 </thead>
 <tbody>
@@ -136,6 +137,7 @@ while($r = $q->fetch_assoc()){
     </td>
     <td> <a href="jawaban.php?id_siswa=<?= $r['id_siswa'];?>&id_ujian=<?= $r['id_ujian'];?>" target="_blank"><?= $r['dijawab'] ?></a></td>
     <td><?= $r['nilai'] ?> <a href="koreksi.php?id_siswa=<?= $r['id_siswa'];?>&id_ujian=<?= $r['id_ujian'];?>&tanggal=<?= $tanggal;?>&jam=<?= $pukul;?>">Koreksi</a></td>
+    <td><a href="hapus_hasil.php?id_siswa=<?= $r['id_siswa'];?>&id_ujian=<?= $r['id_ujian'];?>" title="Hapus Hasil">Hapus</a></td>
 </tr>
 <?php } ?>
 </tbody>
