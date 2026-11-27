@@ -95,6 +95,11 @@ include '../inc/config.php';
     <br>
     <code>°C ± × ÷ π √ ∑ → ← ↑ ↓</code>
 </div>
+<p>
+    Setelah memeriksa seluruh tampilan di atas, bila tidak tampil / tampilan rusak silakan laporkan
+    kondisi HP Anda.
+</p>
+<a href="daftar_ujian.php" class="btn btn-primary mb-2">Kembali ke Daftar Asesmen</a>
 </div>
 </body>
 </html>

@@ -23,14 +23,15 @@ AND NOW() BETWEEN tanggal AND tanggal_selesai
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Daftar Tes - CBT Mandusa</title>
+<title>Daftar Asesmen - CBT Mandusa</title>
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 <div class="container-fluid">
 <div class="card shadow-sm">
 <div class="card-body">
-<?php echo 'Nama '.$nama_siswa.'<br />Nomor Peserta : '.$nomor_tes.'<br />Kelas:  '.$kelas_siswa;?>
+<?php echo 'Nama '.$nama_siswa.'<br />Nomor Peserta : '.$nomor_tes.'<br />Kelas:  '.$kelas_siswa;?><br />
+<a href="aksara.php" class="btn btn-primary mb-2">Periksa aksara jawa</a>
 <h4 class="mb-2">Daftar Tes</h4>
 <table class="table table-bordered table-striped table-sm align-middle">
 <thead class="table-light text-center">
