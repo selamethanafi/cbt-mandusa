@@ -4,10 +4,6 @@ require_once '../inc/fungsi.php';
 require_once '../inc/admin.php';
 $semester = cari_semester();
 $ajaran = cari_thnajaran();
-$query= "update siswa set rombel = '' where `nis` != '0'";
-$q = $db->query($query);
-$query= "update siswa set `rombel` = '$ruang' where `nis` = '0'";
-$q = $db->query($query);
 $query= "SELECT * from siswa where `nis` = '0' ORDER BY nama_siswa";
 $q = $db->query($query);
 ?>

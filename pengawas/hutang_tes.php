@@ -5,6 +5,15 @@ require_once '../inc/admin.php';
 
 $db->set_charset('utf8mb4');
 $waktu = 10;
+if(isset($_GET['nis']))
+{
+$nise = $_GET['nis'];
+}
+else
+{
+	$nise = 0;
+}
+
 if(isset($_GET['ke']))
 {
 $ke = $_GET['ke'];
@@ -29,14 +38,22 @@ else
 {
 	$qs = $db->query("SELECT * FROM `siswa` where `rombel` = '$ruang' limit $ke,1");
 }
+if(!empty($nise))
+{
+	$qs = $db->query("SELECT * FROM `siswa` where `id_siswa` = '$nise'");
+}
+
 if(mysqli_num_rows($qs) == 0)
 {
+	if(empty($nise))
+	{
 	 ?>
 		<script>setTimeout(function () {
 		 window.location.href= 'siswa.php';
 			},<?php echo $waktu;?>);
 			</script>
 		<?php
+	}
 }
 ?>
 <!DOCTYPE html>
@@ -97,8 +114,8 @@ while($ds = mysqli_fetch_assoc($qs))
 	if (!empty($json['data'])) {
 		$stmt = $db->prepare("
 		    INSERT IGNORE INTO `siswa_absen`
-		        (`nis`, `tes_id`)
-		    VALUES (?, ?)
+		        (`nis`, `tes_id`, `item`)
+		    VALUES (?, ?, 'T')
 		");
 	    foreach ($json['data'] as $row) {
 	        $nisApi   = $row['nis'] ?? '';
@@ -127,14 +144,18 @@ while($ds = mysqli_fetch_assoc($qs))
 	else
 	{
 		echo "Kosong.";
-		$db->query("delete from `siswa_absen` where `nis` = '$nis'");
+		$db->query("delete from `siswa_absen` where `nis` = '$nis' and `item` = 'T'");
 	}
 	$ke++;
+		if(empty($nise))
+	{
+
 	?>
 		<script>setTimeout(function () {
 		 window.location.href= 'hutang_tes.php?ruang=<?php echo $ruang;?>&ke=<?php echo $ke;?>';
 			},<?php echo $waktu;?>);
 			</script>
 		<?php
+		}
 
 }

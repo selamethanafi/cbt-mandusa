@@ -192,17 +192,34 @@ $result = $stmt->get_result();
                     <strong>
                         <?php echo $tes_id; ?>
                     </strong>
-
+			<?php
+			if($tes_id > 0)
+			{
+				$ada = 0;
+			$ta = mysqli_query($db, "SELECT `nama_soal` FROM `ujian_aktif` WHERE `kode_soal` like '%$tes_id'");
+			while($da = mysqli_fetch_assoc($ta))
+			{
+				echo $da['nama_soal'].'<br />';
+				$ada++;
+			}
+			}
+			?>
+			
                 </div>
 
                 <div>
-
+<?php
+			if(($tes_id > 0) and ($ada > 0))
+			{?>
                     <a
                         class="btn"
                         href="hapus_tugas_tertunda.php?id_siswa=<?php echo $id_siswa; ?>&tes_id=<?php echo $tes_id; ?>"
                     >
                         Hapus
                     </a>
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
 	<?php

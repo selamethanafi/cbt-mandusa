@@ -3,7 +3,7 @@
 require_once '../inc/config.php';
 require_once '../inc/fungsi.php';
 require_once '../inc/admin.php';
-
+$waktu = date("Y-m-dH:i:s");
 // =====================================================
 // AMBIL PARAMETER
 // =====================================================
@@ -340,7 +340,7 @@ body {
     <div class="qr">
 
         <img
-            src="<?= htmlspecialchars($url_qr) ?>"
+            src="<?= htmlspecialchars($url_qr)?>?=<?= $waktu?>"
             alt="QR Code Tes">
 
     </div>

@@ -4,8 +4,13 @@ require_once '../inc/fungsi.php';
 require_once '../inc/admin.php';
 $semester = cari_semester();
 $ajaran = cari_thnajaran();
+$peran = $_SESSION['role'];
 $getnopes = $_GET['nopes'] ?? '';
-$aksi = $_GET['aksi'] ?? '';
+$pw = '';
+if($peran == 'panitia')
+{
+	$aksi = 'pw';
+}
 if(!empty($getnopes))
 {
 	$db->query("update `siswa` set `rombel` = '' where `username` = '$getnopes'");

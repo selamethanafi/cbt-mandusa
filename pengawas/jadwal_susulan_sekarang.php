@@ -13,9 +13,13 @@ $id_siswa = isset($_GET['id_siswa'])
 $id_ujian = isset($_GET['id_ujian'])
     ? (int) $_GET['id_ujian']
     : 0;
+$query= "update siswa set `rombel` = '$ruang' where `id_siswa` = '$id_siswa'";
+$q = $db->query($query);
+
 $waa = date("Y-m-d H:i:s");
+$wab = date("Y-m-d H:i:s", strtotime("+1 day"));
 $kode = strtoupper(substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 6));
-$updateStatus = mysqli_query($db, "UPDATE ujian_aktif SET status = 'Aktif', token = '$kode', `tanggal` = '$waa' WHERE id_ujian = '$id_ujian'");
+$updateStatus = mysqli_query($db, "UPDATE ujian_aktif SET status = 'Aktif', token = '$kode', `tanggal` = '$waa', `tanggal_selesai` = '$wab' WHERE id_ujian = '$id_ujian'");
 $url = $sianis.'/cbt/updatepeserta/'.$key.'/'.$id_siswa;
 if((!empty($key)) and (!empty($sianis)))
 {

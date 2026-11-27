@@ -173,7 +173,7 @@ $ta = $db->query("SELECT * FROM `ujian_aktif` where `id_ujian` = '$id'");
 				}
 				else
 				{
-						echo '<h1>ada tipe soal yang tidak sesuai ketentuan</h1>';
+						echo '<h1>ada tipe soal yang tidak sesuai ketentuan nomor '.$nomer_soal.'</h1>';
 						die($tipe_soal.' '.$url2);
 				}
 				if(empty($jawaban_benar))

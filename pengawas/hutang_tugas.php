@@ -5,6 +5,15 @@ require_once '../inc/admin.php';
 
 $db->set_charset('utf8mb4');
 $waktu = 10;
+if(isset($_GET['nis']))
+{
+$nise = $_GET['nis'];
+}
+else
+{
+	$nise = '';
+}
+
 if(isset($_GET['ke']))
 {
 $ke = $_GET['ke'];
@@ -15,13 +24,13 @@ else
 }
 if(isset($_GET['ruang']))
 {
-$ruang = $_GET['ruang'];
+$ruange = $_GET['ruang'];
 }
 else
 {
-	$ruang = '';
+	$ruange = '';
 }
-if(empty($ruang))
+if(empty($ruange))
 {
 	$qs = $db->query("SELECT * FROM `siswa` limit $ke,1");
 }
@@ -29,15 +38,23 @@ else
 {
 	$qs = $db->query("SELECT * FROM `siswa` where `rombel` = '$ruang' limit $ke,1");
 }
+if(!empty($nise))
+{
+	$qs = $db->query("SELECT * FROM `siswa` where `id_siswa` = '$nise'");
+}
 if(mysqli_num_rows($qs) == 0)
 {
+	if(empty($nise))
+	{
 	 ?>
 		<script>setTimeout(function () {
 		 window.location.href= 'hutang_tes.php?ruang=<?php echo $ruang;?>';
 			},<?php echo $waktu;?>);
 			</script>
 		<?php
+	}
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +80,7 @@ while($ds = mysqli_fetch_assoc($qs))
 	// PANGGIL ENDPOINT JSON
 	// =====================================================
 	$url = $sianis.'/cbt/siswatugasbelum/'.urlencode($nis);
-	//echo $url;
+//	echo $url;
 	$ch = curl_init($url);
 	curl_setopt_array($ch, [
 	    CURLOPT_RETURNTRANSFER => true,
@@ -99,8 +116,8 @@ while($ds = mysqli_fetch_assoc($qs))
 	if (!empty($json['data'])) {
 		$stmt = $db->prepare("
 		    INSERT IGNORE INTO `siswa_absen`
-		        (`nis`, `tes_id`)
-		    VALUES (?, ?)
+		        (`nis`, `tes_id`, `item`)
+		    VALUES (?, ?,'G')
 		");
 	    foreach ($json['data'] as $row) {
 	        $tes_id    = $row['id_mapel'] ?? '';
@@ -128,14 +145,27 @@ while($ds = mysqli_fetch_assoc($qs))
 	else
 	{
 		echo "Kosong.";
-		$db->query("delete from `siswa_absen` where `nis` = '$nis'");
+		$db->query("delete from `siswa_absen` where `nis` = '$nis' and `item` = 'G'");
 	}
 	$ke++;
+	if(empty($nise))
+	{
+
 	?>
 		<script>setTimeout(function () {
 		 window.location.href= 'hutang_tugas.php?ruang=<?php echo $ruang;?>&ke=<?php echo $ke;?>';
 			},<?php echo $waktu;?>);
 			</script>
 		<?php
+	}
+	else
+	{
+	?>
+		<script>setTimeout(function () {
+		 window.location.href= 'hutang_tes.php?nis=<?php echo $nise;?>';
+			},<?php echo $waktu;?>);
+			</script>
+		<?php
+	}
 
 }

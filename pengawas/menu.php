@@ -2,6 +2,7 @@
 require_once '../inc/config.php';
 require_once '../inc/fungsi.php';
 require_once '../inc/admin.php';
+require_once '../inc/panitia.php';
 /*
 $cek = mysqli_query($db, "SHOW COLUMNS FROM `jawaban` LIKE 'tipe'");
 if (mysqli_num_rows($cek) == 0) {
@@ -99,7 +100,8 @@ Unduh Peserta Simulasi</a></p>
 Unduh Peserta</a></p><p><a class="btn btn-primary" href="sinkron_peserta_per_ruang.php" onclick="return confirm('Yakin mengunduh peserta di ruang ini?')">
 Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php"  onclick="return confirm('Yakin mengunduh tes dari server pusat?')">Unduh Tes</a></p><p><a class="btn btn-primary" href="unduh_soal_per_kode_soal.php"  onclick="return confirm('Yakin mengunduh soal dari server pusat?')">Unduh Soal</a></p>
 <p><a class="btn btn-primary" href="tambah_tes.php"> Tambah Tes</a></p>
-<p><a class="btn btn-primary" href="siswa.php">Daftar Peserta</a></p>
+<p><a class="btn btn-primary" href="siswa.php">Daftar Peserta Ruang ini</a></p>
+<p><a class="btn btn-primary" href="daftar_peserta.php">Daftar Peserta</a></p>
 <p><a class="btn btn-primary" href="update_jadwal.php"  onclick="return confirm('Yakin memutahirkan data cbt dari server pusat?')">Update Data CBT</a></p>
 <p><a class="btn btn-primary" href="pengaturan.php">Pengaturan</a></p>
 </td>
@@ -110,7 +112,8 @@ Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php
     	<p><a class="btn btn-primary" href="daftar_tes_per_tanggal.php">Daftar Tes Per Sesi</a></p>
     	<p><a class="btn btn-primary" href="susulan.php">Unduh Peserta Susulan</a></p>
     	<p><a class="btn btn-primary" href="peserta_susulan.php">Daftar Peserta Susulan</a></p>
-    	  	    	
+    	<p><a class="btn btn-primary" href="kelas_jadi_ruang.php">Kelas Per Ruang</a></p>
+    	<p><a class="btn btn-primary" href="ambil_siswa_susulan.php">Ambil Siswa Susulan</a></p>
     </td>
     <td><p><a class="btn btn-primary" href="soal_hari_ini.php">Pengawasan</a></p>
     <p><a class="btn btn-primary" href="tes_susulan.php">Pengawasan Susulan</a></p>    
@@ -120,6 +123,7 @@ Unduh Peserta Ruang ini</a></p><p><a class="btn btn-primary" href="unduh_tes.php
     <p><a class="btn btn-primary" href="laporan.php">Daftar Pekerjaan Peserta</a></p>
     <p><a class="btn btn-primary" href="cari_peserta.php">Cari Peserta</a></p>
     <p><a class="btn btn-primary" href="belum_tes_ruang_ini.php">Belum Tes</a></p>
+    <p><a class="btn btn-primary" href="hutang_tugas.php?ruang=ini">Periksa Tugas Ruang ini</a></p>            
     </td>
 </tr>
 </tbody>

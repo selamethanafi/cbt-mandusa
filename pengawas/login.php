@@ -1,9 +1,18 @@
 <?php
 require_once '../inc/config.php';
 require_once '../inc/fungsi.php';
-if(isset($_SESSION['username'])){
-    header("Location: menu.php");
-    exit;
+if(isset($_SESSION['role'])){
+	if($_SESSION['role'] == 'panitia')
+	{
+	    header("Location: menu.php");
+	    exit;	    
+	}
+	else
+	{
+	    header("Location: pengawas.php");
+    exit;	    
+	}
+
 }
 $error = '';
 
@@ -18,9 +27,18 @@ if($_POST){
 
   if($r && password_verify($pass,$r['password'])){
     $_SESSION['username'] = $r['id'];
-    $_SESSION['role'] = 'pengawas';
-    header("Location: menu.php");
-    exit;
+    $_SESSION['role'] = $r['peran'];
+	if($_SESSION['role'] == 'panitia')
+	{
+	    header("Location: menu.php");
+	    exit;	    
+	}
+	else
+	{
+	    header("Location: pengawas.php");
+    exit;	    
+	}
+
   }
   $error="Login gagal";
 }

@@ -8,8 +8,27 @@ if(!isset($_SESSION['id_siswa'], $_SESSION['kelas'])){
     exit;
 }
 $id = (int)$_GET['id'];
+$id_siswa = $_SESSION['id_siswa'];
 $u = $db->query("SELECT * FROM ujian_aktif WHERE id_ujian=$id")->fetch_assoc();
+$kode_soal = $u['kode_soal'];
+if (strpos($kode_soal, '_') === false) 
+{
+    $hasil = $kode_soal;
+}
+else
+{
+     $bagian = explode('_', $kode_soal);
+	$hasil = $bagian[1];
+}
+$stmt = $db->prepare(
+    "SELECT *
+     FROM `siswa_absen`
+     WHERE `nis` = ? and `tes_id` = ?"
+);
 
+$stmt->bind_param('ii', $id_siswa,$hasil);
+$stmt->execute();
+$result = $stmt->get_result();
 if(!$u) exit('Ujian tidak ditemukan');
 
 if($_SERVER['REQUEST_METHOD']=='POST'){
@@ -38,7 +57,18 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 <div class="card-body">
 
 <h4>Nama Tes <?= $u['nama_soal'] ?></h4>
-<?php if(isset($err)) echo '<div class="alert-danger">'.$err.'</div>'; ?>
+<h4>Kode Tes <?= $u['kode_soal'] ?></h4>
+<?php
+ if ($result->num_rows > 0) {
+
+        echo '<div">';
+        echo '<h1>Soal tidak tersedia, karena ada tugas / tes yang belum dikerjakan.</h1>';
+        echo '</div>';
+
+    }
+else
+{
+if(isset($err)) echo '<div class="alert-danger">'.$err.'</div>'; ?>
 <form method="post">
 <input class="form-control mb-2" name="token" placeholder="Masukkan token ujian" required>
 <button class="btn btn-success">Masuk Ujian</button>
@@ -46,6 +76,9 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 </div>
 </div>
 </div>
+<?php
+}
+?>
 </body>
 </html>
 
